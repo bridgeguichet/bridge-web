@@ -69,6 +69,13 @@
     "updateSuccess": "Updated successfully",
     "errorOccurred": "An error occurred"
   },
+  "external-header": {
+    "newHere": "Who are we?",
+    "contactUs": "Contact us",
+    "parcours": "Journey",
+    "simulation": "Simulation",
+    "account": "Account"
+  },
   "landing": {
     "title": "Bridge",
     "subtitle": "Complete Traceability of Strategic Minerals",
@@ -417,6 +424,346 @@
       "registeredAt": "Registered on",
       "verifiedBy": "Verified by",
       "verifiedOn": "on"
+    }
+  },
+  "parcoursSection": {
+    "title": "Start your journey",
+    "description": "Create your account and begin your guided journey. You can save your information and pick up where you left off.",
+    "steps": {
+      "step1Title": "1. Create your account",
+      "step1Description": "Access your space and keep your information.",
+      "step2Title": "2. Follow the steps",
+      "step2Description": "A clear, structured journey tailored to your situation.",
+      "step3Title": "3. Stay in control",
+      "step3Description": "Track your progress and centralize your procedures."
+    },
+    "ctaStart": "Start my journey",
+    "ctaSimulateFirst": "Simulate first"
+  },
+  "simulationSection": {
+    "badge": "Quick estimate",
+    "title": "Simulate your journey",
+    "cards": {
+      "resultTitle": "Clear result",
+      "resultDescription": "A simple summary to know what to do first.",
+      "checklistTitle": "Useful checklist",
+      "checklistDescription": "Steps and documents to prepare based on your profile.",
+      "planningTitle": "Better planning",
+      "planningDescription": "Estimate budget and timelines to move forward confidently."
+    },
+    "final": {
+      "badge": "Final step",
+      "badgeSecondary": "Choose a journey",
+      "title": "Start the simulation with the journey that fits you",
+      "description": "Click a button below to directly start the simulation for the selected journey.",
+      "paths": {
+        "diaspora": "Diaspora journey",
+        "expat": "Expat journey",
+        "retraite": "Retirement journey",
+        "investisseur": "Investor journey",
+        "nextgen": "NextGen journey",
+        "transitaire": "Freight forwarder journey"
+      },
+      "note": "You can refine your answers and save your progress in your space."
+    }
+  },
+  "external-hero": {
+    "minidescription": "The Diaspora & Expat counter",
+    "title": "What if your return to the DRC finally became simple?",
+    "description": "Anticipate each step of your settlement or investment in 3 minutes.",
+    "feature1": "Simplified procedures",
+    "feature2": "Centralized tracking",
+    "feature3": "Support",
+    "ctaSimulation": "Simulate my journey",
+    "rejoindrePlateforme": "Join the platform"
+  },
+  "contactSection": {
+    "meetUs": "Prefer to meet us?",
+    "meetUsDes": "Book an appointment in one of our offices for a personalized consultation.",
+    "bookAppointment": "Book an appointment"
+  },
+  "external-footer": {
+    "about": "About",
+    "aboutText": "The first counter for the diaspora and expatriates in the Democratic Republic of the Congo. We turn your ambition into reality.",
+    "quickLinks": "Quick links",
+    "ourServices": "Our services",
+    "theClub": "The Bridge Club",
+    "offices": "Offices",
+    "drcHub": "DRC main hub",
+    "france": "France",
+    "belgium": "Belgium",
+    "southAfrica": "South Africa",
+    "eau": "Dubai",
+    "newsletter": "Subscribe to our newsletter",
+    "emailPlaceholder": "Your email",
+    "subscribe": "Subscribe",
+    "copyright": "© {{year}} BRIDGE Digital Platform. All rights reserved.",
+    "legal": "Legal notice",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "mentionPage": {
+    "heroLabel": "Legal notice",
+    "heroTitle": "Legal notice",
+    "heroDesc": "Legal information related to the publishing and operation of the Bridge website.",
+    "tableOfContents": "Table of contents",
+    "sections": {
+      "informations": {
+        "title": "Legal information",
+        "intro": "This website is published by:",
+        "company": "Bridge",
+        "details": [
+          "Company name: Bridge",
+          "Legal form: [LLC / Corp / Other]",
+          "Share capital: [To be completed]",
+          "Registered office: Otantika Building 22, Avenue Tombalebaye, Kinshasa/Gombe, DRC",
+          "RCCM: [Number]",
+          "ID NAT: [Number]",
+          "Tax number: [Number]",
+          "Official email: contact@bridgeguichet.net",
+          "Official phone: +243 84 737 8782"
+        ]
+      },
+      "hebergement": {
+        "title": "Hosting",
+        "intro": "This website is hosted by:",
+        "details": [
+          "Host name: Hostinger",
+          "Address: Kaunas, Lithuania Jonavos str. 60C, 44192",
+          "Contact: support@hostinger.com"
+        ]
+      },
+      "propriete": {
+        "title": "Intellectual property",
+        "text": "All content on the website (texts, concepts, offers, design, logo, structure, database, commercial documents, marketing materials, methodologies) is the exclusive property of Bridge.",
+        "highlight": "Any reproduction, use, distribution or modification without prior written authorization is strictly prohibited."
+      },
+      "nature": {
+        "title": "Nature of information",
+        "text": "Information published on the website is provided for informational purposes and may be changed at any time.",
+        "highlight": "Bridge reserves the right to adapt its offers, pricing and services without notice."
+      }
+    },
+    "contact": {
+      "title": "Contact us",
+      "description": "If you have any questions about this legal notice, please contact us:",
+      "email": "Email",
+      "emailDescription": "contact@bridgeguichet.fr",
+      "address": "Address",
+      "addressDetails": "Otantika Building 22, Avenue Tombalebaye, Kinshasa/Gombe, DRC"
+    }
+  },
+  "confidentialitePage": {
+    "heroLabel": "Privacy policy",
+    "heroTitle": "Privacy policy",
+    "heroDesc": "This policy describes how Bridge collects, uses, protects and processes personal data in accordance with international data protection standards.",
+    "tableOfContents": "Table of contents",
+    "sections": {
+      "objet": {
+        "title": "Purpose",
+        "text": "This policy describes how Bridge collects, uses, protects and processes personal data in accordance with international data protection standards."
+      },
+      "donnees": {
+        "title": "Data collected",
+        "intro": "Bridge may collect:",
+        "collected": [
+          "First and last name",
+          "Email",
+          "Phone number",
+          "Address",
+          "Administrative information",
+          "Information necessary to provide the requested service"
+        ],
+        "subtitle": "Data is collected via:",
+        "sources": ["Website forms", "Email exchanges", "Contracts", "Bookings"]
+      },
+      "finalite": {
+        "title": "Purpose of processing",
+        "intro": "Data is used for:",
+        "list": [
+          "Providing services",
+          "Contract management",
+          "Customer relationship",
+          "Billing",
+          "Regulatory compliance"
+        ]
+      },
+      "baseLegale": {
+        "title": "Legal basis",
+        "intro": "Processing is based on:",
+        "list": ["Performance of a contract", "Customer consent", "Bridge's legitimate interest"]
+      },
+      "conservation": {
+        "title": "Data retention",
+        "text": "Data is kept only for the period necessary to perform the contract and comply with legal obligations."
+      },
+      "partage": {
+        "title": "Data sharing",
+        "intro": "Data may be shared only:",
+        "list": [
+          "With partners strictly necessary to deliver the service",
+          "With competent authorities if required by law"
+        ],
+        "highlight": "Bridge does not sell or rent any personal data."
+      },
+      "securite": {
+        "title": "Security",
+        "intro": "Bridge implements reasonable technical and organizational measures to protect data against:",
+        "list": ["Unauthorized access", "Loss", "Alteration", "Disclosure"]
+      },
+      "droits": {
+        "title": "User rights",
+        "intro": "The customer may request:",
+        "list": ["Access to data", "Correction", "Deletion", "Restriction of processing"],
+        "note": "Any request must be sent to the official email address published on the website."
+      },
+      "fraudes": {
+        "title": "Fraud prevention",
+        "intro": "Bridge communicates exclusively via:",
+        "list": [
+          "Email addresses published on the official website",
+          "Officially listed phone numbers",
+          "Contracts and materials validated through official channels"
+        ],
+        "highlight": "Any communication from an unlisted email address or phone number should be considered fraudulent.",
+        "note": "Bridge declines any responsibility in case of external scams."
+      }
+    },
+    "contact": {
+      "title": "Contact us",
+      "description": "If you have any questions about this privacy policy, please contact us:",
+      "email": "Email",
+      "emailDescription": "contact@bridgeguichet.fr",
+      "address": "Address",
+      "addressDetails": "Otantika Building 22, Avenue Tombalebaye, Kinshasa/Gombe, DRC"
+    }
+  },
+  "cguPage": {
+    "heroLabel": "General Terms of Service",
+    "heroTitle": "General Terms of Service",
+    "heroDesc": "These General Terms govern any contractual relationship between Bridge and its customers.",
+    "lastUpdate": "Last update: March 9, 2026",
+    "tableOfContents": "Table of contents",
+    "article": "Article",
+    "sections": {
+      "objet": {
+        "title": "Purpose",
+        "intro": "These General Terms govern any contractual relationship between Bridge and its customers.",
+        "highlight": "Any quote validation, contract signature or payment constitutes full acceptance of these terms."
+      },
+      "nature": {
+        "title": "Nature of services",
+        "intro": "Bridge acts exclusively as:",
+        "list": [
+          "Strategic facilitator",
+          "Coordinator",
+          "Referral intermediary",
+          "Structuring advisor"
+        ],
+        "text1": "Bridge is neither a bank, nor a law firm, nor an insurer, nor an administrative authority.",
+        "text2": "Bridge is subject to an obligation of means, not an obligation of results.",
+        "subtitle": "No service guarantees:",
+        "noGuarantee": [
+          "Obtaining a loan",
+          "Administrative approval",
+          "Successful investment",
+          "Project profitability"
+        ]
+      },
+      "responsabilite": {
+        "title": "Limitation of liability",
+        "intro": "Bridge cannot be held liable for:",
+        "list": [
+          "Decisions made by the customer",
+          "Acts or failures of partners",
+          "Administrative or banking refusals",
+          "Indirect or financial losses"
+        ],
+        "highlight": "In any event, Bridge's maximum liability is limited to the amount paid for the service concerned."
+      },
+      "partenaires": {
+        "title": "Relations with partners",
+        "text1": "Partners presented by Bridge are legally independent.",
+        "text2": "Any contractual relationship entered into directly between the customer and a partner is separate from Bridge.",
+        "subtitle": "If the customer chooses to work outside Bridge coordination:",
+        "list": ["Bridge disclaims any responsibility", "No refund will be possible", "No mediation will be provided"]
+      },
+      "antiContournement": {
+        "title": "Anti-circumvention clause",
+        "intro": "The customer agrees not to:",
+        "list": [
+          "Contact a partner introduced by Bridge directly without written approval",
+          "Use the provided contacts for personal or commercial purposes"
+        ],
+        "duration": "This prohibition applies for the duration of the contract and for 24 months after its end."
+      },
+      "clausePenale": {
+        "title": "Penalty clause",
+        "intro": "In case of circumvention:",
+        "text": "The customer must pay Bridge:",
+        "penalty": "30% of the total value of the contract concluded with the partner",
+        "note": "The higher amount will be applied."
+      },
+      "remboursement": {
+        "title": "No-refund policy",
+        "intro": "Due to the intellectual and strategic nature of the services:",
+        "list": ["Payments are final", "No refund is possible once the mission has started"]
+      },
+      "conformite": {
+        "title": "Compliance & Anti-corruption",
+        "intro": "The customer agrees to comply with:",
+        "list": ["Applicable anti-corruption laws", "International compliance standards"],
+        "highlight": "Any attempt at corruption, fraud or illegal practice will result in immediate termination without refund."
+      },
+      "conformiteInter": {
+        "title": "International compliance",
+        "intro": "The customer declares:",
+        "list": [
+          "Not to be listed on an international sanctions list",
+          "To comply with applicable tax and regulatory laws"
+        ],
+        "note": "Bridge reserves the right to refuse any mission that does not meet AML/KYC standards."
+      },
+      "fraude": {
+        "title": "Fraud prevention",
+        "intro": "Bridge recognizes as official only:",
+        "list": [
+          "Emails and phone numbers published on its website",
+          "Contracts issued through its validated channels"
+        ],
+        "highlight": "Bridge declines any responsibility in case of scams involving unlisted contacts."
+      },
+      "confidentialite": {
+        "title": "Confidentiality",
+        "intro": "The customer agrees to keep confidential:",
+        "list": ["Strategies", "Methodologies", "Shared documents"]
+      },
+      "forceMajeure": {
+        "title": "Force majeure",
+        "text": "Bridge cannot be held responsible in the event of circumstances beyond its control."
+      },
+      "resiliation": {
+        "title": "Termination",
+        "intro": "Bridge may suspend or terminate any relationship in case of:",
+        "list": ["Non-payment", "Circumvention", "Breach of these terms"]
+      },
+      "droitApplicable": {
+        "title": "Applicable law",
+        "text1": "These terms are governed by the law applicable at Bridge's registered office.",
+        "text2": "Any dispute will be submitted to the competent courts of the registered office after an attempt at amicable resolution."
+      },
+      "acceptation": {
+        "title": "Acceptance",
+        "highlight": "Any order, payment or signature constitutes full acceptance of these General Terms."
+      }
+    },
+    "contact": {
+      "title": "Contact us",
+      "description": "If you have any questions about these General Terms of Service, please contact us:",
+      "email": "Email",
+      "emailDescription": "contact@bridgeguichet.fr",
+      "address": "Address",
+      "addressDetails": "Otantika Building 22, Avenue Tombalebaye, Kinshasa/Gombe, DRC"
     }
   }
 }

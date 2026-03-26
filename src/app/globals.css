@@ -214,6 +214,7 @@ These serve as the fallback; there is no separate default.css file. */
 }
 
 html {
+  scroll-behavior: smooth;
   overscroll-behavior: none;
 }
 

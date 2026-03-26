@@ -757,16 +757,16 @@ export default function SimulateurParcours() {
                       >
                         <div className="flex items-start gap-3">
                           {rec.type === "success" && (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                           )}
                           {rec.type === "warning" && (
-                            <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+                            <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                           )}
                           {rec.type === "info" && (
-                            <AlertCircle className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                            <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
                           )}
                           {rec.type === "premium" && (
-                            <Sparkles className="w-5 h-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                            <Sparkles className="w-5 h-5 text-purple-500 shrink-0 mt-0.5" />
                           )}
                           <div className="flex-1">
                             <p className="font-semibold text-sm mb-1">
