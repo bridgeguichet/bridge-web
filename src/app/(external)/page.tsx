@@ -387,6 +387,7 @@ export default function Home() {
                   );
                 })}
               </div>
+              <Link href="/demo-appointment"> Test </Link>
             </div>
           </div>
         </section>
