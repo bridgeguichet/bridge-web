@@ -1,10 +1,12 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Service } from "../types";
+import { ServiceDetailDialog } from "./service-detail-dialog";
 
 interface ServiceCardProps {
   service: Service;
@@ -13,6 +15,9 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps) {
+  const displayDescription = service.shortDescription || service.description;
+  const hasShortDescription = !!service.shortDescription;
+
   return (
     <Card
       onClick={() => onToggle(service.id)}
@@ -54,10 +59,25 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-0">
+      <CardContent className="pt-0 space-y-3">
         <CardDescription className="text-sm leading-relaxed">
-          {service.description}
+          {displayDescription}
         </CardDescription>
+        {hasShortDescription && (
+          <div className="flex items-center gap-2">
+            <ServiceDetailDialog service={service}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-auto gap-2 px-0 font-medium text-primary text-xs hover:bg-transparent hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Lire plus
+                <Info className="h-3.5 w-3.5" />
+              </Button>
+            </ServiceDetailDialog>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

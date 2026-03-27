@@ -2,6 +2,7 @@ export interface Service {
   id: string;
   title: string;
   description: string;
+  shortDescription?: string;
   category: string;
   subcategory?: string;
   price?: string;
