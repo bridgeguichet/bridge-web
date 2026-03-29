@@ -451,8 +451,27 @@
     "ctaSimulateFirst": "Simuler d’abord"
   },
   "simulationSection": {
-    "badge": "Estimation rapide",
-    "title": "Simulez votre parcours",
+    "badge": "Simulation en 3 minutes",
+    "title": "Solutions de Simulation Intelligentes",
+    "subtitle": "Naviguez dans votre projet avec confiance grâce à notre processus de simulation transparent conçu pour vous faire gagner du temps et de l'argent.",
+    "steps": {
+      "step1": {
+        "title": "Choisissez votre parcours personnalisé",
+        "description": "Sélectionnez parmi nos 5 parcours adaptés (Diaspora, Expatrié, Investisseur, Retraite, NextGen) pour une expérience sur-mesure alignée avec vos objectifs."
+      },
+      "step2": {
+        "title": "Obtenez une estimation instantanée",
+        "description": "Répondez à quelques questions rapides sur votre situation et recevez des estimations personnalisées en moins de 60 secondes, sans impact sur votre profil."
+      },
+      "step3": {
+        "title": "Découvrez votre aperçu personnalisé",
+        "description": "Visualisez votre potentiel, les opportunités identifiées et votre score de préparation avec des recommandations adaptées à votre profil."
+      },
+      "step4": {
+        "title": "Accédez à votre analyse complète",
+        "description": "Débloquez votre stratégie détaillée, votre feuille de route et vos recommandations d'experts pour transformer votre projet en réalité."
+      }
+    },
     "cards": {
       "resultTitle": "Résultat clair",
       "resultDescription": "Une synthèse simple pour savoir quoi faire en premier.",
@@ -460,6 +479,82 @@
       "checklistDescription": "Les démarches et pièces à prévoir selon votre profil.",
       "planningTitle": "Meilleure planification",
       "planningDescription": "Estimez budget et délais pour avancer sereinement."
+    },
+    "stats": {
+      "users": "Utilisateurs actifs",
+      "usersCount": "+1 200",
+      "satisfaction": "Taux de satisfaction",
+      "satisfactionRate": "98%",
+      "time": "Temps moyen",
+      "timeValue": "3 min"
+    },
+    "features": {
+      "title": "Tout ce dont vous avez besoin",
+      "personalized": "Analyse personnalisée selon votre profil",
+      "instant": "Résultats instantanés et détaillés",
+      "free": "100% gratuit, sans engagement",
+      "expert": "Recommandations d'experts incluses"
+    },
+    "cta": {
+      "title": "Prêt à découvrir votre parcours ?",
+      "subtitle": "Commencez votre simulation personnalisée en quelques clics",
+      "button": "Commencer ma simulation maintenant",
+      "note": "Aucune carte bancaire requise"
+    },
+    "pathways": {
+      "title": "Choisissez votre parcours",
+      "subtitle": "Sélectionnez le profil qui correspond le mieux à votre situation",
+      "diaspora": {
+        "title": "Diaspora",
+        "benefit": "Reconnectez-vous avec vos racines et investissez sereinement"
+      },
+      "expat": {
+        "title": "Expatrié",
+        "benefit": "Installez-vous facilement et profitez pleinement de votre expérience"
+      },
+      "investisseur": {
+        "title": "Investisseur",
+        "benefit": "Maximisez vos opportunités et sécurisez vos investissements"
+      },
+      "retraite": {
+        "title": "Retraite",
+        "benefit": "Préparez une retraite paisible dans un cadre idéal"
+      },
+      "nextgen": {
+        "title": "NextGen",
+        "benefit": "Lancez votre carrière avec un accompagnement sur-mesure"
+      },
+      "cta": "Démarrer la simulation"
+    },
+    "preview": {
+      "title": "Votre aperçu personnalisé",
+      "potential": "Potentiel estimé",
+      "opportunities": "opportunités identifiées",
+      "readiness": "Score de préparation",
+      "note": "Basé sur votre profil initial"
+    },
+    "locked": {
+      "title": "Débloquez votre analyse complète",
+      "features": {
+        "strategy": "Stratégie détaillée personnalisée",
+        "roadmap": "Feuille de route étape par étape",
+        "recommendations": "Recommandations d'experts",
+        "budget": "Plan budgétaire complet",
+        "timeline": "Calendrier de mise en œuvre",
+        "contacts": "Réseau de contacts qualifiés"
+      }
+    },
+    "conversion": {
+      "title": "Transformez votre projet en réalité",
+      "subtitle": "Accédez à votre simulation complète et bénéficiez d'un accompagnement personnalisé",
+      "cta": "Débloquer ma simulation complète",
+      "benefits": {
+        "analysis": "Analyse personnalisée",
+        "guidance": "Accompagnement expert",
+        "strategy": "Stratégie sur-mesure"
+      },
+      "urgency": "Places limitées aujourd'hui",
+      "social": "+1 200 personnes accompagnées"
     },
     "final": {
       "badge": "Étape finale",
@@ -471,8 +566,7 @@
         "expat": "Parcours Expat",
         "retraite": "Parcours Retraite",
         "investisseur": "Parcours Investisseur",
-        "nextgen": "Parcours NextGen",
-        "transitaire": "Parcours Transitaire"
+        "nextgen": "Parcours NextGen"
       },
       "note": "Vous pourrez affiner vos réponses et enregistrer votre progression dans votre espace."
     }

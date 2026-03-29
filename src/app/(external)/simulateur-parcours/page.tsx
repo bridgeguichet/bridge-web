@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   Home,
   Car,
@@ -16,6 +18,11 @@ import {
   AlertCircle,
   CheckCircle2,
   Sparkles,
+  ArrowLeft,
+  ArrowRight,
+  Globe,
+  Plane,
+  Coffee,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -29,6 +36,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import { SimulationSteps } from "./components/SimulationSteps";
 
 const housingOptions = [
   {
@@ -165,15 +174,33 @@ const additionalServices = [
   { id: "loisirs", label: "Loisirs & sorties", price: 250, icon: Sparkles },
 ];
 
+const pathwayOptions = [
+  { id: "diaspora", label: "Diaspora", icon: Globe, color: "text-blue-500", bgColor: "bg-blue-500" },
+  { id: "expat", label: "Expatrié", icon: Plane, color: "text-emerald-500", bgColor: "bg-emerald-500" },
+  { id: "investisseur", label: "Investisseur", icon: TrendingUp, color: "text-purple-500", bgColor: "bg-purple-500" },
+  { id: "retraite", label: "Retraite", icon: Coffee, color: "text-rose-500", bgColor: "bg-rose-500" },
+  { id: "nextgen", label: "NextGen", icon: Zap, color: "text-amber-500", bgColor: "bg-amber-500" },
+];
+
 export default function SimulateurParcours() {
+  const searchParams = useSearchParams();
+  const pathwayParam = searchParams.get("pathway");
+
+  const [currentStep, setCurrentStep] = useState(pathwayParam ? 2 : 1);
+  const [selectedPathway, setSelectedPathway] = useState(pathwayParam || "");
   const [selectedHousing, setSelectedHousing] = useState("appartement-1ch");
-  const [selectedTransport, setSelectedTransport] = useState(
-    "voiture-personnelle",
-  );
+  const [selectedTransport, setSelectedTransport] = useState("voiture-personnelle");
   const [selectedGym, setSelectedGym] = useState("basic");
   const [selectedFood, setSelectedFood] = useState("standard");
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [familySize, setFamilySize] = useState([1]);
+
+  useEffect(() => {
+    if (pathwayParam && pathwayOptions.find(p => p.id === pathwayParam)) {
+      setSelectedPathway(pathwayParam);
+      setCurrentStep(2);
+    }
+  }, [pathwayParam]);
 
   const toggleService = (serviceId: string) => {
     setSelectedServices((prev) =>
@@ -181,6 +208,23 @@ export default function SimulateurParcours() {
         ? prev.filter((id) => id !== serviceId)
         : [...prev, serviceId],
     );
+  };
+
+  const handlePathwaySelect = (pathwayId: string) => {
+    setSelectedPathway(pathwayId);
+    setCurrentStep(2);
+  };
+
+  const handleNextStep = () => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
   const totalBudget = useMemo(() => {
@@ -283,26 +327,51 @@ export default function SimulateurParcours() {
     return { label: "Luxe", color: "text-amber-500", bg: "bg-amber-500" };
   }, [totalBudget]);
 
+  const progressPercentage = (currentStep / 4) * 100;
+
   return (
     <div className="relative min-h-screen bg-linear-to-br from-primary/5 via-background to-background">
-      <div className="container mx-auto px-4 py-12 max-w-7xl">
-        <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            <Calculator className="w-4 h-4" />
-            <span>Simulateur de niveau de vie</span>
-          </div>
-
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4">
-            Estimez votre budget à Kinshasa
-          </h1>
-
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            Personnalisez vos choix de vie et découvrez le budget mensuel
-            nécessaire pour vivre confortablement à Kinshasa
-          </p>
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors">
+            <ArrowLeft className="w-4 h-4" />
+            Retour à l'accueil
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-2">
+                <Calculator className="w-4 h-4" />
+                Simulation personnalisée
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                {currentStep === 1 && "Sélectionnez votre parcours"}
+                {currentStep === 2 && "Personnalisez votre simulation"}
+                {currentStep === 3 && "Votre aperçu personnalisé"}
+                {currentStep === 4 && "Débloquez votre analyse complète"}
+              </h1>
+            </div>
+            <div className="hidden sm:block text-right">
+              <p className="text-muted-foreground text-sm">Étape {currentStep} sur 4</p>
+            </div>
+          </div>
+          
+          <Progress value={progressPercentage} className="h-2" />
+        </div>
+
+        <SimulationSteps
+          pathwayOptions={pathwayOptions}
+          selectedPathway={selectedPathway}
+          onPathwaySelect={handlePathwaySelect}
+          currentStep={currentStep}
+          onNextStep={handleNextStep}
+          onPrevStep={handlePrevStep}
+        />
+
+        {currentStep === 2 && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             <Card className="animate-in fade-in slide-in-from-left-4 duration-700">
               <CardHeader>
@@ -612,6 +681,17 @@ export default function SimulateurParcours() {
                 </div>
               </CardContent>
             </Card>
+
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={handlePrevStep} size="lg">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Retour
+              </Button>
+              <Button onClick={handleNextStep} size="lg" className="flex-1">
+                Voir mon aperçu
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
 
           <div className="lg:col-span-1">
@@ -721,10 +801,9 @@ export default function SimulateurParcours() {
 
                   <Separator />
 
-                  <Button className="w-full" size="lg">
-                    <Calculator className="w-4 h-4 mr-2" />
-                    Obtenir un devis personnalisé
-                  </Button>
+                  <div className="text-center text-muted-foreground text-xs">
+                    Estimation basée sur vos choix
+                  </div>
                 </CardContent>
               </Card>
 
@@ -785,6 +864,7 @@ export default function SimulateurParcours() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </div>
   );

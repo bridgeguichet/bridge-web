@@ -6,12 +6,17 @@ import Image from "next/image";
 import {
   ArrowRight,
   Calculator,
+  CheckCircle2,
+  Clock,
   ClipboardList,
   Coffee,
   Globe,
   Plane,
+  Shield,
   Sparkles,
+  ThumbsUp,
   TrendingUp,
+  Users,
   WalletCards,
   Zap,
 } from "lucide-react";
@@ -100,8 +105,8 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <HeroHeader />
       <main className="mx-auto w-full max-w-6xl px-4 pt-24 pb-10 sm:px-6 sm:pt-28 sm:pb-14">
-        <section className="relative isolate grid gap-8 overflow-hidden px-0 py-6 sm:grid-cols-12 sm:py-10">
-          <div className="order-1 flex flex-col justify-center sm:order-1 sm:col-span-6">
+        <section className="relative isolate overflow-hidden px-0 py-6 sm:py-10">
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
             <p className="font-semibold text-muted-secondary text-xs tracking-wide">
               {t("external-hero.minidescription")}
             </p>
@@ -117,7 +122,7 @@ export default function Home() {
               {t("external-hero.description")}
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-2">
+            <div className="mt-7 flex flex-wrap justify-center gap-2">
               <span className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 {t("external-hero.feature1")}
@@ -137,155 +142,145 @@ export default function Home() {
                 <a href="#simulateur">{t("external-hero.ctaSimulation")}</a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-3xl hover:text-background">
-                <Link href="/dashboard">{t("external-hero.rejoindrePlateforme")}</Link>
+                <Link href="/auth/register">{t("external-hero.rejoindrePlateforme")}</Link>
               </Button>
             </div>
-          </div>
 
-          <div className="order-2 sm:order-2 sm:col-span-6">
-            <div className="relative h-full w-full">
-              <div className="aspect-4/3 w-full rounded-3xl bg-muted sm:aspect-5/4" />
+            <div className="relative mt-12 w-full px-2 sm:px-4 md:px-0">
+              <Image
+                src="/media/simulateur-etape1.png"
+                alt="Simulateur Bridge - Étape 1"
+                width={1200}
+                height={800}
+                className="w-full rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] sm:shadow-[0_10px_40px_rgb(0,0,0,0.15)] md:shadow-2xl"
+                priority
+              />
             </div>
           </div>
         </section>
 
         <section
           id="simulateur"
-          className="-ml-[50vw] -mr-[50vw] relative bg-primary/50 right-1/2 left-1/2 w-screen scroll-mt-28 sm:scroll-mt-32"
+          className="-ml-[50vw] -mr-[50vw] relative bg-primary/10 right-1/2 left-1/2 w-screen scroll-mt-28 sm:scroll-mt-32"
         >
           <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
             <div className="-z-10 pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="-left-24 -top-24 absolute size-72 rounded-full bg-primary/10 blur-3xl" />
-              <div className="-bottom-24 -right-24 absolute size-72 rounded-full bg-primary/5 blur-3xl" />
+              <div className="-left-32 top-0 absolute size-96 rounded-full bg-accent/5 blur-3xl" />
+              <div className="-right-32 bottom-0 absolute size-96 rounded-full bg-primary/5 blur-3xl" />
             </div>
 
-            <div className="mx-auto  max-w-3xl text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border bg-background/50 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
-                <Calculator className="size-4 text-primary" />
+            <div className="mb-12 text-center">
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-background/80 px-4 py-1.5 text-accent text-xs font-medium backdrop-blur-sm">
+                <Calculator className="size-3.5" />
                 {t("simulationSection.badge")}
               </div>
-              <h2 className="mt-4 font-semibold text-2xl tracking-tight text-background sm:text-3xl">{t("simulationSection.title")}</h2>
+              <h2 className="mt-6 font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">
+                {t("simulationSection.title")}
+              </h2>
+              <p className="mx-auto mt-4 max-w-3xl text-muted-foreground text-sm leading-relaxed">
+                {t("simulationSection.subtitle")}
+              </p>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3">
-              <div className="group hover:-translate-y-0.5 rounded-2xl border bg-background p-4 transition-all duration-200 hover:border-primary/20 hover:bg-background/70 hover:shadow-sm">
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Sparkles className="size-5" />
-                  </span>
-                  <div>
-                    <p className="font-semibold text-sm">{t("simulationSection.cards.resultTitle")}</p>
-                    <p className="mt-1 text-muted-foreground text-sm leading-relaxed">
-                      {t("simulationSection.cards.resultDescription")}
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
+              <div className="space-y-6">
+                <div className="group flex gap-5">
+                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                      1
+                    </div>
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h3 className="mb-2 font-bold text-foreground text-lg">
+                      {t("simulationSection.steps.step1.title")}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {t("simulationSection.steps.step1.description")}
                     </p>
                   </div>
                 </div>
-              </div>
 
-              <div className="group hover:-translate-y-0.5 rounded-2xl border bg-background p-4 transition-all duration-200 hover:border-primary/20 hover:bg-background/70 hover:shadow-sm">
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <ClipboardList className="size-5" />
-                  </span>
-                  <div>
-                    <p className="font-semibold text-sm">{t("simulationSection.cards.checklistTitle")}</p>
-                    <p className="mt-1 text-muted-foreground text-sm leading-relaxed">
-                      {t("simulationSection.cards.checklistDescription")}
+                <div className="group flex gap-5">
+                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                      2
+                    </div>
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h3 className="mb-2 font-bold text-foreground text-lg">
+                      {t("simulationSection.steps.step2.title")}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {t("simulationSection.steps.step2.description")}
                     </p>
                   </div>
                 </div>
-              </div>
 
-              <div className="group hover:-translate-y-0.5 rounded-2xl border bg-background p-4 transition-all duration-200 hover:border-primary/20 hover:bg-background/70 hover:shadow-sm">
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <WalletCards className="size-5" />
-                  </span>
-                  <div>
-                    <p className="font-semibold text-sm">{t("simulationSection.cards.planningTitle")}</p>
-                    <p className="mt-1 text-muted-foreground text-sm leading-relaxed">
-                      {t("simulationSection.cards.planningDescription")}
+                <div className="group flex gap-5">
+                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                      3
+                    </div>
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h3 className="mb-2 font-bold text-foreground text-lg">
+                      {t("simulationSection.steps.step3.title")}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {t("simulationSection.steps.step3.description")}
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="mt-10 bg-background rounded-2xl border p-6 sm:mt-12 sm:grid sm:grid-cols-12 sm:gap-8 sm:p-10">
-              <div className="sm:col-span-7">
-                <p className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
-                  {t("simulationSection.final.badge")}
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                  {t("simulationSection.final.badgeSecondary")}
-                </p>
-                <h3 className="mt-4 font-semibold text-xl tracking-tight sm:text-2xl">
-                  {t("simulationSection.final.title")}
-                </h3>
-                <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                  {t("simulationSection.final.description")}
-                </p>
-
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                  <Button
-                    asChild
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    variant="outline"
-                  >
-                    <Link href="/diaspora">{t("simulationSection.final.paths.diaspora")}</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    variant="outline"
-                  >
-                    <Link href="/expat">{t("simulationSection.final.paths.expat")}</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    variant="outline"
-                  >
-                    <Link href="/retraite">{t("simulationSection.final.paths.retraite")}</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    variant="outline"
-                  >
-                    <Link href="/investisseur">{t("simulationSection.final.paths.investisseur")}</Link>
-                  </Button>
-                  <Button
-                    asChild
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    variant="outline"
-                  >
-                    <Link href="/nextgen">{t("simulationSection.final.paths.nextgen")}</Link>
-                  </Button>
-                  <Button
-                    className="h-auto justify-center rounded-2xl py-3 font-medium hover:text-background text-sm sm:text-base"
-                    disabled
-                    type="button"
-                    variant="outline"
-                  >
-                    {t("simulationSection.final.paths.transitaire")}
-                  </Button>
+                <div className="group flex gap-5">
+                  <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                      4
+                    </div>
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h3 className="mb-2 font-bold text-foreground text-lg">
+                      {t("simulationSection.steps.step4.title")}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {t("simulationSection.steps.step4.description")}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    {t("simulationSection.final.note")}
+                <div className="relative mt-10 pt-8">
+                  <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
+                  <Button asChild size="lg" className="group w-full h-14 text-base font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-xl hover:shadow-primary/20">
+                    <Link href="/simulateur-parcours">
+                      {t("simulationSection.cta.button")}
+                      <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </Button>
+                  <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-muted-foreground text-xs">
+                    <Shield className="h-3.5 w-3.5 text-accent" />
+                    {t("simulationSection.cta.note")}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-8 sm:col-span-5 sm:mt-0 sm:flex">
-                <div className="relative aspect-4/5 overflow-hidden rounded-3xl border sm:aspect-auto sm:min-h-[360px] sm:flex-1">
-                  <Image
-                    src="/media/image-fille.jpg"
-                    alt="fille"
-                    fill
-                    className="object-cover object-center"
-                  />
+              <div className="relative lg:block hidden">
+                <div className="sticky top-24">
+                  <div className="relative">
+                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-accent/20 to-primary/20 blur-2xl" />
+                    <div className="relative aspect-4/5 overflow-hidden rounded-3xl border border-accent/10 shadow-2xl">
+                      <Image
+                        src="/media/image-fille.jpg"
+                        alt="Simulation personnalisée"
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -299,12 +294,12 @@ export default function Home() {
           <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
             <div className="flex flex-col gap-8 sm:gap-10">
               <div className="mx-auto max-w-3xl text-center">
-                <div className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
+                <div className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 mb-4 text-muted-foreground text-xs backdrop-blur">
                   <Sparkles className="size-4 text-primary" />
                   <span>Trouvez votre parcours idéal</span>
                 </div>
 
-                <h2 className="mt-4 font-semibold text-2xl tracking-tight sm:text-3xl">Choisissez votre parcours</h2>
+                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">Choisissez votre parcours</h2>
 
                 <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
                   Sélectionnez le profil qui vous correspond le mieux afin que nous puissions adapter votre expérience et vous

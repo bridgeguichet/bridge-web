@@ -441,8 +441,27 @@
     "ctaSimulateFirst": "Simulate first"
   },
   "simulationSection": {
-    "badge": "Quick estimate",
-    "title": "Simulate your journey",
+    "badge": "3-minute simulation",
+    "title": "Smart Simulation Solutions",
+    "subtitle": "Navigate your project with confidence through our transparent simulation process designed to save you time and money.",
+    "steps": {
+      "step1": {
+        "title": "Choose Your Personalized Pathway",
+        "description": "Select from our 5 tailored pathways (Diaspora, Expatriate, Investor, Retirement, NextGen) for a customized experience aligned with your goals."
+      },
+      "step2": {
+        "title": "Get Instant Estimates",
+        "description": "Answer a few quick questions about your situation and receive personalized estimates in under 60 seconds, with no impact on your profile."
+      },
+      "step3": {
+        "title": "Discover Your Personalized Preview",
+        "description": "Visualize your potential, identified opportunities, and readiness score with recommendations tailored to your profile."
+      },
+      "step4": {
+        "title": "Access Your Complete Analysis",
+        "description": "Unlock your detailed strategy, roadmap, and expert recommendations to turn your project into reality."
+      }
+    },
     "cards": {
       "resultTitle": "Clear result",
       "resultDescription": "A simple summary to know what to do first.",
@@ -450,6 +469,82 @@
       "checklistDescription": "Steps and documents to prepare based on your profile.",
       "planningTitle": "Better planning",
       "planningDescription": "Estimate budget and timelines to move forward confidently."
+    },
+    "stats": {
+      "users": "Active users",
+      "usersCount": "+1,200",
+      "satisfaction": "Satisfaction rate",
+      "satisfactionRate": "98%",
+      "time": "Average time",
+      "timeValue": "3 min"
+    },
+    "features": {
+      "title": "Everything you need",
+      "personalized": "Personalized analysis based on your profile",
+      "instant": "Instant and detailed results",
+      "free": "100% free, no commitment",
+      "expert": "Expert recommendations included"
+    },
+    "cta": {
+      "title": "Ready to discover your pathway?",
+      "subtitle": "Start your personalized simulation in just a few clicks",
+      "button": "Start My Simulation Now",
+      "note": "No credit card required"
+    },
+    "pathways": {
+      "title": "Choose your pathway",
+      "subtitle": "Select the profile that best matches your situation",
+      "diaspora": {
+        "title": "Diaspora",
+        "benefit": "Reconnect with your roots and invest with confidence"
+      },
+      "expat": {
+        "title": "Expatriate",
+        "benefit": "Settle in easily and make the most of your experience"
+      },
+      "investisseur": {
+        "title": "Investor",
+        "benefit": "Maximize opportunities and secure your investments"
+      },
+      "retraite": {
+        "title": "Retirement",
+        "benefit": "Prepare a peaceful retirement in an ideal setting"
+      },
+      "nextgen": {
+        "title": "NextGen",
+        "benefit": "Launch your career with tailored support"
+      },
+      "cta": "Start simulation"
+    },
+    "preview": {
+      "title": "Your personalized preview",
+      "potential": "Estimated potential",
+      "opportunities": "identified opportunities",
+      "readiness": "Readiness score",
+      "note": "Based on your initial profile"
+    },
+    "locked": {
+      "title": "Unlock your complete analysis",
+      "features": {
+        "strategy": "Personalized detailed strategy",
+        "roadmap": "Step-by-step roadmap",
+        "recommendations": "Expert recommendations",
+        "budget": "Complete budget plan",
+        "timeline": "Implementation timeline",
+        "contacts": "Qualified contact network"
+      }
+    },
+    "conversion": {
+      "title": "Turn your project into reality",
+      "subtitle": "Access your complete simulation and benefit from personalized support",
+      "cta": "Unlock my complete simulation",
+      "benefits": {
+        "analysis": "Personalized analysis",
+        "guidance": "Expert guidance",
+        "strategy": "Tailored strategy"
+      },
+      "urgency": "Limited slots available today",
+      "social": "+1,200 people supported"
     },
     "final": {
       "badge": "Final step",
@@ -461,8 +556,7 @@
         "expat": "Expat journey",
         "retraite": "Retirement journey",
         "investisseur": "Investor journey",
-        "nextgen": "NextGen journey",
-        "transitaire": "Freight forwarder journey"
+        "nextgen": "NextGen journey"
       },
       "note": "You can refine your answers and save your progress in your space."
     }
