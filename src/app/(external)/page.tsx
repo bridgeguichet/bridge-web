@@ -6,9 +6,6 @@ import Image from "next/image";
 import {
   ArrowRight,
   Calculator,
-  CheckCircle2,
-  Clock,
-  ClipboardList,
   Coffee,
   Globe,
   Plane,
@@ -38,10 +35,10 @@ const parcoursList = [
       "Vous êtes d'origine congolaise et vivez à l'étranger ? Découvrez des services sur-mesure pour vous.",
     icon: Globe,
     color: "text-blue-500",
-    bgColor: "bg-blue-500",
-    bgGradient: "from-blue-500/10 via-transparent to-transparent",
-    bgHover: "hover:bg-blue-500/5",
-    borderHover: "hover:border-blue-500/50",
+    bgColor: "bg-rose-500",
+    bgGradient: "from-rose-500/10 via-transparent to-transparent",
+    bgHover: "hover:bg-rose-500/5",
+    borderHover: "hover:border-rose-500/50",
     badge: "Populaire",
     badgeVariant: "default" as const,
   },
@@ -51,10 +48,10 @@ const parcoursList = [
     description: "Vous venez vous installer au Congo ? Facilitez votre intégration et votre quotidien.",
     icon: Plane,
     color: "text-emerald-500",
-    bgColor: "bg-emerald-500",
-    bgGradient: "from-emerald-500/10 via-transparent to-transparent",
-    bgHover: "hover:bg-emerald-500/5",
-    borderHover: "hover:border-emerald-500/50",
+    bgColor: "bg-rose-500",
+    bgGradient: "from-rose-500/10 via-transparent to-transparent",
+    bgHover: "hover:bg-rose-500/5",
+    borderHover: "hover:border-rose-500/50",
     badge: null,
     badgeVariant: null,
   },
@@ -64,12 +61,12 @@ const parcoursList = [
     description: "Saisissez les meilleures opportunités d'investissement et développez vos projets.",
     icon: TrendingUp,
     color: "text-purple-500",
-    bgColor: "bg-purple-500",
-    bgGradient: "from-purple-500/10 via-transparent to-transparent",
-    bgHover: "hover:bg-purple-500/5",
-    borderHover: "hover:border-purple-500/50",
-    badge: "Premium",
-    badgeVariant: "secondary" as const,
+    bgColor: "bg-rose-500",
+    bgGradient: "from-rose-500/10 via-transparent to-transparent",
+    bgHover: "hover:bg-rose-500/5",
+    borderHover: "hover:border-rose-500/50",
+    badge: null,
+    badgeVariant: null,
   },
   {
     id: "nextgen",
@@ -77,12 +74,12 @@ const parcoursList = [
     description: "Les services pour propulser la nouvelle génération vers l'avenir de leurs ambitions.",
     icon: Zap,
     color: "text-amber-500",
-    bgColor: "bg-amber-500",
-    bgGradient: "from-amber-500/10 via-transparent to-transparent",
-    bgHover: "hover:bg-amber-500/5",
-    borderHover: "hover:border-amber-500/50",
-    badge: "Nouveau",
-    badgeVariant: "outline" as const,
+    bgColor: "bg-rose-500",
+    bgGradient: "from-rose-500/10 via-transparent to-transparent",
+    bgHover: "hover:bg-rose-500/5",
+    borderHover: "hover:border-rose-500/50",
+    badge: null,
+    badgeVariant: null,
   },
   {
     id: "retraite",
@@ -299,7 +296,7 @@ export default function Home() {
                   <span>Trouvez votre parcours idéal</span>
                 </div>
 
-                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">Choisissez votre parcours</h2>
+                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">Choisissez Votre Parcours</h2>
 
                 <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
                   Sélectionnez le profil qui vous correspond le mieux afin que nous puissions adapter votre expérience et vous
