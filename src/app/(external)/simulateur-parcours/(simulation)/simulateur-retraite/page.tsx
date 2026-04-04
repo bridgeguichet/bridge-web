@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { ArrowLeft, ArrowRight, Palmtree, Heart, Lock, Sparkles, CheckCircle2, AlertCircle, DollarSign, Calendar, Users, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
 export default function SimulateurRetraite() {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     typeRetraite: "",
@@ -40,7 +42,7 @@ export default function SimulateurRetraite() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux parcours
+{t("simulator.backToPathways")}
           </Link>
         </div>
 
@@ -50,29 +52,29 @@ export default function SimulateurRetraite() {
               <Palmtree className="w-6 h-6 text-rose-500" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Parcours Retraite</h1>
-              <p className="text-muted-foreground">Préparez une retraite paisible</p>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("simulator.retirement.title")}</h1>
+              <p className="text-muted-foreground">{t("simulator.retirement.subtitle")}</p>
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">Étape {currentStep} sur 3</p>
+          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
         </div>
 
         {currentStep === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Type de retraite envisagée</CardTitle>
-                <CardDescription>Quel est votre projet ?</CardDescription>
+                <CardTitle>{t("simulator.retirement.retirementType")}</CardTitle>
+                <CardDescription>{t("simulator.retirement.yourProject")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.typeRetraite} onValueChange={(value) => setFormData({ ...formData, typeRetraite: value })}>
                   <div className="space-y-3">
                     {[
-                      { value: "partielle", label: "Retraite partielle", icon: Calendar },
-                      { value: "complete", label: "Retraite complète", icon: Palmtree },
-                      { value: "active", label: "Retraite active (projets)", icon: Sparkles },
-                      { value: "saisonniere", label: "Résidence saisonnière", icon: Home },
+                      { value: "partielle", labelKey: "simulator.retirement.types.partial", icon: Calendar },
+                      { value: "complete", labelKey: "simulator.retirement.types.complete", icon: Palmtree },
+                      { value: "active", labelKey: "simulator.retirement.types.active", icon: Sparkles },
+                      { value: "saisonniere", labelKey: "simulator.retirement.types.seasonal", icon: Home },
                     ].map((option) => {
                       const Icon = option.icon;
                       return (
@@ -89,7 +91,7 @@ export default function SimulateurRetraite() {
                           <RadioGroupItem value={option.value} id={option.value} />
                           <Icon className="w-5 h-5 text-rose-500" />
                           <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
                         </div>
                       );
@@ -101,17 +103,17 @@ export default function SimulateurRetraite() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Priorité principale</CardTitle>
-                <CardDescription>Qu'est-ce qui compte le plus pour vous ?</CardDescription>
+                <CardTitle>{t("simulator.retirement.mainPriority")}</CardTitle>
+                <CardDescription>{t("simulator.retirement.whatMatters")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.priorite} onValueChange={(value) => setFormData({ ...formData, priorite: value })}>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "sante", label: "Services santé" },
-                      { value: "calme", label: "Cadre paisible" },
-                      { value: "communaute", label: "Communauté active" },
-                      { value: "famille", label: "Proximité famille" },
+                      { value: "sante", labelKey: "simulator.retirement.priorities.health" },
+                      { value: "calme", labelKey: "simulator.retirement.priorities.peaceful" },
+                      { value: "communaute", labelKey: "simulator.retirement.priorities.community" },
+                      { value: "famille", labelKey: "simulator.retirement.priorities.family" },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -125,7 +127,7 @@ export default function SimulateurRetraite() {
                       >
                         <RadioGroupItem value={option.value} id={option.value} />
                         <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium text-sm">
-                          {option.label}
+                          {t(option.labelKey)}
                         </Label>
                       </div>
                     ))}
@@ -136,7 +138,7 @@ export default function SimulateurRetraite() {
 
             <div className="flex justify-end">
               <Button onClick={handleNext} disabled={!formData.typeRetraite || !formData.priorite} size="lg">
-                Continuer
+{t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -147,13 +149,13 @@ export default function SimulateurRetraite() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Budget mensuel disponible</CardTitle>
-                <CardDescription>Pension et ressources mensuelles (estimation)</CardDescription>
+                <CardTitle>{t("simulator.retirement.availableBudget")}</CardTitle>
+                <CardDescription>{t("simulator.retirement.pensionResources")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-rose-500">${formData.budget[0]}</p>
-                  <p className="text-sm text-muted-foreground mt-1">par mois</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.common.perMonth")}</p>
                 </div>
                 <Slider
                   value={formData.budget}
@@ -172,13 +174,13 @@ export default function SimulateurRetraite() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Âge actuel</CardTitle>
-                <CardDescription>Pour personnaliser votre plan</CardDescription>
+                <CardTitle>{t("simulator.retirement.currentAge")}</CardTitle>
+                <CardDescription>{t("simulator.retirement.personalizeYourPlan")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
-                  <p className="text-4xl font-bold text-rose-500">{formData.age[0]} ans</p>
-                  <p className="text-sm text-muted-foreground mt-1">âge</p>
+                  <p className="text-4xl font-bold text-rose-500">{formData.age[0]} {t("simulator.retirement.years")}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.retirement.age")}</p>
                 </div>
                 <Slider
                   value={formData.age}
@@ -189,19 +191,19 @@ export default function SimulateurRetraite() {
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>50 ans</span>
-                  <span>75 ans</span>
+                  <span>50 {t("simulator.retirement.years")}</span>
+                  <span>75 {t("simulator.retirement.years")}</span>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex gap-3">
-              <Button variant="outline" onClick={handleBack} size="lg">
+              <Button variant="outline" onClick={handleBack} size="lg" className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Retour
+{t("simulator.back")}
               </Button>
               <Button onClick={handleNext} size="lg" className="flex-1">
-                Voir mon aperçu
+                {t("simulator.viewPreview")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -214,73 +216,40 @@ export default function SimulateurRetraite() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-rose-500" />
-                  <Badge variant="outline" className="text-rose-500 border-rose-500">Aperçu personnalisé</Badge>
+                  <Badge variant="outline" className="text-rose-500 border-rose-500">{t("simulator.common.personalizedPreview")}</Badge>
                 </div>
-                <CardTitle>Votre profil Retraite</CardTitle>
-                <CardDescription>Basé sur vos réponses</CardDescription>
+                <CardTitle>{t("simulator.retirement.yourProfile")}</CardTitle>
+                <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-rose-500/5 border border-rose-500/20 text-center">
                     <DollarSign className="w-6 h-6 text-rose-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-rose-500">${formData.budget[0]}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Budget mensuel</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.common.monthlyBudget")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20 text-center">
                     <Calendar className="w-6 h-6 text-blue-500 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-blue-500">{formData.age[0]} ans</p>
-                    <p className="text-xs text-muted-foreground mt-1">Âge actuel</p>
+                    <p className="text-2xl font-bold text-blue-500">{formData.age[0]} {t("simulator.retirement.years")}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.retirement.currentAge")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20 text-center">
                     <Heart className="w-6 h-6 text-purple-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-purple-500 capitalize">{formData.priorite}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Priorité</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.retirement.priority")}</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground">
-                      Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre plan retraite complet avec cadre de vie adapté, services santé, communauté active et accompagnement personnalisé, créez votre compte.
-                    </p>
+                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.retirement.previewNote") }} />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <CardTitle>Plan complet débloqué après inscription</CardTitle>
-                </div>
-                <CardDescription>Accédez à votre plan retraite personnalisé</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    "Cadre de vie adapté et sécurisé",
-                    "Services santé et cliniques partenaires",
-                    "Communauté de retraités actifs",
-                    "Activités et loisirs organisés",
-                    "Accompagnement administratif complet",
-                    "Plan financier optimisé",
-                  ].map((item, idx) => (
-                    <div key={idx} className="relative p-3 rounded-lg border bg-muted/30 backdrop-blur-sm">
-                      <div className="absolute inset-0 bg-linear-to-r from-background/80 to-background/60 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                        <Lock className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                      <div className="opacity-40 flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <p className="text-sm font-medium">{item}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
+            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -288,34 +257,37 @@ export default function SimulateurRetraite() {
                     <Sparkles className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Débloquez votre plan retraite complet</h3>
+                    <h3 className="text-xl font-bold mb-2">{t("simulator.retirement.unlockPlan")}</h3>
                     <p className="text-muted-foreground">
-                      Créez votre compte pour accéder à votre plan personnalisé et bénéficier d'un accompagnement dédié
+                      {t("simulator.retirement.unlockDesc")}
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                    <Button asChild size="lg" className="text-base">
-                      <Link href="/auth/register">
-                        Créer mon compte gratuit
+                    <Button asChild variant="outline" size="lg" className="text-base hover:text-white">
+                      <Link href="/#parcours">
+                        {t("simulator.common.completePathway")}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                      <Link href="/">Parler à un conseiller</Link>
+                    <Button asChild size="lg" className="text-base">
+                      <Link href="/auth/register">
+                        {t("simulator.common.createFreeAccount")}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
                     </Button>
                   </div>
                   <div className="flex items-center justify-center gap-6 pt-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Gratuit</span>
+                      <span className="text-muted-foreground">{t("simulator.common.free")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Sans engagement</span>
+                      <span className="text-muted-foreground">{t("simulator.common.noCommitment")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Accès immédiat</span>
+                      <span className="text-muted-foreground">{t("simulator.common.immediateAccess")}</span>
                     </div>
                   </div>
                 </div>
@@ -323,9 +295,9 @@ export default function SimulateurRetraite() {
             </Card>
 
             <div className="text-center">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button variant="ghost" onClick={handleBack} className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Modifier mes réponses
+{t("simulator.modifyAnswers")}
               </Button>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { ArrowLeft, ArrowRight, Globe, Home, Users, Briefcase, Lock, Sparkles, CheckCircle2, AlertCircle, TrendingUp, Calendar, MapPin, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
 export default function SimulateurDiaspora() {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     objectif: "",
@@ -40,7 +42,7 @@ export default function SimulateurDiaspora() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux parcours
+            {t("simulator.backToPathways")}
           </Link>
         </div>
 
@@ -50,29 +52,29 @@ export default function SimulateurDiaspora() {
               <Globe className="w-6 h-6 text-blue-500" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Parcours Diaspora</h1>
-              <p className="text-muted-foreground">Reconnectez-vous avec vos racines</p>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("simulator.diaspora.title")}</h1>
+              <p className="text-muted-foreground">{t("simulator.diaspora.subtitle")}</p>
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">Étape {currentStep} sur 3</p>
+          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
         </div>
 
         {currentStep === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Quel est votre objectif principal ?</CardTitle>
-                <CardDescription>Sélectionnez ce qui correspond le mieux à votre projet</CardDescription>
+                <CardTitle>{t("simulator.diaspora.mainGoal")}</CardTitle>
+                <CardDescription>{t("simulator.diaspora.selectBestProject")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.objectif} onValueChange={(value) => setFormData({ ...formData, objectif: value })}>
                   <div className="space-y-3">
                     {[
-                      { value: "visite", label: "Visite familiale", icon: Users },
-                      { value: "investissement", label: "Investissement immobilier", icon: Home },
-                      { value: "business", label: "Opportunité business", icon: Briefcase },
-                      { value: "installation", label: "Installation progressive", icon: MapPin },
+                      { value: "visite", labelKey: "simulator.diaspora.goals.familyVisit", icon: Users },
+                      { value: "investissement", labelKey: "simulator.diaspora.goals.realEstate", icon: Home },
+                      { value: "business", labelKey: "simulator.diaspora.goals.business", icon: Briefcase },
+                      { value: "installation", labelKey: "simulator.diaspora.goals.progressiveSettlement", icon: MapPin },
                     ].map((option) => {
                       const Icon = option.icon;
                       return (
@@ -89,7 +91,7 @@ export default function SimulateurDiaspora() {
                           <RadioGroupItem value={option.value} id={option.value} />
                           <Icon className="w-5 h-5 text-blue-500" />
                           <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
                         </div>
                       );
@@ -101,17 +103,17 @@ export default function SimulateurDiaspora() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Durée envisagée</CardTitle>
-                <CardDescription>Combien de temps prévoyez-vous ?</CardDescription>
+                <CardTitle>{t("simulator.diaspora.plannedDuration")}</CardTitle>
+                <CardDescription>{t("simulator.diaspora.howLong")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.duree} onValueChange={(value) => setFormData({ ...formData, duree: value })}>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "court", label: "Court séjour", desc: "< 3 mois" },
-                      { value: "moyen", label: "Moyen terme", desc: "3-12 mois" },
-                      { value: "long", label: "Long terme", desc: "1-3 ans" },
-                      { value: "permanent", label: "Installation", desc: "Permanent" },
+                      { value: "court", labelKey: "simulator.diaspora.durations.short", descKey: "simulator.diaspora.durations.shortDesc" },
+                      { value: "moyen", labelKey: "simulator.diaspora.durations.medium", descKey: "simulator.diaspora.durations.mediumDesc" },
+                      { value: "long", labelKey: "simulator.diaspora.durations.long", descKey: "simulator.diaspora.durations.longDesc" },
+                      { value: "permanent", labelKey: "simulator.diaspora.durations.permanent", descKey: "simulator.diaspora.durations.permanentDesc" },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -126,9 +128,9 @@ export default function SimulateurDiaspora() {
                         <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
                         <div className="flex-1">
                           <Label htmlFor={option.value} className="cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
-                          <p className="text-xs text-muted-foreground">{option.desc}</p>
+                          <p className="text-xs text-muted-foreground">{t(option.descKey)}</p>
                         </div>
                       </div>
                     ))}
@@ -139,7 +141,7 @@ export default function SimulateurDiaspora() {
 
             <div className="flex justify-end">
               <Button onClick={handleNext} disabled={!formData.objectif || !formData.duree} size="lg">
-                Continuer
+                {t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -150,13 +152,13 @@ export default function SimulateurDiaspora() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Budget mensuel estimé</CardTitle>
-                <CardDescription>Glissez pour ajuster (estimation approximative)</CardDescription>
+                <CardTitle>{t("simulator.diaspora.estimatedBudget")}</CardTitle>
+                <CardDescription>{t("simulator.diaspora.adjustEstimate")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-blue-500">${formData.budget[0]}</p>
-                  <p className="text-sm text-muted-foreground mt-1">par mois</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.common.perMonth")}</p>
                 </div>
                 <Slider
                   value={formData.budget}
@@ -175,13 +177,13 @@ export default function SimulateurDiaspora() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Taille du groupe</CardTitle>
-                <CardDescription>Combien de personnes vous accompagnent ?</CardDescription>
+                <CardTitle>{t("simulator.diaspora.groupSize")}</CardTitle>
+                <CardDescription>{t("simulator.diaspora.howManyPeople")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-blue-500">{formData.familySize[0]}</p>
-                  <p className="text-sm text-muted-foreground mt-1">personne(s)</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.common.persons")}</p>
                 </div>
                 <Slider
                   value={formData.familySize}
@@ -199,12 +201,12 @@ export default function SimulateurDiaspora() {
             </Card>
 
             <div className="flex gap-3">
-              <Button variant="outline" onClick={handleBack} size="lg">
+              <Button variant="outline" onClick={handleBack} size="lg" className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Retour
+                {t("simulator.back")}
               </Button>
               <Button onClick={handleNext} size="lg" className="flex-1">
-                Voir mon aperçu
+                {t("simulator.viewPreview")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -217,73 +219,40 @@ export default function SimulateurDiaspora() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-blue-500" />
-                  <Badge variant="outline" className="text-blue-500 border-blue-500">Aperçu personnalisé</Badge>
+                  <Badge variant="outline" className="text-blue-500 border-blue-500">{t("simulator.common.personalizedPreview")}</Badge>
                 </div>
-                <CardTitle>Votre profil Diaspora</CardTitle>
-                <CardDescription>Basé sur vos réponses</CardDescription>
+                <CardTitle>{t("simulator.diaspora.yourProfile")}</CardTitle>
+                <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20 text-center">
                     <DollarSign className="w-6 h-6 text-blue-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-blue-500">${formData.budget[0]}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Budget mensuel</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.common.monthlyBudget")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-center">
                     <Calendar className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-emerald-500">{formData.duree === "court" ? "3" : formData.duree === "moyen" ? "6" : formData.duree === "long" ? "18" : "36"}+</p>
-                    <p className="text-xs text-muted-foreground mt-1">Mois estimés</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.common.estimatedMonths")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20 text-center">
                     <Users className="w-6 h-6 text-purple-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-purple-500">{formData.familySize[0]}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Personne(s)</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.common.persons")}</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground">
-                      Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre stratégie complète avec budget détaillé, démarches administratives et contacts locaux, créez votre compte.
-                    </p>
+                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.diaspora.previewNote") }} />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <CardTitle>Contenu exclusif débloqué après inscription</CardTitle>
-                </div>
-                <CardDescription>Accédez à votre analyse complète</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    "Budget détaillé par catégorie",
-                    "Démarches administratives complètes",
-                    "Contacts et partenaires locaux",
-                    "Calendrier de mise en œuvre",
-                    "Opportunités d'investissement",
-                    "Réseau diaspora actif",
-                  ].map((item, idx) => (
-                    <div key={idx} className="relative p-3 rounded-lg border bg-muted/30 backdrop-blur-sm">
-                      <div className="absolute inset-0 bg-linear-to-r from-background/80 to-background/60 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                        <Lock className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                      <div className="opacity-40 flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <p className="text-sm font-medium">{item}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
+            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -291,34 +260,37 @@ export default function SimulateurDiaspora() {
                     <Sparkles className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Débloquez votre stratégie complète</h3>
+                    <h3 className="text-xl font-bold mb-2">{t("simulator.diaspora.unlockStrategy")}</h3>
                     <p className="text-muted-foreground">
-                      Créez votre compte pour accéder à votre plan personnalisé et bénéficier d'un accompagnement expert
+                      {t("simulator.diaspora.unlockDesc")}
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                    <Button asChild size="lg" className="text-base">
-                      <Link href="/auth/register">
-                        Créer mon compte gratuit
+                    <Button asChild variant="outline" size="lg" className="text-base hover:text-white">
+                      <Link href="/#parcours">
+                        {t("simulator.common.completePathway")}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                      <Link href="/">Parler à un conseiller</Link>
+                    <Button asChild size="lg" className="text-base">
+                      <Link href="/auth/register">
+                        {t("simulator.common.createFreeAccount")}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
                     </Button>
                   </div>
                   <div className="flex items-center justify-center gap-6 pt-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Gratuit</span>
+                      <span className="text-muted-foreground">{t("simulator.common.free")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Sans engagement</span>
+                      <span className="text-muted-foreground">{t("simulator.common.noCommitment")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Accès immédiat</span>
+                      <span className="text-muted-foreground">{t("simulator.common.immediateAccess")}</span>
                     </div>
                   </div>
                 </div>
@@ -326,9 +298,9 @@ export default function SimulateurDiaspora() {
             </Card>
 
             <div className="text-center">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button variant="ghost" onClick={handleBack} className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Modifier mes réponses
+                {t("simulator.modifyAnswers")}
               </Button>
             </div>
           </div>

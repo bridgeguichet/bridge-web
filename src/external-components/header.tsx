@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { ExternalLanguageSwitcher } from "@/external-components/language-switcher";
 
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
@@ -14,10 +14,9 @@ export const HeroHeader = () => {
   const { t } = useTranslation();
 
   const menuItems = [
-    { name: t("external-header.newHere"), href: "https://www.bridgeguichet.net/" },
+    { name: t("external-header.about"), href: "https://www.bridgeguichet.net/a-propos" },
     { name: t("external-header.parcours"), href: "#parcours" },
     { name: t("external-header.simulation"), href: "#simulateur" },
-    { name: t("external-header.account") },
   ];
 
   React.useEffect(() => {
@@ -121,14 +120,14 @@ export const HeroHeader = () => {
                     <span>Login</span>
                   </Link>
                 </Button> */}
-                <LanguageSwitcher />
+                <ExternalLanguageSwitcher />
                 <Button
                   asChild
                   //   size=""
                   className={cn(isScrolled && "lg:hidden")}
                 >
-                  <Link href="/contact">
-                    <span>{t("external-header.contactUs")}</span>
+                  <Link href="/login">
+                    <span>{t("external-header.account")}</span>
                   </Link>
                 </Button>
                 <Button
@@ -137,7 +136,7 @@ export const HeroHeader = () => {
                   className={cn(isScrolled ? "hidden lg:inline-flex" : "hidden")}
                 >
                   <Link href="/contact">
-                    <span>{t("external-header.contactUs")}</span>
+                    <span>{t("external-header.account")}</span>
                   </Link>
                 </Button>
               </div>

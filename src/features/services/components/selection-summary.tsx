@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Service, ServicePack } from "../types";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { getPackTranslationKey, getServiceTranslationKey } from "../utils";
 
 interface SelectionSummaryProps {
   selectedServices: Service[];
@@ -20,6 +22,8 @@ export function SelectionSummary({
   onRemove,
   onClear,
 }: SelectionSummaryProps) {
+  const { t } = useTranslation();
+  
   if (selectedServices.length === 0 && selectedPacks.length === 0) return null;
 
   const totalEstimate = selectedPacks.length > 0
@@ -39,14 +43,14 @@ export function SelectionSummary({
     <Card className="border-2 border-primary/20 bg-primary/5">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Votre sélection</CardTitle>
+          <CardTitle className="text-lg">{t("services.interface.yourSelection")}</CardTitle>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClear}
             className="text-muted-foreground hover:text-foreground"
           >
-            Tout effacer
+            {t("services.interface.clearAll")}
           </Button>
         </div>
       </CardHeader>
@@ -64,10 +68,10 @@ export function SelectionSummary({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-sm leading-tight">
-                      {pack.name}
+                      {t(`services.packs.${getPackTranslationKey(pack.id)}.name`)}
                     </p>
                     <p className="text-muted-foreground text-xs mt-0.5">
-                      {pack.services.length} services inclus
+                      {t("services.interface.servicesIncludedCount", { count: pack.services.length })}
                     </p>
                     <Badge variant="secondary" className="text-xs mt-1">
                       {pack.price}
@@ -87,7 +91,7 @@ export function SelectionSummary({
               >
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm leading-tight truncate">
-                    {service.title}
+                    {t(`services.${getServiceTranslationKey(service.id)}.title`)}
                   </p>
                   {service.price && (
                     <Badge variant="secondary" className="text-xs mt-1">
@@ -112,14 +116,14 @@ export function SelectionSummary({
           <div className="pt-3 border-t">
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">
-                Estimation totale
+                {t("services.interface.totalEstimate")}
               </span>
               <span className="font-bold text-lg text-primary">
                 ${totalEstimate.toFixed(0)}
               </span>
             </div>
             <p className="text-muted-foreground text-xs mt-1">
-              Prix indicatif, peut varier selon votre situation
+              {t("services.interface.priceDisclaimer")}
             </p>
           </div>
         )}

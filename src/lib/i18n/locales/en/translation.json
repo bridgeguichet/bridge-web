@@ -17,7 +17,9 @@
     "previous": "Previous",
     "confirm": "Confirm",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "readMore": "Read more",
+    "category": "Category"
   },
   "auth": {
     "login": "Log in",
@@ -70,8 +72,7 @@
     "errorOccurred": "An error occurred"
   },
   "external-header": {
-    "newHere": "Who are we?",
-    "contactUs": "Contact us",
+    "about": "About",
     "parcours": "Journey",
     "simulation": "Simulation",
     "account": "Account"
@@ -571,6 +572,35 @@
     "ctaSimulation": "Simulate my journey",
     "rejoindrePlateforme": "Join the platform"
   },
+  "parcoursPage": {
+    "badge": "Find your ideal journey",
+    "title": "Choose Your Journey",
+    "description": "Select the profile that best matches you so we can tailor your experience and offer you the most relevant services.",
+    "startNow": "Start now",
+    "popular": "Popular",
+    "parcours": {
+      "diaspora": {
+        "title": "Diaspora",
+        "description": "Are you of Congolese origin and living abroad? Discover tailor-made services for you."
+      },
+      "expat": {
+        "title": "Expatriate",
+        "description": "Are you coming to settle in Congo? Facilitate your integration and daily life."
+      },
+      "investisseur": {
+        "title": "Investor",
+        "description": "Seize the best investment opportunities and develop your projects."
+      },
+      "nextgen": {
+        "title": "NextGen (18-26 years)",
+        "description": "Services to propel the new generation towards the future of their ambitions."
+      },
+      "retraite": {
+        "title": "Retirement",
+        "description": "Prepare your future serenely or enjoy your golden years in complete peace of mind."
+      }
+    }
+  },
   "contactSection": {
     "meetUs": "Prefer to meet us?",
     "meetUsDes": "Book an appointment in one of our offices for a personalized consultation.",
@@ -859,5 +889,1066 @@
       "address": "Address",
       "addressDetails": "Otantika Building 22, Avenue Tombalebaye, Kinshasa/Gombe, DRC"
     }
+  },
+  "simulator": {
+    "backToHome": "Back to home",
+    "backToPathways": "Back to pathways",
+    "personalizedSimulation": "Personalized simulation",
+    "selectYourPathway": "Select your pathway",
+    "stepOf": "Step {{current}} of {{total}}",
+    "continue": "Continue",
+    "back": "Back",
+    "viewPreview": "View my preview",
+    "modifyAnswers": "Modify my answers",
+    "chooseProfile": "Choose your profile",
+    "selectBestMatch": "Select the pathway that best matches your situation",
+    "stats": {
+      "peopleHelped": "People helped",
+      "satisfactionRate": "Satisfaction rate",
+      "specializedPathways": "Specialized pathways"
+    },
+    "pathways": {
+      "diaspora": "Diaspora",
+      "expat": "Expatriate",
+      "investor": "Investor",
+      "retirement": "Retirement",
+      "nextgen": "NextGen"
+    },
+    "common": {
+      "perMonth": "per month",
+      "persons": "person(s)",
+      "personalizedPreview": "Personalized preview",
+      "basedOnAnswers": "Based on your answers",
+      "simplifiedPreview": "simplified preview",
+      "monthlyBudget": "Monthly budget",
+      "estimatedMonths": "Estimated months",
+      "free": "Free",
+      "noCommitment": "No commitment",
+      "immediateAccess": "Immediate access",
+      "completePathway": "Complete the full pathway",
+      "createFreeAccount": "Create my free account"
+    },
+    "diaspora": {
+      "title": "Diaspora Pathway",
+      "subtitle": "Reconnect with your roots",
+      "mainGoal": "What is your main goal?",
+      "selectBestProject": "Select what best matches your project",
+      "goals": {
+        "familyVisit": "Family visit",
+        "realEstate": "Real estate investment",
+        "business": "Business opportunity",
+        "progressiveSettlement": "Progressive settlement"
+      },
+      "plannedDuration": "Planned duration",
+      "howLong": "How long are you planning?",
+      "durations": {
+        "short": "Short stay",
+        "shortDesc": "< 3 months",
+        "medium": "Medium term",
+        "mediumDesc": "3-12 months",
+        "long": "Long term",
+        "longDesc": "1-3 years",
+        "permanent": "Settlement",
+        "permanentDesc": "Permanent"
+      },
+      "estimatedBudget": "Estimated monthly budget",
+      "adjustEstimate": "Slide to adjust (approximate estimate)",
+      "groupSize": "Group size",
+      "howManyPeople": "How many people are accompanying you?",
+      "yourProfile": "Your Diaspora profile",
+      "previewNote": "This is a <strong>simplified preview</strong>. To get your complete strategy with detailed budget, administrative procedures and local contacts, create your account.",
+      "unlockStrategy": "Unlock your complete strategy",
+      "unlockDesc": "Create your account to access your personalized plan and benefit from expert support"
+    },
+    "expat": {
+      "title": "Expatriate Pathway",
+      "subtitle": "Turnkey installation",
+      "contractType": "Contract type",
+      "professionalSituation": "What is your professional situation?",
+      "contracts": {
+        "local": "Local contract",
+        "expatPackage": "Expatriate package",
+        "entrepreneur": "Entrepreneur / Freelance",
+        "internalTransfer": "Internal transfer"
+      },
+      "activitySector": "Activity sector",
+      "workDomain": "What field do you work in?",
+      "sectors": {
+        "ngo": "NGO / Humanitarian",
+        "mining": "Mining / Energy",
+        "telecom": "Telecom / Tech",
+        "finance": "Finance / Banking",
+        "construction": "Construction",
+        "other": "Other sector"
+      },
+      "availableBudget": "Available monthly budget",
+      "globalEstimate": "Overall estimate (housing, daily life, services)",
+      "householdComposition": "Household composition",
+      "peopleToSettle": "Number of people to settle",
+      "yourProfile": "Your Expatriate profile",
+      "previewNote": "This is a <strong>simplified preview</strong>. To get your complete installation package with pre-selected housing, premium services and dedicated concierge, create your account.",
+      "unlockPackage": "Access your complete installation package",
+      "unlockDesc": "Create your account to unlock all premium services and benefit from dedicated concierge"
+    },
+    "investor": {
+      "title": "Investor Pathway",
+      "subtitle": "Maximize your opportunities",
+      "investmentType": "Type of investment sought",
+      "interestedSector": "Which sector interests you?",
+      "types": {
+        "residential": "Residential real estate",
+        "commercial": "Commercial real estate",
+        "businessParticipation": "Business participation",
+        "diversified": "Diversified portfolio"
+      },
+      "investmentHorizon": "Investment horizon",
+      "howLongEnvisage": "What duration are you considering?",
+      "horizons": {
+        "short": "Short term",
+        "shortDesc": "1-3 years",
+        "medium": "Medium term",
+        "mediumDesc": "3-7 years",
+        "long": "Long term",
+        "longDesc": "7-15 years",
+        "heritage": "Heritage",
+        "heritageDesc": "15+ years"
+      },
+      "availableCapital": "Available capital",
+      "amountToInvest": "Amount you wish to invest (estimate)",
+      "initialCapital": "initial capital",
+      "riskProfile": "Risk profile",
+      "riskLevel": "What level of risk do you accept?",
+      "risks": {
+        "prudent": "Prudent",
+        "moderate": "Moderate",
+        "balanced": "Balanced",
+        "dynamic": "Dynamic",
+        "aggressive": "Aggressive"
+      },
+      "yourProfile": "Your Investor profile",
+      "horizon": "Horizon",
+      "previewNote": "This is a <strong>simplified preview</strong>. To get your complete market analysis, exclusive opportunities, due diligence and detailed investment strategy, create your account.",
+      "unlockStrategy": "Unlock your investment strategy",
+      "unlockDesc": "Create your account to access exclusive opportunities and benefit from expert support"
+    },
+    "retirement": {
+      "title": "Retirement Pathway",
+      "subtitle": "Prepare a peaceful retirement",
+      "retirementType": "Type of retirement envisaged",
+      "yourProject": "What is your project?",
+      "types": {
+        "partial": "Partial retirement",
+        "complete": "Complete retirement",
+        "active": "Active retirement (projects)",
+        "seasonal": "Seasonal residence"
+      },
+      "mainPriority": "Main priority",
+      "whatMatters": "What matters most to you?",
+      "priorities": {
+        "health": "Health services",
+        "peaceful": "Peaceful setting",
+        "community": "Active community",
+        "family": "Family proximity"
+      },
+      "availableBudget": "Available monthly budget",
+      "pensionResources": "Pension and monthly resources (estimate)",
+      "currentAge": "Current age",
+      "personalizeYourPlan": "To personalize your plan",
+      "age": "age",
+      "years": "years",
+      "yourProfile": "Your Retirement profile",
+      "priority": "Priority",
+      "previewNote": "This is a <strong>simplified preview</strong>. To get your complete retirement plan with adapted living environment, health services, active community and personalized support, create your account.",
+      "unlockPlan": "Unlock your complete retirement plan",
+      "unlockDesc": "Create your account to access your personalized plan and benefit from dedicated support"
+    },
+    "nextgen": {
+      "title": "NextGen Pathway",
+      "subtitle": "Launch your career",
+      "mainGoal": "Main goal",
+      "whatLookingFor": "What are you looking for?",
+      "goals": {
+        "internship": "Internship / Work-study",
+        "firstJob": "First job",
+        "startBusiness": "Start my business",
+        "network": "Develop my network"
+      },
+      "interestDomain": "Area of interest",
+      "sectorToEvolve": "In which sector do you want to evolve?",
+      "domains": {
+        "tech": "Tech / Digital",
+        "finance": "Finance / Banking",
+        "commerce": "Commerce / Sales",
+        "marketing": "Marketing / Communication",
+        "engineering": "Engineering",
+        "other": "Other sector"
+      },
+      "experienceLevel": "Experience level",
+      "whereAreYou": "Where are you in your journey?",
+      "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "confirmed": "Confirmed",
+        "expert": "Expert"
+      },
+      "ambitionLevel": "Ambition level",
+      "yourVision": "What is your vision?",
+      "ambitions": {
+        "stable": "Stable",
+        "progressive": "Progressive",
+        "ambitious": "Ambitious",
+        "veryAmbitious": "Very ambitious",
+        "visionary": "Visionary"
+      },
+      "yourProfile": "Your NextGen profile",
+      "objective": "Objective",
+      "domain": "Domain",
+      "ambition": "Ambition",
+      "previewNote": "This is a <strong>simplified preview</strong>. To get your complete career plan with professional mentoring, young talent network, exclusive opportunities and personalized support, create your account.",
+      "unlockCareerPlan": "Unlock your complete career plan",
+      "unlockDesc": "Create your account to access mentoring, network and exclusive opportunities"
+    }
+  },
+  "diasporaPage": {
+    "title": "Diaspora Journey",
+    "subtitle": "Customize your experience in a few steps",
+    "exit": "Exit",
+    "steps": {
+      "targetCity": "Target city",
+      "projectType": "Project type",
+      "monthlyBudget": "Monthly budget",
+      "lifestyle": "Lifestyle",
+      "services": "Services",
+      "appointment": "Appointment"
+    },
+    "stepsLabel": "Steps",
+    "stepOf": "Step {{current}}/{{total}}",
+    "cities": {
+      "kinshasa": {
+        "name": "Kinshasa",
+        "description": "Dynamic capital"
+      },
+      "lubumbashi": {
+        "name": "Lubumbashi",
+        "description": "Mining capital"
+      },
+      "kolwezi": {
+        "name": "Kolwezi",
+        "description": "Industrial hub"
+      },
+      "matadi": {
+        "name": "Matadi",
+        "description": "Port city"
+      }
+    },
+    "projectTypes": {
+      "courtSejour": {
+        "name": "Short stay",
+        "description": "Temporary visit of a few weeks"
+      },
+      "installation": {
+        "name": "Permanent settlement",
+        "description": "Settle permanently in Congo"
+      },
+      "investissement": {
+        "name": "Investment",
+        "description": "Develop a business project"
+      },
+      "exploration": {
+        "name": "Exploration",
+        "description": "Discover opportunities"
+      }
+    },
+    "budgetRanges": {
+      "range1": "$500 - $1,500",
+      "range2": "$1,500 - $3,000",
+      "range3": "$3,000 - $6,000",
+      "range4": "$6,000 - $10,000",
+      "range5": "$10,000 - $15,000"
+    },
+    "lifestyles": {
+      "standard": {
+        "name": "Standard",
+        "description": "Essential and functional comfort"
+      },
+      "residentiel": {
+        "name": "Secure residential",
+        "description": "Secure neighborhoods with amenities"
+      },
+      "premium": {
+        "name": "Premium",
+        "description": "High-end and exclusive services"
+      },
+      "ultraPremium": {
+        "name": "Ultra Premium",
+        "description": "Absolute luxury and bespoke services"
+      }
+    },
+    "step1": {
+      "title": "Which city interests you?",
+      "subtitle": "Select your main destination"
+    },
+    "step2": {
+      "title": "What is your project?",
+      "subtitle": "Choose the type of project that matches your goals"
+    },
+    "step3": {
+      "title": "What is your monthly budget?",
+      "subtitle": "Select the range that matches your means"
+    },
+    "step4": {
+      "title": "What lifestyle are you looking for?",
+      "subtitle": "Choose the standard that matches your expectations"
+    },
+    "step5": {
+      "title": "Which services interest you?",
+      "subtitle": "Select the services you will need"
+    },
+    "step6": {
+      "title": "Schedule your appointment",
+      "subtitle": "Choose a date and time slot to discuss your project"
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "expatPage": {
+    "title": "Expatriate Journey",
+    "subtitle": "Facilitate your installation in Congo in a few steps",
+    "exit": "Exit",
+    "steps": {
+      "targetCity": "Target city",
+      "projectType": "Project type",
+      "monthlyBudget": "Monthly budget",
+      "lifestyle": "Lifestyle",
+      "missionDuration": "Mission duration",
+      "employer": "Employer",
+      "documents": "Documents",
+      "banking": "Banking",
+      "services": "Services",
+      "appointment": "Appointment"
+    },
+    "stepsLabel": "Steps",
+    "stepOf": "Step {{current}}/{{total}}",
+    "missionDurations": {
+      "courtTerme": {
+        "name": "Short term",
+        "description": "Less than 6 months"
+      },
+      "moyenTerme": {
+        "name": "Medium term",
+        "description": "6 months to 2 years"
+      },
+      "longTerme": {
+        "name": "Long term",
+        "description": "More than 2 years"
+      }
+    },
+    "step1": {
+      "title": "What is your target city?",
+      "subtitle": "Select the city where you wish to settle"
+    },
+    "step2": {
+      "title": "What is your project type?",
+      "subtitle": "Specify the nature of your visit to Congo"
+    },
+    "step3": {
+      "title": "What is your monthly budget?",
+      "subtitle": "Indicate the monthly budget you wish to allocate"
+    },
+    "step4": {
+      "title": "What lifestyle are you looking for?",
+      "subtitle": "Choose the standard that matches your expectations"
+    },
+    "step5": {
+      "title": "What is the duration of your mission?",
+      "subtitle": "Indicate the planned duration of your expatriation"
+    },
+    "step6": {
+      "title": "What is your employer? (Optional)",
+      "subtitle": "This information helps us better support you",
+      "employerLabel": "Employer name",
+      "employerHelp": "You can leave this field empty if you prefer",
+      "employerPlaceholder": "E.g.: Total Energies, Central Bank of Congo..."
+    },
+    "step7": {
+      "title": "Do you need help with document formalization?",
+      "subtitle": "Work permit, visa, administrative certificates, etc.",
+      "yes": "Yes",
+      "yesDescription": "I need support with my documents",
+      "no": "No",
+      "noDescription": "I manage my documents myself"
+    },
+    "step8": {
+      "title": "Do you need help opening a bank account?",
+      "subtitle": "Local account, international transfers, etc.",
+      "yes": "Yes",
+      "yesDescription": "I need banking support",
+      "no": "No",
+      "noDescription": "I manage my banking procedures myself"
+    },
+    "step9": {
+      "title": "Which services interest you?",
+      "subtitle": "Select the services you will need"
+    },
+    "step10": {
+      "title": "Schedule your appointment",
+      "subtitle": "Choose a date and time slot to discuss your project"
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "investorPage": {
+    "title": "Investor Journey",
+    "subtitle": "Structure your investment project in a few steps",
+    "exit": "Exit",
+    "steps": {
+      "budget": "Budget",
+      "sector": "Sector",
+      "horizon": "Horizon",
+      "financing": "Financing",
+      "services": "Services",
+      "appointment": "Appointment"
+    },
+    "stepsLabel": "Steps",
+    "stepOf": "Step {{current}}/{{total}}",
+    "investmentBudgets": {
+      "small": {
+        "label": "$10,000 - $50,000",
+        "description": "Small investment"
+      },
+      "medium": {
+        "label": "$50,000 - $200,000",
+        "description": "Medium investment"
+      },
+      "large": {
+        "label": "$200,000 - $1M",
+        "description": "Large investment"
+      },
+      "veryLarge": {
+        "label": "Over $1M",
+        "description": "Major investment"
+      }
+    },
+    "investmentSectors": {
+      "immobilier": {
+        "name": "Real Estate",
+        "description": "Residential, commercial, land"
+      },
+      "agriculture": {
+        "name": "Agriculture",
+        "description": "Agribusiness, processing"
+      },
+      "tech": {
+        "name": "Tech & Digital",
+        "description": "Startups, digital services"
+      },
+      "logistique": {
+        "name": "Logistics",
+        "description": "Transport, distribution"
+      },
+      "industrie": {
+        "name": "Industry",
+        "description": "Manufacturing, production"
+      },
+      "commerce": {
+        "name": "Commerce",
+        "description": "Retail, import-export"
+      },
+      "finance": {
+        "name": "Finance",
+        "description": "Financial services, fintech"
+      },
+      "autre": {
+        "name": "Other sector",
+        "description": "Specific opportunity"
+      }
+    },
+    "investmentHorizons": {
+      "courtTerme": {
+        "name": "Short term",
+        "description": "Less than 2 years - Quick return"
+      },
+      "longTerme": {
+        "name": "Long term",
+        "description": "More than 2 years - Sustainable growth"
+      }
+    },
+    "step1": {
+      "title": "What is your investment budget?",
+      "subtitle": "Select the range that matches your investment capacity"
+    },
+    "step2": {
+      "title": "Which sector do you want to invest in?",
+      "subtitle": "Choose the field of activity that interests you"
+    },
+    "step3": {
+      "title": "What is your investment horizon?",
+      "subtitle": "Define the expected duration of your investment"
+    },
+    "step4": {
+      "title": "Are you looking for financing?",
+      "subtitle": "Do you need help structuring or obtaining financing?",
+      "yes": "Yes",
+      "yesDescription": "I need support for financing",
+      "no": "No",
+      "noDescription": "My financing is already secured"
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "nextgenPage": {
+    "title": "NextGen Journey",
+    "subtitle": "Prepare your future in Congo in a few steps",
+    "exit": "Exit",
+    "steps": {
+      "age": "Age",
+      "objective": "Objective",
+      "destination": "Destination",
+      "services": "Services",
+      "appointment": "Appointment"
+    },
+    "stepsLabel": "Steps",
+    "stepOf": "Step {{current}}/{{total}}",
+    "objectives": {
+      "study": {
+        "name": "Studies",
+        "description": "Continue my studies or training"
+      },
+      "business": {
+        "name": "Business",
+        "description": "Launch or develop my business"
+      },
+      "employment": {
+        "name": "Employment",
+        "description": "Find a job or internship"
+      }
+    },
+    "popularCountries": {
+      "rdc": "DR Congo",
+      "france": "France",
+      "canada": "Canada",
+      "usa": "United States",
+      "belgium": "Belgium",
+      "uk": "United Kingdom"
+    },
+    "step1": {
+      "title": "What is your age?",
+      "subtitle": "This journey is designed for 18-26 year olds",
+      "ageLabel": "Your age",
+      "ageHelp": "Between 18 and 26 years old",
+      "agePlaceholder": "E.g.: 22",
+      "ageError": "Age must be between 18 and 26 years old"
+    },
+    "step2": {
+      "title": "What is your main objective?",
+      "subtitle": "Choose what best matches your project"
+    },
+    "step3": {
+      "title": "Which country are you targeting?",
+      "subtitle": "Select your destination or enter another country",
+      "otherCountryLabel": "Other country",
+      "otherCountryHelp": "Enter the country name if you don't see it above",
+      "otherCountryPlaceholder": "E.g.: Germany, Japan..."
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "retirementPage": {
+    "title": "Retirement Journey",
+    "subtitle": "Prepare your retirement in Congo with peace of mind",
+    "exit": "Exit",
+    "steps": {
+      "targetCity": "Target city",
+      "projectType": "Project type",
+      "pension": "Pension",
+      "lifestyle": "Lifestyle",
+      "healthFollowup": "Health followup",
+      "housing": "Housing",
+      "services": "Services",
+      "appointment": "Appointment"
+    },
+    "stepsLabel": "Steps",
+    "stepOf": "Step {{current}}/{{total}}",
+    "projectTypes": {
+      "preparationRetraite": {
+        "name": "Retirement planning",
+        "description": "Plan your retirement in Congo"
+      },
+      "installationRetraite": {
+        "name": "Permanent settlement",
+        "description": "Settle down to enjoy your retirement"
+      },
+      "sejourRegulier": {
+        "name": "Regular stays",
+        "description": "Alternate between home country and Congo"
+      },
+      "retourFamille": {
+        "name": "Family return",
+        "description": "Reunite with your family back home"
+      }
+    },
+    "pensionRanges": {
+      "range1": "$500 - $1,000",
+      "range2": "$1,000 - $2,000",
+      "range3": "$2,000 - $3,500",
+      "range4": "$3,500 - $5,000",
+      "range5": "$5,000 and above"
+    },
+    "step1": {
+      "title": "What is your target city?",
+      "subtitle": "Select the city where you wish to spend your retirement"
+    },
+    "step2": {
+      "title": "What is your project type?",
+      "subtitle": "Specify the nature of your retirement project"
+    },
+    "step3": {
+      "title": "What is your monthly pension?",
+      "subtitle": "Indicate your monthly pension amount to better guide you"
+    },
+    "step4": {
+      "title": "What lifestyle are you looking for?",
+      "subtitle": "Choose the standard that matches your expectations"
+    },
+    "step5": {
+      "title": "Do you need regular health monitoring?",
+      "subtitle": "Indicate if you require continuous medical support",
+      "yes": "Yes",
+      "yesDescription": "I need regular medical monitoring",
+      "no": "No",
+      "noDescription": "I am in good health"
+    },
+    "step6": {
+      "title": "Do you want to secure housing?",
+      "subtitle": "Do you need help finding or securing housing?",
+      "yes": "Yes",
+      "yesDescription": "I need help with my housing",
+      "no": "No",
+      "noDescription": "My housing is already secured"
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "finish": "Finish"
+    }
+  },
+  "services": {
+    "categories": {
+      "conseilAvantDepart": "Pre-Departure Consultation",
+      "formalisationExpat": "Expat Formalization",
+      "arriveeMobilite": "Arrival & Mobility",
+      "installationVie": "Installation & Living",
+      "santeAssistance": "Health & Assistance",
+      "banqueAssurance": "Banking & Insurance",
+      "formalisationRegularisation": "Formalization & Regularization",
+      "businessInvestissement": "Business & Investment",
+      "bridgeNextGen": "Bridge Next-Gen",
+      "bridgeRenaissance": "Bridge Renaissance (Retirement)"
+    },
+    "subcategories": {
+      "accueilCoordination": "Welcome & Coordination",
+      "mobiliteVoyage": "Mobility & Travel",
+      "logement": "Housing",
+      "installation": "Installation",
+      "orientationQuotidienne": "Daily Orientation",
+      "banque": "Banking"
+    },
+    "conseilStandard": {
+      "title": "Strategic session (standard)",
+      "description": "Personalized discussion to understand your project, answer your questions and guide you effectively before your arrival in DRC.",
+      "shortDescription": "Personalized discussion to understand and guide your project."
+    },
+    "conseilPremium": {
+      "title": "Strategic session (premium)",
+      "description": "In-depth analysis for demanding profiles (investors, expatriates, complex projects) with concrete recommendations and action plan.",
+      "shortDescription": "In-depth analysis with recommendations and action plan."
+    },
+    "auditProjet": {
+      "title": "Diaspora project audit",
+      "description": "Complete study of your project (return or investment) with risk identification, opportunities and implementation strategy.",
+      "shortDescription": "Complete study with risk and opportunity identification."
+    },
+    "conseilExpatPremium": {
+      "title": "Premium expatriation consulting",
+      "description": "Complete support to prepare your expatriation: formalities, logistics, cultural integration and practical advice.",
+      "shortDescription": "Complete support to prepare your expatriation."
+    },
+    "assistancePermisTravail": {
+      "title": "Work permit assistance",
+      "description": "Complete support for obtaining your work permit and professional documents.",
+      "shortDescription": "Obtaining your work permit and documents."
+    },
+    "assistanceVisaExpat": {
+      "title": "Expat visa assistance",
+      "description": "Complete management of your expatriation visa procedures and renewal.",
+      "shortDescription": "Management of your visa procedures and renewal."
+    },
+    "packDocumentsExpat": {
+      "title": "Expat documents pack",
+      "description": "Complete formalization of all your administrative documents (permits, visas, certificates).",
+      "shortDescription": "Formalization of all your administrative documents."
+    },
+    "accueilSimple": {
+      "title": "Simple airport welcome",
+      "description": "An agent welcomes you at the airport to facilitate your first steps and guide you upon arrival.",
+      "shortDescription": "Welcome agent at the airport to guide you."
+    },
+    "chauffeurSimple": {
+      "title": "Secure driver (one way)",
+      "description": "Secure transfer from the airport to your accommodation with a selected and reliable driver.",
+      "shortDescription": "Secure transfer from airport to your accommodation."
+    },
+    "assistanceComplete": {
+      "title": "Complete arrival assistance",
+      "description": "Global support: welcome, luggage management, transport and first field recommendations.",
+      "shortDescription": "Global support from your arrival."
+    },
+    "chauffeurAr": {
+      "title": "Round-trip driver",
+      "description": "Secure round-trip transport for your essential trips.",
+      "shortDescription": "Secure transport for your trips."
+    },
+    "assistance48h": {
+      "title": "48h assistance",
+      "description": "Intensive support during your first 48 hours to avoid mistakes, time loss and bad decisions.",
+      "shortDescription": "Intensive support during your first 48 hours."
+    },
+    "accueilVip": {
+      "title": "VIP protocol welcome",
+      "description": "Premium experience with priority welcome, advanced coordination and high-end service.",
+      "shortDescription": "Premium experience with priority welcome."
+    },
+    "chauffeurJournee": {
+      "title": "Dedicated driver (full day)",
+      "description": "Provision of a secure driver for 8 hours for your trips in complete peace of mind.",
+      "shortDescription": "Secure driver available for 8 hours."
+    },
+    "reservationBillet": {
+      "title": "Flight ticket reservation",
+      "description": "Management and optimization of your tickets with our partners to guarantee security and reliability.",
+      "shortDescription": "Management and optimization of your flight tickets."
+    },
+    "organisationSejour": {
+      "title": "Stay organization",
+      "description": "Complete planning of your stay (accommodation, transport, schedule) according to your objectives.",
+      "shortDescription": "Complete planning of your stay."
+    },
+    "rechercheLogement": {
+      "title": "Housing search",
+      "description": "Selection of reliable housing, organized visits and secure negotiation with landlords.",
+      "shortDescription": "Selection and visits of reliable housing."
+    },
+    "visiteAccompagnee": {
+      "title": "Accompanied visit",
+      "description": "On-site support to visit and evaluate several accommodations.",
+      "shortDescription": "Support to visit and evaluate accommodations."
+    },
+    "verificationLogement": {
+      "title": "Housing verification",
+      "description": "Housing audit (security, compliance, environment).",
+      "shortDescription": "Housing audit for security and compliance."
+    },
+    "assistanceSignature": {
+      "title": "Contract signing assistance",
+      "description": "Verification and securing of the rental contract.",
+      "shortDescription": "Verification and securing of your contract."
+    },
+    "miseServiceUtilites": {
+      "title": "Utilities activation",
+      "description": "Activation of water, electricity, internet and other essential services.",
+      "shortDescription": "Activation of your essential services."
+    },
+    "coordinationInstallation": {
+      "title": "Installation coordination",
+      "description": "Global organization of your installation (service providers, equipment, follow-up).",
+      "shortDescription": "Global organization of your installation."
+    },
+    "installationPremium": {
+      "title": "Complete premium installation",
+      "description": "Total support for a turnkey installation without stress.",
+      "shortDescription": "Turnkey installation without stress."
+    },
+    "orientationTerrain": {
+      "title": "Field orientation day",
+      "description": "Guided discovery of neighborhoods, essential services and local best practices.",
+      "shortDescription": "Guided discovery of neighborhoods and services."
+    },
+    "orientationMedicale": {
+      "title": "Medical orientation",
+      "description": "Connection with reliable and suitable health facilities.",
+      "shortDescription": "Connection with health facilities."
+    },
+    "accompagnementClinique": {
+      "title": "Clinical support",
+      "description": "Presence and assistance during your medical consultations.",
+      "shortDescription": "Assistance during your medical consultations."
+    },
+    "assistanceHospitaliere": {
+      "title": "Hospital assistance",
+      "description": "Complete coordination in case of hospitalization.",
+      "shortDescription": "Coordination in case of hospitalization."
+    },
+    "ouvertureCompte": {
+      "title": "Bank account opening",
+      "description": "Complete support to open a secure account adapted to your profile.",
+      "shortDescription": "Opening a secure bank account."
+    },
+    "assistanceBancaire": {
+      "title": "Banking file assistance",
+      "description": "Preparation and optimization of your file.",
+      "shortDescription": "Preparation of your banking file."
+    },
+    "accompagnementRdvBanque": {
+      "title": "Appointment support",
+      "description": "Presence and assistance during your banking appointment.",
+      "shortDescription": "Assistance during your banking appointment."
+    },
+    "creationEntrepriseSimple": {
+      "title": "Simple company creation",
+      "description": "Quick setup of a legal structure.",
+      "shortDescription": "Quick setup of a legal structure."
+    },
+    "creationEntrepriseComplete": {
+      "title": "Complete company creation",
+      "description": "Global support until operational.",
+      "shortDescription": "Global support until operational."
+    },
+    "assistanceRccm": {
+      "title": "RCCM assistance",
+      "description": "Management of registration administrative procedures.",
+      "shortDescription": "Management of RCCM registration procedures."
+    },
+    "conformiteFiscale": {
+      "title": "Tax compliance",
+      "description": "Organization and regularization of your tax situation.",
+      "shortDescription": "Regularization of your tax situation."
+    },
+    "diagnosticProjet": {
+      "title": "Project diagnosis",
+      "description": "Quick analysis to validate the relevance of your project.",
+      "shortDescription": "Quick analysis of your project's relevance."
+    },
+    "etudeFaisabilite": {
+      "title": "Feasibility study",
+      "description": "In-depth analysis of the market, risks and opportunities.",
+      "shortDescription": "Market and opportunities analysis."
+    },
+    "miseRelationPartenaires": {
+      "title": "Partner connection",
+      "description": "Connection with reliable and strategic actors.",
+      "shortDescription": "Connection with strategic actors."
+    },
+    "accompagnementStrategique": {
+      "title": "Strategic support",
+      "description": "Personalized follow-up to structure and develop your project.",
+      "shortDescription": "Follow-up to structure and develop your project."
+    },
+    "coachingIndividuelNextgen": {
+      "title": "Individual coaching",
+      "description": "Support for orientation and personal development adapted to young people.",
+      "shortDescription": "Support for orientation and development."
+    },
+    "programmeMentoratNextgen": {
+      "title": "Mentorship program",
+      "description": "Access to a network of experienced mentors to guide you in your journey.",
+      "shortDescription": "Access to a network of experienced mentors."
+    },
+    "orientationFinancementNextgen": {
+      "title": "Financing orientation",
+      "description": "Help finding financing opportunities for your studies or projects.",
+      "shortDescription": "Help finding financing opportunities."
+    },
+    "programmeCompletNextgen": {
+      "title": "Complete NextGen program",
+      "description": "Structured pathway for professional and entrepreneurial integration.",
+      "shortDescription": "Pathway for professional integration."
+    },
+    "orientationEtudes": {
+      "title": "Studies orientation",
+      "description": "Advice and support to choose your academic path.",
+      "shortDescription": "Advice to choose your academic path."
+    },
+    "rechercheStage": {
+      "title": "Internship search",
+      "description": "Support in searching and securing internship opportunities.",
+      "shortDescription": "Support to find an internship."
+    },
+    "cvLettreMotivation": {
+      "title": "CV & Cover letter",
+      "description": "Optimization of your CV and cover letters to maximize your chances.",
+      "shortDescription": "Optimization of your CV and letters."
+    },
+    "preparationEntretien": {
+      "title": "Interview preparation",
+      "description": "Coaching to succeed in your job or admission interviews.",
+      "shortDescription": "Coaching to succeed in your interviews."
+    },
+    "installationRetraite": {
+      "title": "Retirement installation",
+      "description": "Complete support for a serene installation adapted to retirees.",
+      "shortDescription": "Serene installation adapted to retirees."
+    },
+    "accompagnementSanteSenior": {
+      "title": "Senior health support",
+      "description": "Coordination of medical needs and health monitoring adapted to seniors.",
+      "shortDescription": "Coordination of senior medical needs."
+    },
+    "suiviMensuelRetraite": {
+      "title": "Monthly retiree follow-up",
+      "description": "Continuous assistance adapted to the retirees' lifestyle.",
+      "shortDescription": "Continuous assistance for retirees."
+    },
+    "suiviSanteMensuel": {
+      "title": "Monthly health monitoring",
+      "description": "Regular monitoring to ensure your well-being and health security.",
+      "shortDescription": "Regular monitoring of your well-being."
+    },
+    "packs": {
+      "packEssentiel": {
+        "name": "Essential Pack",
+        "price": "$150",
+        "description": "The essentials for a serene first contact with Congo",
+        "valueProposition": "Secure and stress-free arrival from the airport"
+      },
+      "packConfort": {
+        "name": "Comfort Pack",
+        "price": "$250",
+        "description": "Comfort and support for your first days",
+        "valueProposition": "48h support to avoid common mistakes"
+      },
+      "packVip": {
+        "name": "VIP Pack",
+        "price": "$1000",
+        "description": "Premium experience for an exceptional stay",
+        "valueProposition": "High-end service with complete coordination"
+      },
+      "packInstallationSerenite": {
+        "name": "Serenity Installation Pack",
+        "price": "$1500",
+        "description": "Complete and secure installation in 30 days",
+        "valueProposition": "Everything to settle in serenely with 30-day follow-up"
+      },
+      "packExpatComplet": {
+        "name": "Complete Expat Pack",
+        "price": "$2500",
+        "description": "Complete solution for demanding expatriates",
+        "valueProposition": "Premium installation with 3-month follow-up"
+      },
+      "packInvestisseur": {
+        "name": "Investor Pack",
+        "price": "$5000",
+        "description": "Strategic support for investors",
+        "valueProposition": "Complete strategy with 6-month follow-up"
+      },
+      "bridgeAccess": {
+        "name": "Bridge Access",
+        "price": "$299/month",
+        "description": "Priority access and continuous assistance",
+        "valueProposition": "For clients traveling more than 5 times per year"
+      },
+      "packNextgenStarter": {
+        "name": "NextGen Starter Pack",
+        "price": "$200",
+        "description": "Ideal start for young professionals",
+        "valueProposition": "Optimize your profile and prepare for the market"
+      },
+      "packNextgenEtudiant": {
+        "name": "NextGen Student Pack",
+        "price": "$250",
+        "description": "Complete support for students",
+        "valueProposition": "Structure your academic and professional path"
+      },
+      "packNextgenEntrepreneur": {
+        "name": "NextGen Entrepreneur Pack",
+        "price": "$800",
+        "description": "Project launch for young entrepreneurs",
+        "valueProposition": "Transform your idea into a viable business"
+      },
+      "packNextgenPremium": {
+        "name": "NextGen Premium Pack",
+        "price": "$1200",
+        "description": "Complete 6-month support",
+        "valueProposition": "Intensive program to succeed in your integration"
+      },
+      "packRetraiteEssentiel": {
+        "name": "Essential Retirement Pack",
+        "price": "$800",
+        "description": "The essentials for a serene arrival",
+        "valueProposition": "Basic installation with health orientation"
+      },
+      "packRetraiteConfort": {
+        "name": "Comfort Retirement Pack",
+        "price": "$1800",
+        "description": "Complete and secure installation",
+        "valueProposition": "Complete installation with senior health monitoring"
+      },
+      "packRetraiteSerenite": {
+        "name": "Serenity Retirement Pack",
+        "price": "$2500",
+        "description": "Premium support for retirees",
+        "valueProposition": "Premium installation with continuous monthly follow-up"
+      }
+    },
+    "interface": {
+      "title": "Explore our services",
+      "subtitle": "Select the services that match your needs",
+      "servicesSelected": "{{count}} service selected",
+      "servicesSelected_plural": "{{count}} services selected",
+      "recommendedForYou": "Recommended for you",
+      "viewMore": "View more ({{count}})",
+      "viewLess": "View less",
+      "viewAllServices": "View all services",
+      "viewRecommendedServices": "View recommended services",
+      "recommendedPacks": "Recommended packs",
+      "discoverPacks": "Discover our packs",
+      "discoverPacksDescription": "Select services to see packs that match your needs",
+      "match": "match",
+      "perMonth": "/month",
+      "servicesIncluded": "Services included:",
+      "otherServices": "+{{count}} other services",
+      "packSelected": "Pack selected",
+      "choosePack": "Choose this pack",
+      "yourSelection": "Your selection",
+      "clearAll": "Clear all",
+      "servicesIncludedCount": "{{count}} services included",
+      "totalEstimate": "Total estimate",
+      "priceDisclaimer": "Indicative price, may vary depending on your situation"
+    }
+  },
+  "appointment": {
+    "title": "Book your appointment",
+    "description": "Schedule a call with an advisor to finalize your file",
+    "alert": "Appointments are available Monday to Friday, from 9am to 5pm. First select a date, then choose a time slot.",
+    "chooseDate": "Choose a date",
+    "chooseDateDescription": "Select an available day for your appointment",
+    "chooseTimeSlot": "Choose a time slot",
+    "chooseTimeSlotDescription": "Select the time that suits you best",
+    "availableSlots": "Available slots",
+    "available": "available",
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "noSlotsAvailable": "No slots available for this date",
+    "summary": "Summary",
+    "servicesSelected": "Selected services",
+    "service": "service",
+    "service_plural": "services",
+    "appointmentCounselor": "Advisor appointment",
+    "date": "Date",
+    "time": "Time",
+    "counselor": "Advisor",
+    "selectDateAndTime": "Select a date and time slot",
+    "confirmationEmail": "A confirmation email will be sent to you after payment validation."
   }
 }

@@ -9,6 +9,7 @@ import { TimeSlotSelector } from "./time-slot-selector";
 import { AppointmentSummary } from "./appointment-summary";
 import type { AppointmentData, TimeSlot } from "../types";
 import { generateTimeSlots, getDisabledDatesMatcher } from "../utils";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface AppointmentStepProps {
   /**
@@ -69,9 +70,10 @@ export function AppointmentStep({
   onAppointmentChange,
   selectedServicesCount = 0,
   totalEstimate = 0,
-  title = "Réservez votre rendez-vous",
-  description = "Planifiez un appel avec un conseiller pour finaliser votre dossier",
+  title,
+  description,
 }: AppointmentStepProps) {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | undefined>(undefined);
 
@@ -108,15 +110,14 @@ export function AppointmentStep({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-muted-foreground">{description}</p>
+        <h2 className="text-2xl font-bold">{title || t("appointment.title")}</h2>
+        <p className="text-muted-foreground">{description || t("appointment.description")}</p>
       </div>
 
       <Alert>
         <Info className="h-4 w-4" />
         <AlertDescription>
-          Les rendez-vous sont disponibles du lundi au vendredi, de 9h à 17h. Sélectionnez d'abord
-          une date, puis choisissez un créneau horaire.
+          {t("appointment.alert")}
         </AlertDescription>
       </Alert>
 
@@ -126,10 +127,10 @@ export function AppointmentStep({
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5" />
-                Choisissez une date
+                {t("appointment.chooseDate")}
               </CardTitle>
               <CardDescription>
-                Sélectionnez un jour disponible pour votre rendez-vous
+                {t("appointment.chooseDateDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
@@ -147,9 +148,9 @@ export function AppointmentStep({
           {selectedDate && (
             <Card className="animate-in fade-in slide-in-from-bottom-4 duration-300">
               <CardHeader>
-                <CardTitle>Choisissez un créneau</CardTitle>
+                <CardTitle>{t("appointment.chooseTimeSlot")}</CardTitle>
                 <CardDescription>
-                  Sélectionnez l'heure qui vous convient le mieux
+                  {t("appointment.chooseTimeSlotDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent>

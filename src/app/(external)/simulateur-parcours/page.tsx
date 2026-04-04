@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { ArrowLeft, ArrowRight, Globe, Plane, TrendingUp, Users, Briefcase, Palmtree, Rocket, Sparkles, FileText, Coffee } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -14,37 +15,38 @@ import { Label } from "@/components/ui/label";
 const pathwayOptions = [
   {
     id: "diaspora",
-    label: "Diaspora",
+    labelKey: "simulator.pathways.diaspora",
     icon: Globe,
     color: "text-blue-500",
   },
   {
     id: "expat",
-    label: "Expatrié",
+    labelKey: "simulator.pathways.expat",
     icon: Plane,
     color: "text-emerald-500",
   },
   {
     id: "investisseur",
-    label: "Investisseur",
+    labelKey: "simulator.pathways.investor",
     icon: TrendingUp,
     color: "text-purple-500",
   },
   {
     id: "retraite",
-    label: "Retraite",
+    labelKey: "simulator.pathways.retirement",
     icon: Coffee,
     color: "text-rose-500",
   },
   {
     id: "nextgen",
-    label: "NextGen",
+    labelKey: "simulator.pathways.nextgen",
     icon: Rocket,
     color: "text-amber-500",
   },
 ];
 
 export default function SimulateurParcours() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [selectedPathway, setSelectedPathway] = useState("");
 
@@ -64,21 +66,21 @@ export default function SimulateurParcours() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour à l'accueil
+            {t("simulator.backToHome")}
           </Link>
         </div>
 
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <FileText className="w-5 h-5 text-primary" />
-            <span className="text-primary text-sm font-medium">Simulation personnalisée</span>
+            <span className="text-primary text-sm font-medium">{t("simulator.personalizedSimulation")}</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Sélectionnez votre parcours
+            {t("simulator.selectYourPathway")}
           </h1>
           <div className="flex items-center justify-between mb-2">
             <Progress value={25} className="flex-1 mr-4" />
-            <span className="text-sm text-muted-foreground whitespace-nowrap">Étape 1 sur 4</span>
+            <span className="text-sm text-muted-foreground whitespace-nowrap">{t("simulator.stepOf", { current: 1, total: 4 })}</span>
           </div>
         </div>
 
@@ -91,21 +93,21 @@ export default function SimulateurParcours() {
                     <Users className="w-5 h-5 text-primary" />
                     <p className="text-3xl font-bold">+1 200</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Personnes accompagnées</p>
+                  <p className="text-sm text-muted-foreground">{t("simulator.stats.peopleHelped")}</p>
                 </div>
                 <div>
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Sparkles className="w-5 h-5 text-primary" />
                     <p className="text-3xl font-bold">98%</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Taux de satisfaction</p>
+                  <p className="text-sm text-muted-foreground">{t("simulator.stats.satisfactionRate")}</p>
                 </div>
                 <div>
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Briefcase className="w-5 h-5 text-primary" />
                     <p className="text-3xl font-bold">5</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">Parcours spécialisés</p>
+                  <p className="text-sm text-muted-foreground">{t("simulator.stats.specializedPathways")}</p>
                 </div>
               </div>
             </CardContent>
@@ -114,8 +116,8 @@ export default function SimulateurParcours() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Choisissez votre profil</CardTitle>
-            <CardDescription>Sélectionnez le parcours qui correspond le mieux à votre situation</CardDescription>
+            <CardTitle>{t("simulator.chooseProfile")}</CardTitle>
+            <CardDescription>{t("simulator.selectBestMatch")}</CardDescription>
           </CardHeader>
           <CardContent>
             <RadioGroup value={selectedPathway} onValueChange={setSelectedPathway}>
@@ -136,7 +138,7 @@ export default function SimulateurParcours() {
                       <RadioGroupItem value={pathway.id} id={pathway.id} />
                       <Icon className={cn("w-6 h-6", pathway.color)} />
                       <Label htmlFor={pathway.id} className="flex-1 cursor-pointer font-medium">
-                        {pathway.label}
+                        {t(pathway.labelKey)}
                       </Label>
                     </div>
                   );
@@ -151,7 +153,7 @@ export default function SimulateurParcours() {
                 size="lg"
                 className="min-w-[140px]"
               >
-                Continuer
+                {t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

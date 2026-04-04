@@ -9,13 +9,15 @@ import { ServiceCard } from "./service-card";
 import { PackRecommendation } from "./pack-recommendation";
 import { SelectionSummary } from "./selection-summary";
 import { services, servicePacks } from "../data";
-import { detectMatchingPacks, getRelevantServices, groupServicesByCategory, getServiceById } from "../utils";
+import { detectMatchingPacks, getRelevantServices, groupServicesByCategory, getServiceById, getCategoryTranslationKey } from "../utils";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface ServiceSelectionSectionProps {
   userProfile?: string;
 }
 
 export function ServiceSelectionSection({ userProfile }: ServiceSelectionSectionProps) {
+  const { t } = useTranslation();
   const [selectedServices, setSelectedServices] = useState<Set<string>>(new Set());
   const [selectedPacks, setSelectedPacks] = useState<Set<string>>(new Set());
   const [showAllServices, setShowAllServices] = useState(false);
@@ -105,22 +107,22 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
       <div className="mb-8">
         <div className="mb-6">
           <h2 className="text-2xl font-bold mb-2">
-            Explorez nos services
+            {t("services.interface.title")}
           </h2>
           <p className="text-muted-foreground">
-            Sélectionnez les services qui correspondent à vos besoins
+            {t("services.interface.subtitle")}
           </p>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
           <Badge variant="outline" className="gap-2">
             <Filter className="w-3 h-3" />
-            {selectedServices.size} service{selectedServices.size !== 1 ? "s" : ""} sélectionné{selectedServices.size !== 1 ? "s" : ""}
+            {t("services.interface.servicesSelected", { count: selectedServices.size })}
           </Badge>
           {!showAllServices && (
             <Badge variant="secondary" className="gap-2">
               <Sparkles className="w-3 h-3" />
-              Recommandés pour vous
+              {t("services.interface.recommendedForYou")}
             </Badge>
           )}
         </div>
@@ -137,7 +139,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
             return (
               <div key={category} className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">{category}</h3>
+                  <h3 className="font-semibold text-lg">{t(`services.categories.${getCategoryTranslationKey(category)}`)}</h3>
                   {categoryServices.length > 3 && !showAllServices && (
                     <Button
                       variant="ghost"
@@ -147,12 +149,12 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                     >
                       {isExpanded ? (
                         <>
-                          Voir moins
+                          {t("services.interface.viewLess")}
                           <ChevronUp className="w-4 h-4" />
                         </>
                       ) : (
                         <>
-                          Voir plus ({categoryServices.length - 3})
+                          {t("services.interface.viewMore", { count: categoryServices.length - 3 })}
                           <ChevronDown className="w-4 h-4" />
                         </>
                       )}
@@ -182,7 +184,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                 onClick={() => setShowAllServices(true)}
                 className="gap-2"
               >
-                Voir tous les services
+                {t("services.interface.viewAllServices")}
                 <ChevronDown className="w-4 h-4" />
               </Button>
             </div>
@@ -196,7 +198,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                 onClick={() => setShowAllServices(false)}
                 className="gap-2"
               >
-                Voir les services recommandés
+                {t("services.interface.viewRecommendedServices")}
                 <ChevronUp className="w-4 h-4" />
               </Button>
             </div>
@@ -216,7 +218,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
               <>
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-primary" />
-                  <h3 className="font-semibold text-lg">Packs recommandés</h3>
+                  <h3 className="font-semibold text-lg">{t("services.interface.recommendedPacks")}</h3>
                 </div>
                 {matchingPacks.slice(0, 2).map((pack) => {
                   const includedServices = pack.services.filter((serviceId) =>
@@ -240,10 +242,10 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                   <Package2 className="w-6 h-6 text-muted-foreground" />
                 </div>
                 <h3 className="font-semibold mb-2">
-                  Découvrez nos packs
+                  {t("services.interface.discoverPacks")}
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
-                  Sélectionnez des services pour voir les packs qui correspondent à vos besoins
+                  {t("services.interface.discoverPacksDescription")}
                 </p>
               </div>
             ) : null}

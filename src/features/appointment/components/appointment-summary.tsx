@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { AppointmentData } from "../types";
 import { formatAppointmentDate } from "../utils";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface AppointmentSummaryProps {
   appointment: AppointmentData;
@@ -18,13 +19,14 @@ export function AppointmentSummary({
   selectedServicesCount = 0,
   totalEstimate = 0,
 }: AppointmentSummaryProps) {
+  const { t } = useTranslation();
   const { date, timeSlot } = appointment;
   const hasAppointment = date && timeSlot;
 
   return (
     <Card className="border-2 border-primary/20 bg-primary/5">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg">Récapitulatif</CardTitle>
+        <CardTitle className="text-lg">{t("appointment.summary")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {selectedServicesCount > 0 && (
@@ -32,11 +34,11 @@ export function AppointmentSummary({
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Package className="w-4 h-4" />
-                <span>Services sélectionnés</span>
+                <span>{t("appointment.servicesSelected")}</span>
               </div>
               <div className="flex items-center justify-between">
                 <Badge variant="secondary" className="text-sm">
-                  {selectedServicesCount} service{selectedServicesCount > 1 ? "s" : ""}
+                  {selectedServicesCount} {t(selectedServicesCount > 1 ? "appointment.service_plural" : "appointment.service")}
                 </Badge>
                 {totalEstimate > 0 && (
                   <span className="font-bold text-lg text-primary">
@@ -52,7 +54,7 @@ export function AppointmentSummary({
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm font-medium">
             <CalendarIcon className="w-4 h-4 text-primary" />
-            <span>Rendez-vous conseiller</span>
+            <span>{t("appointment.appointmentCounselor")}</span>
           </div>
 
           {hasAppointment ? (
@@ -61,7 +63,7 @@ export function AppointmentSummary({
                 <div className="flex items-start gap-2">
                   <CalendarIcon className="w-4 h-4 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-xs text-muted-foreground">Date</p>
+                    <p className="text-xs text-muted-foreground">{t("appointment.date")}</p>
                     <p className="font-semibold text-sm capitalize">
                       {formatAppointmentDate(date)}
                     </p>
@@ -75,7 +77,7 @@ export function AppointmentSummary({
                 <div className="flex items-start gap-2">
                   <Clock className="w-4 h-4 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
-                    <p className="text-xs text-muted-foreground">Heure</p>
+                    <p className="text-xs text-muted-foreground">{t("appointment.time")}</p>
                     <p className="font-semibold text-sm">{timeSlot.time}</p>
                   </div>
                 </div>
@@ -88,7 +90,7 @@ export function AppointmentSummary({
                     <div className="flex items-start gap-2">
                       <User className="w-4 h-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-xs text-muted-foreground">Conseiller</p>
+                        <p className="text-xs text-muted-foreground">{t("appointment.counselor")}</p>
                         <p className="font-semibold text-sm">{timeSlot.counselor}</p>
                       </div>
                     </div>
@@ -100,7 +102,7 @@ export function AppointmentSummary({
             <div className="p-4 rounded-lg border-2 border-dashed border-muted-foreground/20 text-center">
               <CalendarIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground/40" />
               <p className="text-xs text-muted-foreground">
-                Sélectionnez une date et un créneau horaire
+                {t("appointment.selectDateAndTime")}
               </p>
             </div>
           )}
@@ -109,7 +111,7 @@ export function AppointmentSummary({
         {hasAppointment && (
           <div className="pt-2">
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Un email de confirmation vous sera envoyé après validation du paiement.
+              {t("appointment.confirmationEmail")}
             </p>
           </div>
         )}

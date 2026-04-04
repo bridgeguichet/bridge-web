@@ -414,14 +414,6 @@ export const services: Service[] = [
     relevantFor: ["retraite"],
   },
   {
-    id: "orientation-medicale",
-    title: "Orientation médicale",
-    description: "Mise en relation avec des structures de santé fiables et adaptées.",
-    shortDescription: "Mise en relation avec des structures de santé.",
-    category: "Santé & Assistance",
-    relevantFor: ["installation", "investissement", "expat", "retraite"],
-  },
-  {
     id: "suivi-sante-mensuel",
     title: "Suivi santé mensuel",
     description: "Suivi régulier pour assurer votre bien-être et votre sécurité sanitaire.",

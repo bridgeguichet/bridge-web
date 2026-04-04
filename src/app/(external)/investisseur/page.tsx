@@ -36,101 +36,38 @@ import { AppointmentStep } from "@/features/appointment";
 import type { AppointmentData } from "@/features/appointment";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
-const investmentBudgets = [
-  { id: "small", label: "10 000$ - 50 000$", value: "10000-50000", description: "Petit investissement" },
-  { id: "medium", label: "50 000$ - 200 000$", value: "50000-200000", description: "Investissement moyen" },
-  { id: "large", label: "200 000$ - 1M$", value: "200000-1000000", description: "Grand investissement" },
-  { id: "very-large", label: "Plus de 1M$", value: "1000000+", description: "Investissement majeur" },
+const investmentBudgetIds = ["small", "medium", "large", "veryLarge"];
+
+const investmentSectorConfigs = [
+  { id: "immobilier", icon: Home, color: "text-blue-500" },
+  { id: "agriculture", icon: Sprout, color: "text-green-500" },
+  { id: "tech", icon: Cpu, color: "text-purple-500" },
+  { id: "logistique", icon: Truck, color: "text-orange-500" },
+  { id: "industrie", icon: Factory, color: "text-slate-500" },
+  { id: "commerce", icon: ShoppingBag, color: "text-rose-500" },
+  { id: "finance", icon: Landmark, color: "text-emerald-500" },
+  { id: "autre", icon: HelpCircle, color: "text-amber-500" },
 ];
 
-const investmentSectors = [
-  {
-    id: "immobilier",
-    name: "Immobilier",
-    description: "Résidentiel, commercial, terrain",
-    icon: Home,
-    color: "text-blue-500",
-  },
-  {
-    id: "agriculture",
-    name: "Agriculture",
-    description: "Agrobusiness, transformation",
-    icon: Sprout,
-    color: "text-green-500",
-  },
-  {
-    id: "tech",
-    name: "Tech & Digital",
-    description: "Startups, services numériques",
-    icon: Cpu,
-    color: "text-purple-500",
-  },
-  {
-    id: "logistique",
-    name: "Logistique",
-    description: "Transport, distribution",
-    icon: Truck,
-    color: "text-orange-500",
-  },
-  {
-    id: "industrie",
-    name: "Industrie",
-    description: "Manufacturing, production",
-    icon: Factory,
-    color: "text-slate-500",
-  },
-  {
-    id: "commerce",
-    name: "Commerce",
-    description: "Retail, import-export",
-    icon: ShoppingBag,
-    color: "text-rose-500",
-  },
-  {
-    id: "finance",
-    name: "Finance",
-    description: "Services financiers, fintech",
-    icon: Landmark,
-    color: "text-emerald-500",
-  },
-  {
-    id: "autre",
-    name: "Autre secteur",
-    description: "Opportunité spécifique",
-    icon: HelpCircle,
-    color: "text-amber-500",
-  },
+const investmentHorizonConfigs = [
+  { id: "courtTerme", icon: Clock, color: "text-blue-500" },
+  { id: "longTerme", icon: TrendingUp, color: "text-emerald-500" },
 ];
 
-const investmentHorizons = [
-  {
-    id: "court-terme",
-    name: "Court terme",
-    description: "Moins de 2 ans - Retour rapide",
-    icon: Clock,
-    color: "text-blue-500",
-  },
-  {
-    id: "long-terme",
-    name: "Long terme",
-    description: "Plus de 2 ans - Croissance durable",
-    icon: TrendingUp,
-    color: "text-emerald-500",
-  },
-];
-
-const steps = [
-  { id: 1, title: "Budget", icon: DollarSign },
-  { id: 2, title: "Secteur", icon: Building2 },
-  { id: 3, title: "Horizon", icon: Clock },
-  { id: 4, title: "Financement", icon: Landmark },
-  { id: 5, title: "Services", icon: Package2 },
-  { id: 6, title: "Rendez-vous", icon: Calendar },
+const stepConfigs = [
+  { id: 1, key: "budget", icon: DollarSign },
+  { id: 2, key: "sector", icon: Building2 },
+  { id: 3, key: "horizon", icon: Clock },
+  { id: 4, key: "financing", icon: Landmark },
+  { id: 5, key: "services", icon: Package2 },
+  { id: 6, key: "appointment", icon: Calendar },
 ];
 
 export default function Investisseur() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedBudget, setSelectedBudget] = useState<string>("");
   const [selectedSector, setSelectedSector] = useState<string>("");
@@ -202,10 +139,10 @@ export default function Investisseur() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              Parcours <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">Investisseur</span>
+              {t("investorPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("investorPage.title").split(" ")[1]}</span>
             </h1>
             <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              Structurez votre projet d'investissement en quelques étapes
+              {t("investorPage.subtitle")}
             </p>
           </div>
 
@@ -213,15 +150,15 @@ export default function Investisseur() {
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div>
-                  <div className="text-sm font-semibold">Étapes</div>
+                  <div className="text-sm font-semibold">{t("investorPage.stepsLabel")}</div>
                   <div className="text-xs text-muted-foreground">
-                    Étape {currentStep}/{steps.length}
+                    {t("investorPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-5 overflow-x-auto py-2">
-                {steps.map((step) => {
+                {stepConfigs.map((step) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -253,7 +190,7 @@ export default function Investisseur() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`investorPage.steps.${step.key}`)}
                       </div>
                     </div>
                   );
@@ -267,14 +204,14 @@ export default function Investisseur() {
           <div className="shrink-0 md:sticky md:top-8 hidden md:block md:w-[180px]">
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl md:w-[180px]">
               <div className="mb-3">
-                <div className="text-sm font-semibold">Étapes</div>
+                <div className="text-sm font-semibold">{t("investorPage.stepsLabel")}</div>
                 <div className="text-xs text-muted-foreground">
-                  Étape {currentStep}/{steps.length}
+                  {t("investorPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                 </div>
               </div>
 
               <div className="flex flex-col items-center">
-                {steps.map((step, index) => {
+                {stepConfigs.map((step, index) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -307,9 +244,9 @@ export default function Investisseur() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`investorPage.steps.${step.key}`)}
                       </span>
-                      {index < steps.length - 1 && (
+                      {index < stepConfigs.length - 1 && (
                         <div
                           className={cn(
                             "w-0.5 h-8 transition-all duration-300 my-2 rounded-full",
@@ -331,20 +268,20 @@ export default function Investisseur() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quel est votre budget d'investissement ?
+                      {t("investorPage.step1.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Sélectionnez la fourchette qui correspond à votre capacité d'investissement
+                      {t("investorPage.step1.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {investmentBudgets.map((budget) => (
+                    {investmentBudgetIds.map((budgetId) => (
                       <Card
-                        key={budget.id}
-                        onClick={() => setSelectedBudget(budget.value)}
+                        key={budgetId}
+                        onClick={() => setSelectedBudget(budgetId)}
                         className={cn(
                           "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                          selectedBudget === budget.value
+                          selectedBudget === budgetId
                             ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
                             : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                         )}
@@ -357,14 +294,14 @@ export default function Investisseur() {
                               </div>
                               <div>
                                 <CardTitle className="text-base">
-                                  {budget.label}
+                                  {t(`investorPage.investmentBudgets.${budgetId}.label`)}
                                 </CardTitle>
                                 <CardDescription className="mt-1">
-                                  {budget.description}
+                                  {t(`investorPage.investmentBudgets.${budgetId}.description`)}
                                 </CardDescription>
                               </div>
                             </div>
-                            {selectedBudget === budget.value && (
+                            {selectedBudget === budgetId && (
                               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                                 <Check className="w-3 h-3 text-primary-foreground" />
                               </div>
@@ -382,14 +319,14 @@ export default function Investisseur() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Dans quel secteur souhaitez-vous investir ?
+                      {t("investorPage.step2.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Choisissez le domaine d'activité qui vous intéresse
+                      {t("investorPage.step2.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {investmentSectors.map((sector) => {
+                    {investmentSectorConfigs.map((sector) => {
                       const SectorIcon = sector.icon;
                       return (
                         <Card
@@ -410,10 +347,10 @@ export default function Investisseur() {
                                 </div>
                                 <div className="flex-1">
                                   <CardTitle className="text-base">
-                                    {sector.name}
+                                    {t(`investorPage.investmentSectors.${sector.id}.name`)}
                                   </CardTitle>
                                   <CardDescription className="mt-1">
-                                    {sector.description}
+                                    {t(`investorPage.investmentSectors.${sector.id}.description`)}
                                   </CardDescription>
                                 </div>
                               </div>
@@ -436,14 +373,14 @@ export default function Investisseur() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quel est votre horizon d'investissement ?
+                      {t("investorPage.step3.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Définissez la durée prévue de votre investissement
+                      {t("investorPage.step3.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {investmentHorizons.map((horizon) => {
+                    {investmentHorizonConfigs.map((horizon) => {
                       const HorizonIcon = horizon.icon;
                       return (
                         <Card
@@ -463,10 +400,10 @@ export default function Investisseur() {
                               </div>
                               <div>
                                 <CardTitle className="text-base mb-1">
-                                  {horizon.name}
+                                  {t(`investorPage.investmentHorizons.${horizon.id}.name`)}
                                 </CardTitle>
                                 <CardDescription>
-                                  {horizon.description}
+                                  {t(`investorPage.investmentHorizons.${horizon.id}.description`)}
                                 </CardDescription>
                               </div>
                               {selectedHorizon === horizon.id && (
@@ -488,10 +425,10 @@ export default function Investisseur() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Recherchez-vous un financement ?
+                      {t("investorPage.step4.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Avez-vous besoin d'aide pour structurer ou obtenir un financement ?
+                      {t("investorPage.step4.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -511,9 +448,9 @@ export default function Investisseur() {
                               <Landmark className="w-5 h-5" />
                             </div>
                             <div className="flex-1">
-                              <CardTitle className="text-base">Oui</CardTitle>
+                              <CardTitle className="text-base">{t("investorPage.step4.yes")}</CardTitle>
                               <CardDescription className="mt-1">
-                                J'ai besoin d'accompagnement pour le financement
+                                {t("investorPage.step4.yesDescription")}
                               </CardDescription>
                             </div>
                           </div>
@@ -542,9 +479,9 @@ export default function Investisseur() {
                               <X className="w-5 h-5 text-muted-foreground" />
                             </div>
                             <div className="flex-1">
-                              <CardTitle className="text-base">Non</CardTitle>
+                              <CardTitle className="text-base">{t("investorPage.step4.no")}</CardTitle>
                               <CardDescription className="mt-1">
-                                Mon financement est déjà sécurisé
+                                {t("investorPage.step4.noDescription")}
                               </CardDescription>
                             </div>
                           </div>
@@ -588,7 +525,7 @@ export default function Investisseur() {
                 disabled={currentStep === 1}
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour
+                {t("investorPage.navigation.previous")}
               </Button>
 
               <Button
@@ -597,7 +534,7 @@ export default function Investisseur() {
                 disabled={!isStepComplete()}
                 className="gap-2 hover:scale-105 transition-transform duration-200 bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl"
               >
-                {currentStep === 6 ? "Procéder au paiement" : "Suivant"}
+                {currentStep === 6 ? t("investorPage.navigation.finish") : t("investorPage.navigation.next")}
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </div>

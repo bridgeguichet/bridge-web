@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { ArrowLeft, ArrowRight, Rocket, GraduationCap, Briefcase, Lock, Sparkles, CheckCircle2, AlertCircle, Target, Users, TrendingUp, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
 export default function SimulateurNextGen() {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     objectif: "",
@@ -40,7 +42,7 @@ export default function SimulateurNextGen() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux parcours
+{t("simulator.backToPathways")}
           </Link>
         </div>
 
@@ -50,29 +52,29 @@ export default function SimulateurNextGen() {
               <Rocket className="w-6 h-6 text-amber-500" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Parcours NextGen</h1>
-              <p className="text-muted-foreground">Lancez votre carrière</p>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("simulator.nextgen.title")}</h1>
+              <p className="text-muted-foreground">{t("simulator.nextgen.subtitle")}</p>
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">Étape {currentStep} sur 3</p>
+          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
         </div>
 
         {currentStep === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Objectif principal</CardTitle>
-                <CardDescription>Que recherchez-vous ?</CardDescription>
+                <CardTitle>{t("simulator.nextgen.mainGoal")}</CardTitle>
+                <CardDescription>{t("simulator.nextgen.whatLookingFor")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.objectif} onValueChange={(value) => setFormData({ ...formData, objectif: value })}>
                   <div className="space-y-3">
                     {[
-                      { value: "stage", label: "Stage / Alternance", icon: GraduationCap },
-                      { value: "premier-emploi", label: "Premier emploi", icon: Briefcase },
-                      { value: "entrepreneuriat", label: "Lancer mon entreprise", icon: Rocket },
-                      { value: "reseau", label: "Développer mon réseau", icon: Users },
+                      { value: "stage", labelKey: "simulator.nextgen.goals.internship", icon: GraduationCap },
+                      { value: "premier-emploi", labelKey: "simulator.nextgen.goals.firstJob", icon: Briefcase },
+                      { value: "entrepreneuriat", labelKey: "simulator.nextgen.goals.startBusiness", icon: Rocket },
+                      { value: "reseau", labelKey: "simulator.nextgen.goals.network", icon: Users },
                     ].map((option) => {
                       const Icon = option.icon;
                       return (
@@ -89,7 +91,7 @@ export default function SimulateurNextGen() {
                           <RadioGroupItem value={option.value} id={option.value} />
                           <Icon className="w-5 h-5 text-amber-500" />
                           <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
                         </div>
                       );
@@ -101,19 +103,19 @@ export default function SimulateurNextGen() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Domaine d'intérêt</CardTitle>
-                <CardDescription>Dans quel secteur souhaitez-vous évoluer ?</CardDescription>
+                <CardTitle>{t("simulator.nextgen.interestDomain")}</CardTitle>
+                <CardDescription>{t("simulator.nextgen.sectorToEvolve")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.domaine} onValueChange={(value) => setFormData({ ...formData, domaine: value })}>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "tech", label: "Tech / Digital" },
-                      { value: "finance", label: "Finance / Banque" },
-                      { value: "commerce", label: "Commerce / Vente" },
-                      { value: "marketing", label: "Marketing / Com" },
-                      { value: "ingenierie", label: "Ingénierie" },
-                      { value: "autre", label: "Autre secteur" },
+                      { value: "tech", labelKey: "simulator.nextgen.domains.tech" },
+                      { value: "finance", labelKey: "simulator.nextgen.domains.finance" },
+                      { value: "commerce", labelKey: "simulator.nextgen.domains.commerce" },
+                      { value: "marketing", labelKey: "simulator.nextgen.domains.marketing" },
+                      { value: "ingenierie", labelKey: "simulator.nextgen.domains.engineering" },
+                      { value: "autre", labelKey: "simulator.nextgen.domains.other" },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -127,7 +129,7 @@ export default function SimulateurNextGen() {
                       >
                         <RadioGroupItem value={option.value} id={option.value} />
                         <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium text-sm">
-                          {option.label}
+                          {t(option.labelKey)}
                         </Label>
                       </div>
                     ))}
@@ -138,7 +140,7 @@ export default function SimulateurNextGen() {
 
             <div className="flex justify-end">
               <Button onClick={handleNext} disabled={!formData.objectif || !formData.domaine} size="lg">
-                Continuer
+{t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -149,15 +151,15 @@ export default function SimulateurNextGen() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Niveau d'expérience</CardTitle>
-                <CardDescription>Où en êtes-vous dans votre parcours ?</CardDescription>
+                <CardTitle>{t("simulator.nextgen.experienceLevel")}</CardTitle>
+                <CardDescription>{t("simulator.nextgen.whereAreYou")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-amber-500">
-                    {formData.experience[0] === "1" ? "Débutant" : formData.experience[0] === "2" ? "Intermédiaire" : formData.experience[0] === "3" ? "Confirmé" : "Expert"}
+                    {t(`simulator.nextgen.levels.${formData.experience[0] === "1" ? "beginner" : formData.experience[0] === "2" ? "intermediate" : formData.experience[0] === "3" ? "confirmed" : "expert"}`)}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">niveau d'expérience</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.nextgen.experienceLevel")}</p>
                 </div>
                 <Slider
                   value={formData.experience.map(Number)}
@@ -168,23 +170,23 @@ export default function SimulateurNextGen() {
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Débutant</span>
-                  <span>Expert</span>
+                  <span>{t("simulator.nextgen.levels.beginner")}</span>
+                  <span>{t("simulator.nextgen.levels.expert")}</span>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Niveau d'ambition</CardTitle>
-                <CardDescription>Quelle est votre vision ?</CardDescription>
+                <CardTitle>{t("simulator.nextgen.ambitionLevel")}</CardTitle>
+                <CardDescription>{t("simulator.nextgen.yourVision")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-amber-500">
-                    {formData.ambition[0] === "1" ? "Stable" : formData.ambition[0] === "2" ? "Progressif" : formData.ambition[0] === "3" ? "Ambitieux" : formData.ambition[0] === "4" ? "Très ambitieux" : "Visionnaire"}
+                    {t(`simulator.nextgen.ambitions.${formData.ambition[0] === "1" ? "stable" : formData.ambition[0] === "2" ? "progressive" : formData.ambition[0] === "3" ? "ambitious" : formData.ambition[0] === "4" ? "veryAmbitious" : "visionary"}`)}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">niveau d'ambition</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.nextgen.ambitionLevel")}</p>
                 </div>
                 <Slider
                   value={formData.ambition.map(Number)}
@@ -195,19 +197,19 @@ export default function SimulateurNextGen() {
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Stable</span>
-                  <span>Visionnaire</span>
+                  <span>{t("simulator.nextgen.ambitions.stable")}</span>
+                  <span>{t("simulator.nextgen.ambitions.visionary")}</span>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex gap-3">
-              <Button variant="outline" onClick={handleBack} size="lg">
+              <Button variant="outline" onClick={handleBack} size="lg" className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Retour
+{t("simulator.back")}
               </Button>
               <Button onClick={handleNext} size="lg" className="flex-1">
-                Voir mon aperçu
+                {t("simulator.viewPreview")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -220,75 +222,42 @@ export default function SimulateurNextGen() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-amber-500" />
-                  <Badge variant="outline" className="text-amber-500 border-amber-500">Aperçu personnalisé</Badge>
+                  <Badge variant="outline" className="text-amber-500 border-amber-500">{t("simulator.common.personalizedPreview")}</Badge>
                 </div>
-                <CardTitle>Votre profil NextGen</CardTitle>
-                <CardDescription>Basé sur vos réponses</CardDescription>
+                <CardTitle>{t("simulator.nextgen.yourProfile")}</CardTitle>
+                <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20 text-center">
                     <Target className="w-6 h-6 text-amber-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-amber-500 capitalize">{formData.objectif.replace("-", " ")}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Objectif</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.nextgen.objective")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20 text-center">
                     <Briefcase className="w-6 h-6 text-blue-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-blue-500 capitalize">{formData.domaine}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Domaine</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.nextgen.domain")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20 text-center">
                     <TrendingUp className="w-6 h-6 text-purple-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-purple-500">
-                      {formData.ambition[0] === "1" ? "Stable" : formData.ambition[0] === "2" ? "Progressif" : formData.ambition[0] === "3" ? "Ambitieux" : formData.ambition[0] === "4" ? "Très ambitieux" : "Visionnaire"}
+                      {t(`simulator.nextgen.ambitions.${formData.ambition[0] === "1" ? "stable" : formData.ambition[0] === "2" ? "progressive" : formData.ambition[0] === "3" ? "ambitious" : formData.ambition[0] === "4" ? "veryAmbitious" : "visionary"}`)}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">Ambition</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.nextgen.ambition")}</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground">
-                      Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre plan carrière complet avec mentorat professionnel, réseau jeunes talents, opportunités exclusives et accompagnement personnalisé, créez votre compte.
-                    </p>
+                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.nextgen.previewNote") }} />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <CardTitle>Programme complet débloqué après inscription</CardTitle>
-                </div>
-                <CardDescription>Accédez à votre plan carrière personnalisé</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    "Mentorat professionnel dédié",
-                    "Réseau de jeunes talents actif",
-                    "Opportunités carrière exclusives",
-                    "Formation et développement",
-                    "Accompagnement entrepreneurial",
-                    "Événements networking premium",
-                  ].map((item, idx) => (
-                    <div key={idx} className="relative p-3 rounded-lg border bg-muted/30 backdrop-blur-sm">
-                      <div className="absolute inset-0 bg-linear-to-r from-background/80 to-background/60 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                        <Lock className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                      <div className="opacity-40 flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <p className="text-sm font-medium">{item}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
+            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -296,34 +265,37 @@ export default function SimulateurNextGen() {
                     <Sparkles className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Débloquez votre plan carrière complet</h3>
+                    <h3 className="text-xl font-bold mb-2">{t("simulator.nextgen.unlockCareerPlan")}</h3>
                     <p className="text-muted-foreground">
-                      Créez votre compte pour accéder au mentorat, réseau et opportunités exclusives
+                      {t("simulator.nextgen.unlockDesc")}
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                    <Button asChild size="lg" className="text-base">
-                      <Link href="/auth/register">
-                        Créer mon compte gratuit
+                    <Button asChild variant="outline" size="lg" className="text-base hover:text-white">
+                      <Link href="/#parcours">
+                        {t("simulator.common.completePathway")}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                      <Link href="/">Parler à un conseiller</Link>
+                    <Button asChild size="lg" className="text-base">
+                      <Link href="/auth/register">
+                        {t("simulator.common.createFreeAccount")}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
                     </Button>
                   </div>
                   <div className="flex items-center justify-center gap-6 pt-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Gratuit</span>
+                      <span className="text-muted-foreground">{t("simulator.common.free")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Sans engagement</span>
+                      <span className="text-muted-foreground">{t("simulator.common.noCommitment")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Accès immédiat</span>
+                      <span className="text-muted-foreground">{t("simulator.common.immediateAccess")}</span>
                     </div>
                   </div>
                 </div>
@@ -331,9 +303,9 @@ export default function SimulateurNextGen() {
             </Card>
 
             <div className="text-center">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button variant="ghost" onClick={handleBack} className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Modifier mes réponses
+{t("simulator.modifyAnswers")}
               </Button>
             </div>
           </div>

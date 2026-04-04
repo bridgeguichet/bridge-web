@@ -31,50 +31,34 @@ import { AppointmentStep } from "@/features/appointment";
 import type { AppointmentData } from "@/features/appointment";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
-const objectives = [
-  {
-    id: "study",
-    name: "Études",
-    description: "Poursuivre mes études ou formations",
-    icon: GraduationCap,
-    color: "text-blue-500",
-  },
-  {
-    id: "business",
-    name: "Business",
-    description: "Lancer ou développer mon entreprise",
-    icon: Briefcase,
-    color: "text-purple-500",
-  },
-  {
-    id: "employment",
-    name: "Emploi",
-    description: "Trouver un emploi ou stage",
-    icon: Users,
-    color: "text-emerald-500",
-  },
+const objectiveConfigs = [
+  { id: "study", icon: GraduationCap, color: "text-blue-500" },
+  { id: "business", icon: Briefcase, color: "text-purple-500" },
+  { id: "employment", icon: Users, color: "text-emerald-500" },
 ];
 
-const popularCountries = [
-  { id: "rdc", name: "RD Congo", flag: "🇨🇩" },
-  { id: "france", name: "France", flag: "🇫🇷" },
-  { id: "canada", name: "Canada", flag: "🇨🇦" },
-  { id: "usa", name: "États-Unis", flag: "🇺🇸" },
-  { id: "belgium", name: "Belgique", flag: "🇧🇪" },
-  { id: "uk", name: "Royaume-Uni", flag: "🇬🇧" },
+const popularCountryConfigs = [
+  { id: "rdc", flag: "🇨🇩" },
+  { id: "france", flag: "🇫🇷" },
+  { id: "canada", flag: "🇨🇦" },
+  { id: "usa", flag: "🇺🇸" },
+  { id: "belgium", flag: "🇧🇪" },
+  { id: "uk", flag: "🇬🇧" },
 ];
 
-const steps = [
-  { id: 1, title: "Âge", icon: Hash },
-  { id: 2, title: "Objectif", icon: Target },
-  { id: 3, title: "Destination", icon: Globe },
-  { id: 4, title: "Services", icon: Package2 },
-  { id: 5, title: "Rendez-vous", icon: Calendar },
+const stepConfigs = [
+  { id: 1, key: "age", icon: Hash },
+  { id: 2, key: "objective", icon: Target },
+  { id: 3, key: "destination", icon: Globe },
+  { id: 4, key: "services", icon: Package2 },
+  { id: 5, key: "appointment", icon: Calendar },
 ];
 
 export default function NextGen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [age, setAge] = useState<string>("");
   const [selectedObjective, setSelectedObjective] = useState<string>("");
@@ -144,10 +128,10 @@ export default function NextGen() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              Parcours <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">NextGen</span>
+              {t("nextgenPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("nextgenPage.title").split(" ")[1]}</span>
             </h1>
             <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              Préparez votre avenir au Congo en quelques étapes
+              {t("nextgenPage.subtitle")}
             </p>
           </div>
 
@@ -155,15 +139,15 @@ export default function NextGen() {
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div>
-                  <div className="text-sm font-semibold">Étapes</div>
+                  <div className="text-sm font-semibold">{t("nextgenPage.stepsLabel")}</div>
                   <div className="text-xs text-muted-foreground">
-                    Étape {currentStep}/{steps.length}
+                    {t("nextgenPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-5 overflow-x-auto py-2">
-                {steps.map((step) => {
+                {stepConfigs.map((step) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -195,7 +179,7 @@ export default function NextGen() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`nextgenPage.steps.${step.key}`)}
                       </div>
                     </div>
                   );
@@ -209,14 +193,14 @@ export default function NextGen() {
           <div className="shrink-0 md:sticky md:top-8 hidden md:block md:w-[180px]">
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl md:w-[180px]">
               <div className="mb-3">
-                <div className="text-sm font-semibold">Étapes</div>
+                <div className="text-sm font-semibold">{t("nextgenPage.stepsLabel")}</div>
                 <div className="text-xs text-muted-foreground">
-                  Étape {currentStep}/{steps.length}
+                  {t("nextgenPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                 </div>
               </div>
 
               <div className="flex flex-col items-center">
-                {steps.map((step, index) => {
+                {stepConfigs.map((step, index) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -249,9 +233,9 @@ export default function NextGen() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`nextgenPage.steps.${step.key}`)}
                       </span>
-                      {index < steps.length - 1 && (
+                      {index < stepConfigs.length - 1 && (
                         <div
                           className={cn(
                             "w-0.5 h-8 transition-all duration-300 my-2 rounded-full",
@@ -272,10 +256,10 @@ export default function NextGen() {
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="mb-6">
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Quel est ton âge ?
+                  {t("nextgenPage.step1.title")}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Ce parcours est conçu pour les 18-26 ans
+                  {t("nextgenPage.step1.subtitle")}
                 </p>
               </div>
               <Card className="max-w-md mx-auto p-6 border-border/50 bg-background/50 backdrop-blur-sm rounded-xl">
@@ -287,10 +271,10 @@ export default function NextGen() {
                     <div className="flex-1 space-y-3">
                       <div>
                         <Label htmlFor="age" className="text-base font-semibold">
-                          Ton âge
+                          {t("nextgenPage.step1.ageLabel")}
                         </Label>
                         <p className="text-muted-foreground text-sm mt-1">
-                          Entre 18 et 26 ans
+                          {t("nextgenPage.step1.ageHelp")}
                         </p>
                       </div>
                       <Input
@@ -298,14 +282,14 @@ export default function NextGen() {
                         type="number"
                         min="18"
                         max="26"
-                        placeholder="Ex: 22"
+                        placeholder={t("nextgenPage.step1.agePlaceholder")}
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                         className="max-w-xs text-lg"
                       />
                       {age && (Number.parseInt(age) < 18 || Number.parseInt(age) > 26) && (
                         <p className="text-destructive text-sm">
-                          L'âge doit être entre 18 et 26 ans
+                          {t("nextgenPage.step1.ageError")}
                         </p>
                       )}
                     </div>
@@ -319,14 +303,14 @@ export default function NextGen() {
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="mb-6">
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Quel est ton objectif principal ?
+                  {t("nextgenPage.step2.title")}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Choisis ce qui correspond le mieux à ton projet
+                  {t("nextgenPage.step2.subtitle")}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-                {objectives.map((objective) => {
+                {objectiveConfigs.map((objective) => {
                   const ObjectiveIcon = objective.icon;
                   return (
                     <Card
@@ -346,10 +330,10 @@ export default function NextGen() {
                           </div>
                           <div>
                             <CardTitle className="text-base mb-1">
-                              {objective.name}
+                              {t(`nextgenPage.objectives.${objective.id}.name`)}
                             </CardTitle>
                             <CardDescription>
-                              {objective.description}
+                              {t(`nextgenPage.objectives.${objective.id}.description`)}
                             </CardDescription>
                           </div>
                           {selectedObjective === objective.id && (
@@ -370,23 +354,23 @@ export default function NextGen() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quel pays cibles-tu ?
+                      {t("nextgenPage.step3.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Sélectionne ta destination ou entre un autre pays
+                      {t("nextgenPage.step3.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                    {popularCountries.map((country) => (
+                    {popularCountryConfigs.map((country) => (
                       <Card
                         key={country.id}
                         onClick={() => {
-                          setSelectedCountry(country.name);
+                          setSelectedCountry(country.id);
                           setCustomCountry("");
                         }}
                         className={cn(
                           "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                          selectedCountry === country.name
+                          selectedCountry === country.id
                             ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
                             : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                         )}
@@ -396,10 +380,10 @@ export default function NextGen() {
                         <span className="text-3xl">{country.flag}</span>
                         <div className="flex-1">
                           <CardTitle className="text-base">
-                            {country.name}
+                            {t(`nextgenPage.popularCountries.${country.id}`)}
                           </CardTitle>
                         </div>
-                        {selectedCountry === country.name && (
+                        {selectedCountry === country.id && (
                           <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
                             <Check className="w-3 h-3 text-primary-foreground" />
                           </div>
@@ -419,15 +403,15 @@ export default function NextGen() {
                     <div className="flex-1 space-y-3">
                       <div>
                         <Label htmlFor="custom-country" className="text-base font-semibold">
-                          Autre pays
+                          {t("nextgenPage.step3.otherCountryLabel")}
                         </Label>
                         <p className="text-muted-foreground text-sm mt-1">
-                          Entre le nom du pays si tu ne le vois pas ci-dessus
+                          {t("nextgenPage.step3.otherCountryHelp")}
                         </p>
                       </div>
                       <Input
                         id="custom-country"
-                        placeholder="Ex: Allemagne, Japon..."
+                        placeholder={t("nextgenPage.step3.otherCountryPlaceholder")}
                         value={customCountry}
                         onChange={(e) => {
                           setCustomCountry(e.target.value);
@@ -468,7 +452,7 @@ export default function NextGen() {
                 disabled={currentStep === 1}
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour
+                {t("nextgenPage.navigation.previous")}
               </Button>
 
               <Button
@@ -477,7 +461,7 @@ export default function NextGen() {
                 disabled={!isStepComplete()}
                 className="gap-2 hover:scale-105 transition-transform duration-200 bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl"
               >
-                {currentStep === 5 ? "Procéder au paiement" : "Suivant"}
+                {currentStep === 5 ? t("nextgenPage.navigation.finish") : t("nextgenPage.navigation.next")}
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </div>

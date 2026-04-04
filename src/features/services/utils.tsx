@@ -104,3 +104,44 @@ export function getServiceById(
 ): Service | undefined {
   return services.find((s) => s.id === serviceId);
 }
+
+// Map service IDs to translation keys (camelCase)
+export function getServiceTranslationKey(serviceId: string): string {
+  // Convert kebab-case to camelCase
+  return serviceId.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+// Map category names to translation keys
+export function getCategoryTranslationKey(category: string): string {
+  const categoryMap: Record<string, string> = {
+    "Conseil Avant Départ": "conseilAvantDepart",
+    "Formalisation Expatrié": "formalisationExpat",
+    "Arrivée & Mobilité": "arriveeMobilite",
+    "Installation & Vie": "installationVie",
+    "Santé & Assistance": "santeAssistance",
+    "Banque & Assurance": "banqueAssurance",
+    "Formalisation & Régularisation": "formalisationRegularisation",
+    "Business & Investissement": "businessInvestissement",
+    "Bridge Next-Gen": "bridgeNextGen",
+    "Bridge Renaissance (Retraite)": "bridgeRenaissance",
+  };
+  return categoryMap[category] || category;
+}
+
+// Map subcategory names to translation keys
+export function getSubcategoryTranslationKey(subcategory: string): string {
+  const subcategoryMap: Record<string, string> = {
+    "Accueil & Coordination": "accueilCoordination",
+    "Mobilité & Voyage": "mobiliteVoyage",
+    "Logement": "logement",
+    "Installation": "installation",
+    "Orientation Quotidienne": "orientationQuotidienne",
+    "Banque": "banque",
+  };
+  return subcategoryMap[subcategory] || subcategory;
+}
+
+// Map pack IDs to translation keys
+export function getPackTranslationKey(packId: string): string {
+  return getServiceTranslationKey(packId);
+}

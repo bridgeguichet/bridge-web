@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { ServicePack } from "../types";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { getPackTranslationKey, getServiceTranslationKey } from "../utils";
 
 interface PackRecommendationProps {
   pack: ServicePack;
@@ -20,6 +22,8 @@ export function PackRecommendation({
   onSelect,
   isSelected = false,
 }: PackRecommendationProps) {
+  const { t } = useTranslation();
+  const packKey = getPackTranslationKey(pack.id);
   const matchPercentage = Math.round(
     (includedServices.length / pack.services.length) * 100,
   );
@@ -37,24 +41,24 @@ export function PackRecommendation({
             <Package className="w-5 h-5" />
           </div>
           <Badge variant="default" className="shrink-0">
-            {matchPercentage}% match
+            {matchPercentage}% {t("services.interface.match")}
           </Badge>
         </div>
-        <CardTitle className="text-lg">{pack.name}</CardTitle>
+        <CardTitle className="text-lg">{t(`services.packs.${packKey}.name`)}</CardTitle>
         <div className="flex items-baseline gap-2">
           <span className="font-bold text-2xl text-primary">{pack.price}</span>
           {pack.category === "Abonnement" && (
-            <span className="text-muted-foreground text-sm">/mois</span>
+            <span className="text-muted-foreground text-sm">{t("services.interface.perMonth")}</span>
           )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <CardDescription className="text-sm leading-relaxed">
-          {pack.valueProposition}
+          {t(`services.packs.${packKey}.valueProposition`)}
         </CardDescription>
 
         <div className="space-y-2">
-          <p className="font-semibold text-sm">Services inclus :</p>
+          <p className="font-semibold text-sm">{t("services.interface.servicesIncluded")}</p>
           <ul className="space-y-1.5">
             {pack.services.slice(0, 4).map((serviceId) => {
               const isIncluded = includedServices.includes(serviceId);
@@ -73,14 +77,14 @@ export function PackRecommendation({
                     )}
                   />
                   <span className="flex-1 leading-tight">
-                    {serviceId.split("-").join(" ")}
+                    {t(`services.${getServiceTranslationKey(serviceId)}.title`)}
                   </span>
                 </li>
               );
             })}
             {pack.services.length > 4 && (
               <li className="text-muted-foreground text-xs ml-6">
-                +{pack.services.length - 4} autres services
+                {t("services.interface.otherServices", { count: pack.services.length - 4 })}
               </li>
             )}
           </ul>
@@ -96,12 +100,12 @@ export function PackRecommendation({
           {isSelected ? (
             <>
               <Check className="w-4 h-4" />
-              Pack sélectionné
+              {t("services.interface.packSelected")}
             </>
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              Choisir ce pack
+              {t("services.interface.choosePack")}
               <ArrowRight className="w-4 h-4" />
             </>
           )}

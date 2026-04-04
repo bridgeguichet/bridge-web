@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { ArrowLeft, ArrowRight, TrendingUp, Building2, Lock, Sparkles, CheckCircle2, AlertCircle, DollarSign, Target, BarChart3, PieChart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
 export default function SimulateurInvestisseur() {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     typeInvestissement: "",
@@ -40,7 +42,7 @@ export default function SimulateurInvestisseur() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Retour aux parcours
+{t("simulator.backToPathways")}
           </Link>
         </div>
 
@@ -50,29 +52,29 @@ export default function SimulateurInvestisseur() {
               <TrendingUp className="w-6 h-6 text-purple-500" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Parcours Investisseur</h1>
-              <p className="text-muted-foreground">Maximisez vos opportunités</p>
+              <h1 className="text-2xl md:text-3xl font-bold">{t("simulator.investor.title")}</h1>
+              <p className="text-muted-foreground">{t("simulator.investor.subtitle")}</p>
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">Étape {currentStep} sur 3</p>
+          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
         </div>
 
         {currentStep === 1 && (
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Type d'investissement recherché</CardTitle>
-                <CardDescription>Quel secteur vous intéresse ?</CardDescription>
+                <CardTitle>{t("simulator.investor.investmentType")}</CardTitle>
+                <CardDescription>{t("simulator.investor.interestedSector")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.typeInvestissement} onValueChange={(value) => setFormData({ ...formData, typeInvestissement: value })}>
                   <div className="space-y-3">
                     {[
-                      { value: "immobilier", label: "Immobilier résidentiel", icon: Building2 },
-                      { value: "commercial", label: "Immobilier commercial", icon: Building2 },
-                      { value: "business", label: "Participation entreprise", icon: TrendingUp },
-                      { value: "mixte", label: "Portefeuille diversifié", icon: PieChart },
+                      { value: "immobilier", labelKey: "simulator.investor.types.residential", icon: Building2 },
+                      { value: "commercial", labelKey: "simulator.investor.types.commercial", icon: Building2 },
+                      { value: "business", labelKey: "simulator.investor.types.businessParticipation", icon: TrendingUp },
+                      { value: "mixte", labelKey: "simulator.investor.types.diversified", icon: PieChart },
                     ].map((option) => {
                       const Icon = option.icon;
                       return (
@@ -89,7 +91,7 @@ export default function SimulateurInvestisseur() {
                           <RadioGroupItem value={option.value} id={option.value} />
                           <Icon className="w-5 h-5 text-purple-500" />
                           <Label htmlFor={option.value} className="flex-1 cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
                         </div>
                       );
@@ -101,17 +103,17 @@ export default function SimulateurInvestisseur() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Horizon d'investissement</CardTitle>
-                <CardDescription>Sur quelle durée envisagez-vous ?</CardDescription>
+                <CardTitle>{t("simulator.investor.investmentHorizon")}</CardTitle>
+                <CardDescription>{t("simulator.investor.howLongEnvisage")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={formData.horizon} onValueChange={(value) => setFormData({ ...formData, horizon: value })}>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "court", label: "Court terme", desc: "1-3 ans" },
-                      { value: "moyen", label: "Moyen terme", desc: "3-7 ans" },
-                      { value: "long", label: "Long terme", desc: "7-15 ans" },
-                      { value: "patrimoine", label: "Patrimoine", desc: "15+ ans" },
+                      { value: "court", labelKey: "simulator.investor.horizons.short", descKey: "simulator.investor.horizons.shortDesc" },
+                      { value: "moyen", labelKey: "simulator.investor.horizons.medium", descKey: "simulator.investor.horizons.mediumDesc" },
+                      { value: "long", labelKey: "simulator.investor.horizons.long", descKey: "simulator.investor.horizons.longDesc" },
+                      { value: "patrimoine", labelKey: "simulator.investor.horizons.heritage", descKey: "simulator.investor.horizons.heritageDesc" },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -126,9 +128,9 @@ export default function SimulateurInvestisseur() {
                         <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
                         <div className="flex-1">
                           <Label htmlFor={option.value} className="cursor-pointer font-medium">
-                            {option.label}
+                            {t(option.labelKey)}
                           </Label>
-                          <p className="text-xs text-muted-foreground">{option.desc}</p>
+                          <p className="text-xs text-muted-foreground">{t(option.descKey)}</p>
                         </div>
                       </div>
                     ))}
@@ -139,7 +141,7 @@ export default function SimulateurInvestisseur() {
 
             <div className="flex justify-end">
               <Button onClick={handleNext} disabled={!formData.typeInvestissement || !formData.horizon} size="lg">
-                Continuer
+{t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -150,13 +152,13 @@ export default function SimulateurInvestisseur() {
           <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500">
             <Card>
               <CardHeader>
-                <CardTitle>Capital disponible</CardTitle>
-                <CardDescription>Montant que vous souhaitez investir (estimation)</CardDescription>
+                <CardTitle>{t("simulator.investor.availableCapital")}</CardTitle>
+                <CardDescription>{t("simulator.investor.amountToInvest")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-purple-500">${formData.capital[0].toLocaleString()}</p>
-                  <p className="text-sm text-muted-foreground mt-1">capital initial</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.investor.initialCapital")}</p>
                 </div>
                 <Slider
                   value={formData.capital}
@@ -175,15 +177,15 @@ export default function SimulateurInvestisseur() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Profil de risque</CardTitle>
-                <CardDescription>Quel niveau de risque acceptez-vous ?</CardDescription>
+                <CardTitle>{t("simulator.investor.riskProfile")}</CardTitle>
+                <CardDescription>{t("simulator.investor.riskLevel")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-purple-500">
-                    {formData.risque[0] === "1" ? "Prudent" : formData.risque[0] === "2" ? "Modéré" : formData.risque[0] === "3" ? "Équilibré" : formData.risque[0] === "4" ? "Dynamique" : "Agressif"}
+                    {t(`simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`)}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">profil de risque</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t("simulator.investor.riskProfile")}</p>
                 </div>
                 <Slider
                   value={formData.risque.map(Number)}
@@ -194,19 +196,19 @@ export default function SimulateurInvestisseur() {
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Prudent</span>
-                  <span>Agressif</span>
+                  <span>{t("simulator.investor.risks.prudent")}</span>
+                  <span>{t("simulator.investor.risks.aggressive")}</span>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex gap-3">
-              <Button variant="outline" onClick={handleBack} size="lg">
+              <Button variant="outline" onClick={handleBack} size="lg" className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Retour
+{t("simulator.back")}
               </Button>
               <Button onClick={handleNext} size="lg" className="flex-1">
-                Voir mon aperçu
+                {t("simulator.viewPreview")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -219,75 +221,42 @@ export default function SimulateurInvestisseur() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-purple-500" />
-                  <Badge variant="outline" className="text-purple-500 border-purple-500">Aperçu personnalisé</Badge>
+                  <Badge variant="outline" className="text-purple-500 border-purple-500">{t("simulator.common.personalizedPreview")}</Badge>
                 </div>
-                <CardTitle>Votre profil Investisseur</CardTitle>
-                <CardDescription>Basé sur vos réponses</CardDescription>
+                <CardTitle>{t("simulator.investor.yourProfile")}</CardTitle>
+                <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20 text-center">
                     <DollarSign className="w-6 h-6 text-purple-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-purple-500">${formData.capital[0].toLocaleString()}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Capital initial</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.investor.initialCapital")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-blue-500/5 border border-blue-500/20 text-center">
                     <Target className="w-6 h-6 text-blue-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-blue-500 capitalize">{formData.horizon}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Horizon</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.investor.horizon")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-center">
                     <BarChart3 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-emerald-500">
-                      {formData.risque[0] === "1" ? "Prudent" : formData.risque[0] === "2" ? "Modéré" : formData.risque[0] === "3" ? "Équilibré" : formData.risque[0] === "4" ? "Dynamique" : "Agressif"}
+                      {t(`simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`)}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">Profil risque</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("simulator.investor.riskProfile")}</p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground">
-                      Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre analyse de marché complète, opportunités exclusives, due diligence et stratégie d'investissement détaillée, créez votre compte.
-                    </p>
+                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.investor.previewNote") }} />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-muted-foreground" />
-                  <CardTitle>Analyse complète débloquée après inscription</CardTitle>
-                </div>
-                <CardDescription>Accédez à votre stratégie d'investissement</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    "Analyse de marché détaillée",
-                    "Opportunités exclusives présélectionnées",
-                    "Due diligence complète",
-                    "Projections financières personnalisées",
-                    "Accompagnement juridique et fiscal",
-                    "Réseau d'investisseurs",
-                  ].map((item, idx) => (
-                    <div key={idx} className="relative p-3 rounded-lg border bg-muted/30 backdrop-blur-sm">
-                      <div className="absolute inset-0 bg-linear-to-r from-background/80 to-background/60 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                        <Lock className="w-5 h-5 text-muted-foreground" />
-                      </div>
-                      <div className="opacity-40 flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4" />
-                        <p className="text-sm font-medium">{item}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
+            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -295,34 +264,37 @@ export default function SimulateurInvestisseur() {
                     <Sparkles className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold mb-2">Débloquez votre stratégie d'investissement</h3>
+                    <h3 className="text-xl font-bold mb-2">{t("simulator.investor.unlockStrategy")}</h3>
                     <p className="text-muted-foreground">
-                      Créez votre compte pour accéder aux opportunités exclusives et bénéficier d'un accompagnement expert
+                      {t("simulator.investor.unlockDesc")}
                     </p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-                    <Button asChild size="lg" className="text-base">
-                      <Link href="/auth/register">
-                        Créer mon compte gratuit
+                    <Button asChild variant="outline" size="lg" className="text-base hover:text-white">
+                      <Link href="/#parcours">
+                        {t("simulator.common.completePathway")}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                      <Link href="/">Parler à un conseiller</Link>
+                    <Button asChild size="lg" className="text-base">
+                      <Link href="/auth/register">
+                        {t("simulator.common.createFreeAccount")}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
                     </Button>
                   </div>
                   <div className="flex items-center justify-center gap-6 pt-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Gratuit</span>
+                      <span className="text-muted-foreground">{t("simulator.common.free")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Sans engagement</span>
+                      <span className="text-muted-foreground">{t("simulator.common.noCommitment")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                      <span className="text-muted-foreground">Accès immédiat</span>
+                      <span className="text-muted-foreground">{t("simulator.common.immediateAccess")}</span>
                     </div>
                   </div>
                 </div>
@@ -330,9 +302,9 @@ export default function SimulateurInvestisseur() {
             </Card>
 
             <div className="text-center">
-              <Button variant="ghost" onClick={handleBack}>
+              <Button variant="ghost" onClick={handleBack} className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Modifier mes réponses
+{t("simulator.modifyAnswers")}
               </Button>
             </div>
           </div>

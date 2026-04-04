@@ -12,6 +12,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Service } from "../types";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { getServiceTranslationKey, getSubcategoryTranslationKey, getCategoryTranslationKey } from "../utils";
 
 interface ServiceDetailDialogProps {
   service: Service;
@@ -19,6 +21,9 @@ interface ServiceDetailDialogProps {
 }
 
 export function ServiceDetailDialog({ service, children }: ServiceDetailDialogProps) {
+  const { t } = useTranslation();
+  const serviceKey = getServiceTranslationKey(service.id);
+  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -36,7 +41,7 @@ export function ServiceDetailDialog({ service, children }: ServiceDetailDialogPr
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <div className="flex items-start justify-between gap-3">
-            <DialogTitle className="text-xl">{service.title}</DialogTitle>
+            <DialogTitle className="text-xl">{t(`services.${serviceKey}.title`)}</DialogTitle>
             {service.price && (
               <Badge variant="secondary" className="shrink-0">
                 {service.price}
@@ -45,19 +50,19 @@ export function ServiceDetailDialog({ service, children }: ServiceDetailDialogPr
           </div>
           {service.subcategory && (
             <p className="text-muted-foreground text-sm">
-              {service.subcategory}
+              {t(`services.subcategories.${getSubcategoryTranslationKey(service.subcategory)}`)}
             </p>
           )}
         </DialogHeader>
         <DialogDescription className="text-base leading-relaxed text-foreground">
-          {service.description}
+          {t(`services.${serviceKey}.description`)}
         </DialogDescription>
         <div className="mt-4 rounded-lg bg-muted/50 p-4">
           <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-            Catégorie
+            {t("common.category")}
           </p>
           <p className="mt-1 font-medium text-sm">
-            {service.category}
+            {t(`services.categories.${getCategoryTranslationKey(service.category)}`)}
           </p>
         </div>
       </DialogContent>

@@ -34,93 +34,40 @@ import { ServiceSelectionSection } from "@/features/services";
 import { AppointmentStep } from "@/features/appointment";
 import type { AppointmentData } from "@/features/appointment";
 import { Logo } from "@/components/logo";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
-const cities = [
-  { id: "kinshasa", name: "Kinshasa", description: "Capitale dynamique" },
-  { id: "lubumbashi", name: "Lubumbashi", description: "Capitale minière" },
-  { id: "kolwezi", name: "Kolwezi", description: "Pôle industriel" },
-  { id: "matadi", name: "Matadi", description: "Ville portuaire" },
+const cityIds = ["kinshasa", "lubumbashi", "kolwezi", "matadi"];
+
+const projectTypeConfigs = [
+  { id: "preparationRetraite", icon: Coffee },
+  { id: "installationRetraite", icon: Home },
+  { id: "sejourRegulier", icon: MapPin },
+  { id: "retourFamille", icon: Heart },
 ];
 
-const projectTypes = [
-  {
-    id: "preparation-retraite",
-    name: "Préparation retraite",
-    description: "Planifier votre retraite au Congo",
-    icon: Coffee,
-  },
-  {
-    id: "installation-retraite",
-    name: "Installation définitive",
-    description: "S'installer pour profiter de sa retraite",
-    icon: Home,
-  },
-  {
-    id: "sejour-regulier",
-    name: "Séjours réguliers",
-    description: "Alterner entre pays d'origine et Congo",
-    icon: MapPin,
-  },
-  {
-    id: "retour-famille",
-    name: "Retour en famille",
-    description: "Rejoindre sa famille au pays",
-    icon: Heart,
-  },
+const pensionRangeIds = ["range1", "range2", "range3", "range4", "range5"];
+
+const lifestyleConfigs = [
+  { id: "standard", color: "text-blue-500", bgColor: "bg-blue-500" },
+  { id: "residentiel", color: "text-emerald-500", bgColor: "bg-emerald-500" },
+  { id: "premium", color: "text-purple-500", bgColor: "bg-purple-500" },
+  { id: "ultraPremium", color: "text-amber-500", bgColor: "bg-amber-500" },
 ];
 
-const pensionRanges = [
-  { id: "500-1000", label: "500$ - 1 000$", value: "500-1000" },
-  { id: "1000-2000", label: "1 000$ - 2 000$", value: "1000-2000" },
-  { id: "2000-3500", label: "2 000$ - 3 500$", value: "2000-3500" },
-  { id: "3500-5000", label: "3 500$ - 5 000$", value: "3500-5000" },
-  { id: "5000-plus", label: "5 000$ et plus", value: "5000-plus" },
-];
-
-const lifestyles = [
-  {
-    id: "standard",
-    name: "Standard",
-    description: "Confort essentiel et fonctionnel",
-    color: "text-blue-500",
-    bgColor: "bg-blue-500",
-  },
-  {
-    id: "residentiel",
-    name: "Résidentiel sécurisé",
-    description: "Quartiers sécurisés avec commodités",
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-500",
-  },
-  {
-    id: "premium",
-    name: "Premium",
-    description: "Haut standing et services exclusifs",
-    color: "text-purple-500",
-    bgColor: "bg-purple-500",
-  },
-  {
-    id: "ultra-premium",
-    name: "Ultra Premium",
-    description: "Luxe absolu et prestations sur-mesure",
-    color: "text-amber-500",
-    bgColor: "bg-amber-500",
-  },
-];
-
-const steps = [
-  { id: 1, title: "Ville cible", icon: MapPin },
-  { id: 2, title: "Type de projet", icon: Briefcase },
-  { id: 3, title: "Pension", icon: Wallet },
-  { id: 4, title: "Niveau de vie", icon: Home },
-  { id: 5, title: "Suivi santé", icon: Heart },
-  { id: 6, title: "Logement", icon: Shield },
-  { id: 7, title: "Services", icon: Package2 },
-  { id: 8, title: "Rendez-vous", icon: Calendar },
+const stepConfigs = [
+  { id: 1, key: "targetCity", icon: MapPin },
+  { id: 2, key: "projectType", icon: Briefcase },
+  { id: 3, key: "pension", icon: Wallet },
+  { id: 4, key: "lifestyle", icon: Home },
+  { id: 5, key: "healthFollowup", icon: Heart },
+  { id: 6, key: "housing", icon: Shield },
+  { id: 7, key: "services", icon: Package2 },
+  { id: 8, key: "appointment", icon: Calendar },
 ];
 
 export default function Retraite() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<string>("");
@@ -200,10 +147,10 @@ export default function Retraite() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              Parcours <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">Retraite</span>
+              {t("retirementPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("retirementPage.title").split(" ")[1]}</span>
             </h1>
             <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              Préparez votre retraite au Congo en toute sérénité
+              {t("retirementPage.subtitle")}
             </p>
           </div>
 
@@ -211,15 +158,15 @@ export default function Retraite() {
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl">
               <div className="flex items-center justify-between gap-3 mb-3">
                 <div>
-                  <div className="text-sm font-semibold">Étapes</div>
+                  <div className="text-sm font-semibold">{t("retirementPage.stepsLabel")}</div>
                   <div className="text-xs text-muted-foreground">
-                    Étape {currentStep}/{steps.length}
+                    {t("retirementPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-5 overflow-x-auto py-2">
-                {steps.map((step) => {
+                {stepConfigs.map((step) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -251,7 +198,7 @@ export default function Retraite() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`retirementPage.steps.${step.key}`)}
                       </div>
                     </div>
                   );
@@ -265,14 +212,14 @@ export default function Retraite() {
           <div className="shrink-0 md:sticky md:top-8 hidden md:block md:w-[180px]">
             <div className="w-full rounded-2xl border border-border/50 bg-background/80 p-4 shadow-lg backdrop-blur-xl md:w-[180px]">
               <div className="mb-3">
-                <div className="text-sm font-semibold">Étapes</div>
+                <div className="text-sm font-semibold">{t("retirementPage.stepsLabel")}</div>
                 <div className="text-xs text-muted-foreground">
-                  Étape {currentStep}/{steps.length}
+                  {t("retirementPage.stepOf", { current: currentStep, total: stepConfigs.length })}
                 </div>
               </div>
 
               <div className="flex flex-col items-center">
-                {steps.map((step, index) => {
+                {stepConfigs.map((step, index) => {
                   const StepIcon = step.icon;
                   const isActive = currentStep === step.id;
                   const isCompleted = currentStep > step.id;
@@ -305,9 +252,9 @@ export default function Retraite() {
                           !isActive && !isCompleted && "text-muted-foreground",
                         )}
                       >
-                        {step.title}
+                        {t(`retirementPage.steps.${step.key}`)}
                       </span>
-                      {index < steps.length - 1 && (
+                      {index < stepConfigs.length - 1 && (
                         <div
                           className={cn(
                             "w-0.5 h-8 transition-all duration-300 my-2 rounded-full",
@@ -328,20 +275,20 @@ export default function Retraite() {
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="mb-6">
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Quelle est votre ville cible ?
+                  {t("retirementPage.step1.title")}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Sélectionnez la ville où vous souhaitez passer votre retraite
+                  {t("retirementPage.step1.subtitle")}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                {cities.map((city) => (
+                {cityIds.map((cityId) => (
                   <Card
-                    key={city.id}
-                    onClick={() => setSelectedCity(city.id)}
+                    key={cityId}
+                    onClick={() => setSelectedCity(cityId)}
                     className={cn(
                       "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                      selectedCity === city.id
+                      selectedCity === cityId
                         ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
                         : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                     )}
@@ -349,12 +296,12 @@ export default function Retraite() {
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle className="text-lg">{city.name}</CardTitle>
+                          <CardTitle className="text-lg">{t(`diasporaPage.cities.${cityId}.name`)}</CardTitle>
                           <CardDescription className="mt-1">
-                            {city.description}
+                            {t(`diasporaPage.cities.${cityId}.description`)}
                           </CardDescription>
                         </div>
-                        {selectedCity === city.id && (
+                        {selectedCity === cityId && (
                           <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                             <Check className="w-3 h-3 text-primary-foreground" />
                           </div>
@@ -371,14 +318,14 @@ export default function Retraite() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quel est votre type de projet ?
+                      {t("retirementPage.step2.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Précisez la nature de votre projet de retraite
+                      {t("retirementPage.step2.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {projectTypes.map((project) => {
+                    {projectTypeConfigs.map((project) => {
                       const ProjectIcon = project.icon;
                       return (
                         <Card
@@ -399,10 +346,10 @@ export default function Retraite() {
                                 </div>
                                 <div className="flex-1">
                                   <CardTitle className="text-base">
-                                    {project.name}
+                                    {t(`retirementPage.projectTypes.${project.id}.name`)}
                                   </CardTitle>
                                   <CardDescription className="mt-1">
-                                    {project.description}
+                                    {t(`retirementPage.projectTypes.${project.id}.description`)}
                                   </CardDescription>
                                 </div>
                               </div>
@@ -424,20 +371,20 @@ export default function Retraite() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quelle est votre pension mensuelle ?
+                      {t("retirementPage.step3.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Indiquez le montant de votre pension mensuelle pour mieux vous orienter
+                      {t("retirementPage.step3.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {pensionRanges.map((pension) => (
+                    {pensionRangeIds.map((pensionId) => (
                       <Card
-                        key={pension.id}
-                        onClick={() => setSelectedPension(pension.value)}
+                        key={pensionId}
+                        onClick={() => setSelectedPension(pensionId)}
                         className={cn(
                           "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                          selectedPension === pension.value
+                          selectedPension === pensionId
                             ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
                             : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                         )}
@@ -449,10 +396,10 @@ export default function Retraite() {
                                 <DollarSign className="w-4 h-4" />
                               </div>
                               <CardTitle className="text-base">
-                                {pension.label}
+                                {t(`retirementPage.pensionRanges.${pensionId}`)}
                               </CardTitle>
                             </div>
-                            {selectedPension === pension.value && (
+                            {selectedPension === pensionId && (
                               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                                 <Check className="w-3 h-3 text-primary-foreground" />
                               </div>
@@ -469,14 +416,14 @@ export default function Retraite() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Quel niveau de vie souhaitez-vous ?
+                      {t("retirementPage.step4.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Choisissez le standing qui correspond à vos attentes
+                      {t("retirementPage.step4.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {lifestyles.map((lifestyle) => (
+                    {lifestyleConfigs.map((lifestyle) => (
                       <Card
                         key={lifestyle.id}
                         onClick={() => setSelectedLifestyle(lifestyle.id)}
@@ -492,16 +439,16 @@ export default function Retraite() {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-2">
                                 <CardTitle className="text-base">
-                                  {lifestyle.name}
+                                  {t(`diasporaPage.lifestyles.${lifestyle.id}.name`)}
                                 </CardTitle>
-                                {lifestyle.id === "ultra-premium" && (
+                                {lifestyle.id === "ultraPremium" && (
                                   <Badge variant="secondary" className="text-xs">
-                                    Exclusif
+                                    {t("diasporaPage.lifestyles.ultraPremium.badge")}
                                   </Badge>
                                 )}
                               </div>
                               <CardDescription>
-                                {lifestyle.description}
+                                {t(`diasporaPage.lifestyles.${lifestyle.id}.description`)}
                               </CardDescription>
                             </div>
                             {selectedLifestyle === lifestyle.id && (
@@ -529,10 +476,10 @@ export default function Retraite() {
             <div className="animate-in fade-in slide-in-from-right-4 duration-500">
               <div className="mb-6">
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Avez-vous besoin d'un suivi santé régulier ?
+                  {t("retirementPage.step5.title")}
                 </h2>
                 <p className="text-muted-foreground text-sm">
-                  Indiquez si vous nécessitez un accompagnement médical continu
+                  {t("retirementPage.step5.subtitle")}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -552,9 +499,9 @@ export default function Retraite() {
                           <Heart className="w-5 h-5" />
                         </div>
                         <div className="flex-1">
-                          <CardTitle className="text-base">Oui</CardTitle>
+                          <CardTitle className="text-base">{t("retirementPage.step5.yes")}</CardTitle>
                           <CardDescription className="mt-1">
-                            J'ai besoin d'un suivi médical régulier
+                            {t("retirementPage.step5.yesDescription")}
                           </CardDescription>
                         </div>
                       </div>
@@ -583,9 +530,9 @@ export default function Retraite() {
                           <X className="w-5 h-5 text-muted-foreground" />
                         </div>
                         <div className="flex-1">
-                          <CardTitle className="text-base">Non</CardTitle>
+                          <CardTitle className="text-base">{t("retirementPage.step5.no")}</CardTitle>
                           <CardDescription className="mt-1">
-                            Je suis en bonne santé
+                            {t("retirementPage.step5.noDescription")}
                           </CardDescription>
                         </div>
                       </div>
@@ -605,10 +552,10 @@ export default function Retraite() {
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                      Souhaitez-vous sécuriser un logement ?
+                      {t("retirementPage.step6.title")}
                     </h2>
                     <p className="text-muted-foreground text-sm">
-                      Avez-vous besoin d'aide pour trouver ou sécuriser un logement ?
+                      {t("retirementPage.step6.subtitle")}
                     </p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
@@ -628,9 +575,9 @@ export default function Retraite() {
                               <Home className="w-5 h-5" />
                             </div>
                             <div className="flex-1">
-                              <CardTitle className="text-base">Oui</CardTitle>
+                              <CardTitle className="text-base">{t("retirementPage.step6.yes")}</CardTitle>
                               <CardDescription className="mt-1">
-                                J'ai besoin d'aide pour mon logement
+                                {t("retirementPage.step6.yesDescription")}
                               </CardDescription>
                             </div>
                           </div>
@@ -659,9 +606,9 @@ export default function Retraite() {
                               <X className="w-5 h-5 text-muted-foreground" />
                             </div>
                             <div className="flex-1">
-                              <CardTitle className="text-base">Non</CardTitle>
+                              <CardTitle className="text-base">{t("retirementPage.step6.no")}</CardTitle>
                               <CardDescription className="mt-1">
-                                Mon logement est déjà sécurisé
+                                {t("retirementPage.step6.noDescription")}
                               </CardDescription>
                             </div>
                           </div>
@@ -703,7 +650,7 @@ export default function Retraite() {
                 disabled={currentStep === 1}
               >
                 <ArrowLeft className="w-4 h-4" />
-                Retour
+                {t("retirementPage.navigation.previous")}
               </Button>
 
               <Button
@@ -712,7 +659,7 @@ export default function Retraite() {
                 disabled={!isStepComplete()}
                 className="gap-2 hover:scale-105 transition-transform duration-200 bg-linear-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-lg hover:shadow-xl"
               >
-                {currentStep === 8 ? "Procéder au paiement" : "Suivant"}
+                {currentStep === 8 ? t("retirementPage.navigation.finish") : t("retirementPage.navigation.next")}
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </div>

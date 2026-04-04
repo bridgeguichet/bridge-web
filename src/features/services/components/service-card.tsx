@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Service } from "../types";
 import { ServiceDetailDialog } from "./service-detail-dialog";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { getServiceTranslationKey, getSubcategoryTranslationKey } from "../utils";
 
 interface ServiceCardProps {
   service: Service;
@@ -15,6 +17,8 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps) {
+  const { t } = useTranslation();
+  const serviceKey = getServiceTranslationKey(service.id);
   const displayDescription = service.shortDescription || service.description;
   const hasShortDescription = !!service.shortDescription;
 
@@ -33,7 +37,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <CardTitle className="text-base leading-tight">
-                {service.title}
+                {t(`services.${serviceKey}.title`)}
               </CardTitle>
               {service.price && (
                 <Badge variant="secondary" className="text-xs shrink-0">
@@ -43,7 +47,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
             </div>
             {service.subcategory && (
               <p className="text-muted-foreground text-xs mt-0.5">
-                {service.subcategory}
+                {t(`services.subcategories.${getSubcategoryTranslationKey(service.subcategory)}`)}
               </p>
             )}
           </div>
@@ -61,7 +65,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
       </CardHeader>
       <CardContent className="pt-0 space-y-3">
         <CardDescription className="text-sm leading-relaxed">
-          {displayDescription}
+          {hasShortDescription ? t(`services.${serviceKey}.shortDescription`) : t(`services.${serviceKey}.description`)}
         </CardDescription>
         {hasShortDescription && (
           <div className="flex items-center gap-2">
@@ -72,7 +76,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
                 className="h-auto gap-2 px-0 font-medium text-primary text-xs hover:bg-transparent hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
-                Lire plus
+                {t("common.readMore")}
                 <Info className="h-3.5 w-3.5" />
               </Button>
             </ServiceDetailDialog>

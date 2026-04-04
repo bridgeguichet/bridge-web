@@ -27,77 +27,69 @@ import { HeroHeader } from "@/external-components/header";
 
 import { cn } from "@/lib/utils";
 
-const parcoursList = [
+const getParcoursList = (t: (key: string) => string) => [
   {
     id: "diaspora",
-    title: "Diaspora",
-    description:
-      "Vous êtes d'origine congolaise et vivez à l'étranger ? Découvrez des services sur-mesure pour vous.",
     icon: Globe,
     color: "text-blue-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
     bgHover: "hover:bg-rose-500/5",
     borderHover: "hover:border-rose-500/50",
-    badge: "Populaire",
+    showBadge: true,
     badgeVariant: "default" as const,
   },
   {
     id: "expat",
-    title: "Expatrié",
-    description: "Vous venez vous installer au Congo ? Facilitez votre intégration et votre quotidien.",
     icon: Plane,
     color: "text-emerald-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
     bgHover: "hover:bg-rose-500/5",
     borderHover: "hover:border-rose-500/50",
-    badge: null,
+    showBadge: false,
     badgeVariant: null,
   },
   {
     id: "investisseur",
-    title: "Investisseur",
-    description: "Saisissez les meilleures opportunités d'investissement et développez vos projets.",
     icon: TrendingUp,
     color: "text-purple-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
     bgHover: "hover:bg-rose-500/5",
     borderHover: "hover:border-rose-500/50",
-    badge: null,
+    showBadge: false,
     badgeVariant: null,
   },
   {
     id: "nextgen",
-    title: "NextGen (18-26 ans)",
-    description: "Les services pour propulser la nouvelle génération vers l'avenir de leurs ambitions.",
     icon: Zap,
     color: "text-amber-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
     bgHover: "hover:bg-rose-500/5",
     borderHover: "hover:border-rose-500/50",
-    badge: null,
+    showBadge: false,
     badgeVariant: null,
   },
   {
     id: "retraite",
-    title: "Retraite",
-    description: "Préparez sereinement votre avenir ou profitez de vos vieux jours en toute tranquillité.",
     icon: Coffee,
     color: "text-rose-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
     bgHover: "hover:bg-rose-500/5",
     borderHover: "hover:border-rose-500/50",
-    badge: null,
+    showBadge: false,
     badgeVariant: null,
   },
 ];
 
-export default function Home() {
-  const { t } = useTranslation();
+export default function ExternalPage() {
+  const { t, i18n } = useTranslation();
+  const parcoursList = getParcoursList(t);
+  const imageSrc = i18n.language === 'en' ? '/media/simulateur-etape1_en.png' : '/media/simulateur-etape1.png';
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <HeroHeader />
@@ -145,7 +137,7 @@ export default function Home() {
 
             <div className="relative mt-12 w-full px-2 sm:px-4 md:px-0">
               <Image
-                src="/media/simulateur-etape1.png"
+                src={imageSrc}
                 alt="Simulateur Bridge - Étape 1"
                 width={1200}
                 height={800}
@@ -293,14 +285,13 @@ export default function Home() {
               <div className="mx-auto max-w-3xl text-center">
                 <div className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 mb-4 text-muted-foreground text-xs backdrop-blur">
                   <Sparkles className="size-4 text-primary" />
-                  <span>Trouvez votre parcours idéal</span>
+                  <span>{t("parcoursPage.badge")}</span>
                 </div>
 
-                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">Choisissez Votre Parcours</h2>
+                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">{t("parcoursPage.title")}</h2>
 
                 <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                  Sélectionnez le profil qui vous correspond le mieux afin que nous puissions adapter votre expérience et vous
-                  proposer les services les plus pertinents.
+                  {t("parcoursPage.description")}
                 </p>
               </div>
 
@@ -337,23 +328,23 @@ export default function Home() {
                             <Icon className="h-9 w-9 transition-transform duration-300 group-hover:scale-110" />
                           </div>
 
-                          {item.badge && (
+                          {item.showBadge && (
                             <Badge variant={item.badgeVariant} className="shrink-0">
-                              {item.badge}
+                              {t("parcoursPage.popular")}
                             </Badge>
                           )}
                         </div>
 
                         <p className="mt-6 font-semibold text-xl tracking-tight transition-colors group-hover:text-primary">
-                          {item.title}
+                          {t(`parcoursPage.parcours.${item.id}.title`)}
                         </p>
                         <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                          {item.description}
+                          {t(`parcoursPage.parcours.${item.id}.description`)}
                         </p>
 
                         <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4 transition-all duration-300 group-hover:bg-primary/10">
                           <span className="font-semibold text-muted-foreground text-sm transition-colors group-hover:text-primary">
-                            Démarrer maintenant
+                            {t("parcoursPage.startNow")}
                           </span>
                           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-background shadow-sm transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
                             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
