@@ -1,12 +1,14 @@
 "use client";
 
 import { ArrowRight, Check, Package, Sparkles } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import type { ServicePack } from "../types";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
+
+import type { ServicePack } from "../types";
 import { getPackTranslationKey, getServiceTranslationKey } from "../utils";
 
 interface PackRecommendationProps {
@@ -16,25 +18,20 @@ interface PackRecommendationProps {
   isSelected?: boolean;
 }
 
-export function PackRecommendation({
-  pack,
-  includedServices,
-  onSelect,
-  isSelected = false,
-}: PackRecommendationProps) {
+export function PackRecommendation({ pack, includedServices, onSelect, isSelected = false }: PackRecommendationProps) {
   const { t } = useTranslation();
   const packKey = getPackTranslationKey(pack.id);
-  const matchPercentage = Math.round(
-    (includedServices.length / pack.services.length) * 100,
-  );
+  const matchPercentage = Math.round((includedServices.length / pack.services.length) * 100);
 
   return (
-    <Card className={cn(
-      "border-2 shadow-lg transition-all duration-300",
-      isSelected 
-        ? "border-green-500 bg-linear-to-br from-green-500/10 to-background" 
-        : "border-primary/20 bg-linear-to-br from-primary/5 to-background"
-    )}>
+    <Card
+      className={cn(
+        "border-2 shadow-lg transition-all duration-300",
+        isSelected
+          ? "border-green-500 bg-linear-to-br from-green-500/10 to-background"
+          : "border-primary/20 bg-linear-to-br from-primary/5 to-background",
+      )}
+    >
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-3 mb-2">
           <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -71,10 +68,7 @@ export function PackRecommendation({
                   )}
                 >
                   <Check
-                    className={cn(
-                      "w-4 h-4 shrink-0 mt-0.5",
-                      isIncluded ? "text-primary" : "text-muted-foreground/50",
-                    )}
+                    className={cn("w-4 h-4 shrink-0 mt-0.5", isIncluded ? "text-primary" : "text-muted-foreground/50")}
                   />
                   <span className="flex-1 leading-tight">
                     {t(`services.${getServiceTranslationKey(serviceId)}.title`)}

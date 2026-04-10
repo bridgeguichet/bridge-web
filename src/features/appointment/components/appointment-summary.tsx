@@ -1,12 +1,14 @@
 "use client";
 
-import { Calendar as CalendarIcon, Clock, User, Package } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar as CalendarIcon, Clock, Package, User } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useTranslation } from "@/lib/i18n/use-translation";
+
 import type { AppointmentData } from "../types";
 import { formatAppointmentDate } from "../utils";
-import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface AppointmentSummaryProps {
   appointment: AppointmentData;
@@ -38,12 +40,11 @@ export function AppointmentSummary({
               </div>
               <div className="flex items-center justify-between">
                 <Badge variant="secondary" className="text-sm">
-                  {selectedServicesCount} {t(selectedServicesCount > 1 ? "appointment.service_plural" : "appointment.service")}
+                  {selectedServicesCount}{" "}
+                  {t(selectedServicesCount > 1 ? "appointment.service_plural" : "appointment.service")}
                 </Badge>
                 {totalEstimate > 0 && (
-                  <span className="font-bold text-lg text-primary">
-                    ${totalEstimate.toFixed(0)}
-                  </span>
+                  <span className="font-bold text-lg text-primary">${totalEstimate.toFixed(0)}</span>
                 )}
               </div>
             </div>
@@ -64,9 +65,7 @@ export function AppointmentSummary({
                   <CalendarIcon className="w-4 h-4 text-muted-foreground mt-0.5" />
                   <div className="flex-1">
                     <p className="text-xs text-muted-foreground">{t("appointment.date")}</p>
-                    <p className="font-semibold text-sm capitalize">
-                      {formatAppointmentDate(date)}
-                    </p>
+                    <p className="font-semibold text-sm capitalize">{formatAppointmentDate(date)}</p>
                   </div>
                 </div>
               </div>
@@ -101,18 +100,14 @@ export function AppointmentSummary({
           ) : (
             <div className="p-4 rounded-lg border-2 border-dashed border-muted-foreground/20 text-center">
               <CalendarIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground/40" />
-              <p className="text-xs text-muted-foreground">
-                {t("appointment.selectDateAndTime")}
-              </p>
+              <p className="text-xs text-muted-foreground">{t("appointment.selectDateAndTime")}</p>
             </div>
           )}
         </div>
 
         {hasAppointment && (
           <div className="pt-2">
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {t("appointment.confirmationEmail")}
-            </p>
+            <p className="text-xs text-muted-foreground leading-relaxed">{t("appointment.confirmationEmail")}</p>
           </div>
         )}
       </CardContent>

@@ -1,11 +1,13 @@
 "use client";
 
 import { Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import type { TimeSlot } from "../types";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
+
+import type { TimeSlot } from "../types";
 
 interface TimeSlotSelectorProps {
   slots: TimeSlot[];
@@ -13,13 +15,9 @@ interface TimeSlotSelectorProps {
   onSelectSlot: (slot: TimeSlot) => void;
 }
 
-export function TimeSlotSelector({
-  slots,
-  selectedSlot,
-  onSelectSlot,
-}: TimeSlotSelectorProps) {
+export function TimeSlotSelector({ slots, selectedSlot, onSelectSlot }: TimeSlotSelectorProps) {
   const { t } = useTranslation();
-  
+
   const morningSlots = slots.filter((slot) => {
     const hour = Number.parseInt(slot.time.split(":")[0]);
     return hour < 12;
@@ -49,8 +47,7 @@ export function TimeSlotSelector({
               onClick={() => onSelectSlot(slot)}
               className={cn(
                 "h-auto py-2 px-3 flex flex-col items-center justify-center transition-all",
-                selectedSlot?.id === slot.id &&
-                  "ring-2 ring-primary ring-offset-2",
+                selectedSlot?.id === slot.id && "ring-2 ring-primary ring-offset-2",
                 !slot.available && "opacity-40 cursor-not-allowed",
               )}
             >

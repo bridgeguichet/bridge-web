@@ -778,21 +778,11 @@
       "nature": {
         "title": "Nature of services",
         "intro": "Bridge acts exclusively as:",
-        "list": [
-          "Strategic facilitator",
-          "Coordinator",
-          "Referral intermediary",
-          "Structuring advisor"
-        ],
+        "list": ["Strategic facilitator", "Coordinator", "Referral intermediary", "Structuring advisor"],
         "text1": "Bridge is neither a bank, nor a law firm, nor an insurer, nor an administrative authority.",
         "text2": "Bridge is subject to an obligation of means, not an obligation of results.",
         "subtitle": "No service guarantees:",
-        "noGuarantee": [
-          "Obtaining a loan",
-          "Administrative approval",
-          "Successful investment",
-          "Project profitability"
-        ]
+        "noGuarantee": ["Obtaining a loan", "Administrative approval", "Successful investment", "Project profitability"]
       },
       "responsabilite": {
         "title": "Limitation of liability",
@@ -957,8 +947,8 @@
       "howManyPeople": "How many people are accompanying you?",
       "yourProfile": "Your Diaspora profile",
       "previewNote": "This is a <strong>simplified preview</strong>. To get your complete strategy with detailed budget, administrative procedures and local contacts, create your account.",
-      "unlockStrategy": "Unlock your complete strategy",
-      "unlockDesc": "Create your account to access your personalized plan and benefit from expert support"
+      "unlockStrategy": "Ready to make your project a reality?",
+      "unlockDesc": "This simulator gave you a preview. Now move on to the complete pathway to benefit from personalized support and a detailed action plan"
     },
     "expat": {
       "title": "Expatriate Pathway",
@@ -987,8 +977,8 @@
       "peopleToSettle": "Number of people to settle",
       "yourProfile": "Your Expatriate profile",
       "previewNote": "This is a <strong>simplified preview</strong>. To get your complete installation package with pre-selected housing, premium services and dedicated concierge, create your account.",
-      "unlockPackage": "Access your complete installation package",
-      "unlockDesc": "Create your account to unlock all premium services and benefit from dedicated concierge"
+      "unlockPackage": "Ready to settle in with peace of mind?",
+      "unlockDesc": "This simulator gave you a preview. Now move on to the complete pathway to access all premium services and your dedicated concierge"
     },
     "investor": {
       "title": "Investor Pathway",
@@ -1028,8 +1018,8 @@
       "yourProfile": "Your Investor profile",
       "horizon": "Horizon",
       "previewNote": "This is a <strong>simplified preview</strong>. To get your complete market analysis, exclusive opportunities, due diligence and detailed investment strategy, create your account.",
-      "unlockStrategy": "Unlock your investment strategy",
-      "unlockDesc": "Create your account to access exclusive opportunities and benefit from expert support"
+      "unlockStrategy": "Ready to invest smartly?",
+      "unlockDesc": "This simulator gave you a preview. Now move on to the complete pathway to access exclusive opportunities and benefit from expert support"
     },
     "retirement": {
       "title": "Retirement Pathway",
@@ -1059,8 +1049,8 @@
       "yourProfile": "Your Retirement profile",
       "priority": "Priority",
       "previewNote": "This is a <strong>simplified preview</strong>. To get your complete retirement plan with adapted living environment, health services, active community and personalized support, create your account.",
-      "unlockPlan": "Unlock your complete retirement plan",
-      "unlockDesc": "Create your account to access your personalized plan and benefit from dedicated support"
+      "unlockPlan": "Ready to prepare your ideal retirement?",
+      "unlockDesc": "This simulator gave you a preview. Now move on to the complete pathway to access your personalized plan and benefit from dedicated support"
     },
     "nextgen": {
       "title": "NextGen Pathway",
@@ -1105,8 +1095,8 @@
       "domain": "Domain",
       "ambition": "Ambition",
       "previewNote": "This is a <strong>simplified preview</strong>. To get your complete career plan with professional mentoring, young talent network, exclusive opportunities and personalized support, create your account.",
-      "unlockCareerPlan": "Unlock your complete career plan",
-      "unlockDesc": "Create your account to access mentoring, network and exclusive opportunities"
+      "unlockCareerPlan": "Ready to boost your career?",
+      "unlockDesc": "This simulator gave you a preview. Now move on to the complete pathway to access mentoring, network and exclusive opportunities"
     }
   },
   "diasporaPage": {

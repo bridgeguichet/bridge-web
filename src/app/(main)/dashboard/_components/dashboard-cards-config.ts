@@ -1,11 +1,4 @@
-import {
-  Building2,
-  type LucideIcon,
-  MapPin,
-  Package,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+import { Building2, type LucideIcon, MapPin, Package, ShoppingCart, Users } from "lucide-react";
 
 export interface DashboardCardConfig {
   titleKey: string;

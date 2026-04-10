@@ -1,6 +1,9 @@
 "use client";
 
 import { Info } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,11 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import type { Service } from "../types";
 import { useTranslation } from "@/lib/i18n/use-translation";
-import { getServiceTranslationKey, getSubcategoryTranslationKey, getCategoryTranslationKey } from "../utils";
+
+import type { Service } from "../types";
+import { getCategoryTranslationKey, getServiceTranslationKey, getSubcategoryTranslationKey } from "../utils";
 
 interface ServiceDetailDialogProps {
   service: Service;
@@ -23,17 +25,12 @@ interface ServiceDetailDialogProps {
 export function ServiceDetailDialog({ service, children }: ServiceDetailDialogProps) {
   const { t } = useTranslation();
   const serviceKey = getServiceTranslationKey(service.id);
-  
+
   return (
     <Dialog>
       <DialogTrigger asChild>
         {children || (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 shrink-0"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={(e) => e.stopPropagation()}>
             <Info className="h-4 w-4" />
           </Button>
         )}
@@ -58,9 +55,7 @@ export function ServiceDetailDialog({ service, children }: ServiceDetailDialogPr
           {t(`services.${serviceKey}.description`)}
         </DialogDescription>
         <div className="mt-4 rounded-lg bg-muted/50 p-4">
-          <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
-            {t("common.category")}
-          </p>
+          <p className="text-muted-foreground text-xs font-medium uppercase tracking-wide">{t("common.category")}</p>
           <p className="mt-1 font-medium text-sm">
             {t(`services.categories.${getCategoryTranslationKey(service.category)}`)}
           </p>

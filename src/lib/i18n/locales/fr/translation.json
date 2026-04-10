@@ -604,7 +604,7 @@
   "contactSection": {
     "meetUs": "Vous préférez nous rencontrer ?",
     "meetUsDes": "Prenez rendez-vous dans l'un de nos bureaux pour un entretien personnalisé.",
-    "bookAppointment": "Prendre rendez-vous"  
+    "bookAppointment": "Prendre rendez-vous"
   },
   "external-footer": {
     "about": "À propos",
@@ -690,14 +690,27 @@
       "donnees": {
         "title": "Données collectées",
         "intro": "Bridge peut collecter :",
-        "collected": ["Nom et prénom", "Email", "Numéro de téléphone", "Adresse", "Informations administratives", "Informations nécessaires à la prestation demandée"],
+        "collected": [
+          "Nom et prénom",
+          "Email",
+          "Numéro de téléphone",
+          "Adresse",
+          "Informations administratives",
+          "Informations nécessaires à la prestation demandée"
+        ],
         "subtitle": "Les données sont collectées via :",
         "sources": ["Formulaires du site", "Échanges email", "Contrats", "Réservations"]
       },
       "finalite": {
         "title": "Finalité du traitement",
         "intro": "Les données sont utilisées pour :",
-        "list": ["Fourniture des services", "Gestion contractuelle", "Relation client", "Facturation", "Conformité réglementaire"]
+        "list": [
+          "Fourniture des services",
+          "Gestion contractuelle",
+          "Relation client",
+          "Facturation",
+          "Conformité réglementaire"
+        ]
       },
       "baseLegale": {
         "title": "Base légale",
@@ -711,7 +724,10 @@
       "partage": {
         "title": "Partage des données",
         "intro": "Les données peuvent être transmises uniquement :",
-        "list": ["Aux partenaires strictement nécessaires à l'exécution du service", "Aux autorités compétentes si exigé par la loi"],
+        "list": [
+          "Aux partenaires strictement nécessaires à l'exécution du service",
+          "Aux autorités compétentes si exigé par la loi"
+        ],
         "highlight": "Bridge ne vend ni ne loue aucune donnée personnelle."
       },
       "securite": {
@@ -728,7 +744,11 @@
       "fraudes": {
         "title": "Prévention contre les fraudes",
         "intro": "Bridge communique exclusivement via :",
-        "list": ["Les emails publiés sur le site officiel", "Les numéros officiellement référencés", "Les contrats et supports validés"],
+        "list": [
+          "Les emails publiés sur le site officiel",
+          "Les numéros officiellement référencés",
+          "Les contrats et supports validés"
+        ],
         "highlight": "Toute communication provenant d'une adresse ou d'un numéro non référencé doit être considérée comme frauduleuse.",
         "note": "Bridge décline toute responsabilité en cas d'escroquerie externe."
       }
@@ -758,16 +778,31 @@
       "nature": {
         "title": "Nature des services",
         "intro": "Bridge agit exclusivement en qualité de :",
-        "list": ["Facilitateur stratégique", "Coordinateur", "Intermédiaire de mise en relation", "Conseiller en structuration"],
+        "list": [
+          "Facilitateur stratégique",
+          "Coordinateur",
+          "Intermédiaire de mise en relation",
+          "Conseiller en structuration"
+        ],
         "text1": "Bridge n'est ni une banque, ni un cabinet juridique, ni un assureur, ni une autorité administrative.",
         "text2": "Bridge est tenu à une obligation de moyens et non de résultat.",
         "subtitle": "Aucun service ne garantit :",
-        "noGuarantee": ["L'obtention d'un crédit", "L'approbation administrative", "La réussite d'un investissement", "La rentabilité d'un projet"]
+        "noGuarantee": [
+          "L'obtention d'un crédit",
+          "L'approbation administrative",
+          "La réussite d'un investissement",
+          "La rentabilité d'un projet"
+        ]
       },
       "responsabilite": {
         "title": "Limitation de responsabilité",
         "intro": "Bridge ne pourra être tenu responsable :",
-        "list": ["Des décisions prises par le client", "Des actes ou manquements des partenaires", "Des refus administratifs ou bancaires", "Des pertes indirectes ou financières"],
+        "list": [
+          "Des décisions prises par le client",
+          "Des actes ou manquements des partenaires",
+          "Des refus administratifs ou bancaires",
+          "Des pertes indirectes ou financières"
+        ],
         "highlight": "En tout état de cause, la responsabilité maximale de Bridge est limitée au montant payé pour la prestation concernée."
       },
       "partenaires": {
@@ -775,12 +810,19 @@
         "text1": "Les partenaires présentés par Bridge sont juridiquement indépendants.",
         "text2": "Toute relation contractuelle conclue directement entre le client et un partenaire est distincte de Bridge.",
         "subtitle": "Si le client choisit de traiter hors coordination Bridge :",
-        "list": ["Bridge décline toute responsabilité", "Aucun remboursement ne sera possible", "Aucune médiation ne sera assurée"]
+        "list": [
+          "Bridge décline toute responsabilité",
+          "Aucun remboursement ne sera possible",
+          "Aucune médiation ne sera assurée"
+        ]
       },
       "antiContournement": {
         "title": "Clause anti-contournement",
         "intro": "Le client s'engage à ne pas :",
-        "list": ["Contacter directement un partenaire présenté par Bridge sans validation écrite", "Exploiter les contacts fournis à des fins personnelles ou commerciales"],
+        "list": [
+          "Contacter directement un partenaire présenté par Bridge sans validation écrite",
+          "Exploiter les contacts fournis à des fins personnelles ou commerciales"
+        ],
         "duration": "Cette interdiction s'applique pendant la durée du contrat et pendant 24 mois après sa fin."
       },
       "clausePenale": {
@@ -793,7 +835,10 @@
       "remboursement": {
         "title": "Politique de non-remboursement",
         "intro": "En raison de la nature intellectuelle et stratégique des services :",
-        "list": ["Les paiements sont fermes et définitifs", "Aucun remboursement n'est possible après démarrage de la mission"]
+        "list": [
+          "Les paiements sont fermes et définitifs",
+          "Aucun remboursement n'est possible après démarrage de la mission"
+        ]
       },
       "conformite": {
         "title": "Conformité & Anti-corruption",
@@ -804,7 +849,10 @@
       "conformiteInter": {
         "title": "Conformité internationale",
         "intro": "Le client déclare :",
-        "list": ["Ne pas figurer sur une liste de sanctions internationales", "Respecter les lois fiscales et réglementaires applicables"],
+        "list": [
+          "Ne pas figurer sur une liste de sanctions internationales",
+          "Respecter les lois fiscales et réglementaires applicables"
+        ],
         "note": "Bridge se réserve le droit de refuser toute mission non conforme aux standards AML / KYC."
       },
       "fraude": {
@@ -913,8 +961,8 @@
       "howManyPeople": "Combien de personnes vous accompagnent ?",
       "yourProfile": "Votre profil Diaspora",
       "previewNote": "Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre stratégie complète avec budget détaillé, démarches administratives et contacts locaux, créez votre compte.",
-      "unlockStrategy": "Débloquez votre stratégie complète",
-      "unlockDesc": "Créez votre compte pour accéder à votre plan personnalisé et bénéficier d'un accompagnement expert"
+      "unlockStrategy": "Prêt à concrétiser votre projet ?",
+      "unlockDesc": "Ce simulateur vous a donné un aperçu. Passez maintenant au parcours complet pour bénéficier d'un accompagnement personnalisé et d'un plan d'action détaillé"
     },
     "expat": {
       "title": "Parcours Expatrié",
@@ -943,8 +991,8 @@
       "peopleToSettle": "Nombre de personnes à installer",
       "yourProfile": "Votre profil Expatrié",
       "previewNote": "Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre pack installation complet avec logements présélectionnés, services premium et conciergerie dédiée, créez votre compte.",
-      "unlockPackage": "Accédez à votre pack installation complet",
-      "unlockDesc": "Créez votre compte pour débloquer tous les services premium et bénéficier d'une conciergerie dédiée"
+      "unlockPackage": "Prêt à vous installer sereinement ?",
+      "unlockDesc": "Ce simulateur vous a donné un aperçu. Passez maintenant au parcours complet pour accéder à tous les services premium et votre conciergerie dédiée"
     },
     "investor": {
       "title": "Parcours Investisseur",
@@ -984,8 +1032,8 @@
       "yourProfile": "Votre profil Investisseur",
       "horizon": "Horizon",
       "previewNote": "Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre analyse de marché complète, opportunités exclusives, due diligence et stratégie d'investissement détaillée, créez votre compte.",
-      "unlockStrategy": "Débloquez votre stratégie d'investissement",
-      "unlockDesc": "Créez votre compte pour accéder aux opportunités exclusives et bénéficier d'un accompagnement expert"
+      "unlockStrategy": "Prêt à investir intelligemment ?",
+      "unlockDesc": "Ce simulateur vous a donné un aperçu. Passez maintenant au parcours complet pour accéder aux opportunités exclusives et bénéficier d'un accompagnement expert"
     },
     "retirement": {
       "title": "Parcours Retraite",
@@ -1015,8 +1063,8 @@
       "yourProfile": "Votre profil Retraite",
       "priority": "Priorité",
       "previewNote": "Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre plan retraite complet avec cadre de vie adapté, services santé, communauté active et accompagnement personnalisé, créez votre compte.",
-      "unlockPlan": "Débloquez votre plan retraite complet",
-      "unlockDesc": "Créez votre compte pour accéder à votre plan personnalisé et bénéficier d'un accompagnement dédié"
+      "unlockPlan": "Prêt à préparer votre retraite idéale ?",
+      "unlockDesc": "Ce simulateur vous a donné un aperçu. Passez maintenant au parcours complet pour accéder à votre plan personnalisé et bénéficier d'un accompagnement dédié"
     },
     "nextgen": {
       "title": "Parcours NextGen",
@@ -1061,8 +1109,8 @@
       "domain": "Domaine",
       "ambition": "Ambition",
       "previewNote": "Ceci est un <strong>aperçu simplifié</strong>. Pour obtenir votre plan carrière complet avec mentorat professionnel, réseau jeunes talents, opportunités exclusives et accompagnement personnalisé, créez votre compte.",
-      "unlockCareerPlan": "Débloquez votre plan carrière complet",
-      "unlockDesc": "Créez votre compte pour accéder au mentorat, réseau et opportunités exclusives"
+      "unlockCareerPlan": "Prêt à booster votre carrière ?",
+      "unlockDesc": "Ce simulateur vous a donné un aperçu. Passez maintenant au parcours complet pour accéder au mentorat, réseau et opportunités exclusives"
     }
   },
   "diasporaPage": {

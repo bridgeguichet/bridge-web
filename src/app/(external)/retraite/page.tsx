@@ -1,40 +1,36 @@
 "use client";
 
 import { useState } from "react";
+
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import {
-  MapPin,
-  Briefcase,
-  DollarSign,
-  Home,
-  ArrowRight,
   ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  Calendar,
   Check,
   Coffee,
-  Package2,
-  X,
+  DollarSign,
   Heart,
+  Home,
+  MapPin,
+  Package2,
   Shield,
   Wallet,
-  Calendar,
+  X,
 } from "lucide-react";
-import Link from "next/link";
 
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ServiceSelectionSection } from "@/features/services";
-import { AppointmentStep } from "@/features/appointment";
-import type { AppointmentData } from "@/features/appointment";
 import { Logo } from "@/components/logo";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { AppointmentData } from "@/features/appointment";
+import { AppointmentStep } from "@/features/appointment";
+import { ServiceSelectionSection } from "@/features/services";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 const cityIds = ["kinshasa", "lubumbashi", "kolwezi", "matadi"];
 
@@ -147,11 +143,12 @@ export default function Retraite() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              {t("retirementPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("retirementPage.title").split(" ")[1]}</span>
+              {t("retirementPage.title").split(" ")[0]}{" "}
+              <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">
+                {t("retirementPage.title").split(" ")[1]}
+              </span>
             </h1>
-            <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              {t("retirementPage.subtitle")}
-            </p>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base">{t("retirementPage.subtitle")}</p>
           </div>
 
           <div className="md:hidden">
@@ -176,19 +173,12 @@ export default function Retraite() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 mx-auto",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-105",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-105",
                           isCompleted && "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <div
                         className={cn(
@@ -229,20 +219,12 @@ export default function Retraite() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-110",
-                          isCompleted &&
-                            "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-110",
+                          isCompleted && "bg-primary/20 text-primary border-primary",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <span
                         className={cn(
@@ -271,48 +253,46 @@ export default function Retraite() {
 
           <div className="flex-1 min-w-0">
             <div className="min-h-[280px] mb-6">
-          {currentStep === 1 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-              <div className="mb-6">
-                <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  {t("retirementPage.step1.title")}
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  {t("retirementPage.step1.subtitle")}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                {cityIds.map((cityId) => (
-                  <Card
-                    key={cityId}
-                    onClick={() => setSelectedCity(cityId)}
-                    className={cn(
-                      "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                      selectedCity === cityId
-                        ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
-                        : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
-                    )}
-                  >
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{t(`diasporaPage.cities.${cityId}.name`)}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {t(`diasporaPage.cities.${cityId}.description`)}
-                          </CardDescription>
-                        </div>
-                        {selectedCity === cityId && (
-                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                            <Check className="w-3 h-3 text-primary-foreground" />
-                          </div>
+              {currentStep === 1 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div className="mb-6">
+                    <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
+                      {t("retirementPage.step1.title")}
+                    </h2>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step1.subtitle")}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                    {cityIds.map((cityId) => (
+                      <Card
+                        key={cityId}
+                        onClick={() => setSelectedCity(cityId)}
+                        className={cn(
+                          "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
+                          selectedCity === cityId
+                            ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
+                            : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                         )}
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          )}
+                      >
+                        <CardHeader>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <CardTitle className="text-lg">{t(`diasporaPage.cities.${cityId}.name`)}</CardTitle>
+                              <CardDescription className="mt-1">
+                                {t(`diasporaPage.cities.${cityId}.description`)}
+                              </CardDescription>
+                            </div>
+                            {selectedCity === cityId && (
+                              <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                                <Check className="w-3 h-3 text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {currentStep === 2 && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
@@ -320,9 +300,7 @@ export default function Retraite() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("retirementPage.step2.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("retirementPage.step2.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step2.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {projectTypeConfigs.map((project) => {
@@ -373,9 +351,7 @@ export default function Retraite() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("retirementPage.step3.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("retirementPage.step3.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step3.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {pensionRangeIds.map((pensionId) => (
@@ -418,9 +394,7 @@ export default function Retraite() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("retirementPage.step4.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("retirementPage.step4.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step4.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {lifestyleConfigs.map((lifestyle) => (
@@ -472,81 +446,79 @@ export default function Retraite() {
                 </div>
               )}
 
-          {currentStep === 5 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-              <div className="mb-6">
-                <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
-                  {t("retirementPage.step5.title")}
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  {t("retirementPage.step5.subtitle")}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                <Card
-                  onClick={() => setNeedsHealthFollowup(true)}
-                  className={cn(
-                    "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                    needsHealthFollowup === true
-                      ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
-                      : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
-                  )}
-                >
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
-                          <Heart className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-base">{t("retirementPage.step5.yes")}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {t("retirementPage.step5.yesDescription")}
-                          </CardDescription>
-                        </div>
-                      </div>
-                      {needsHealthFollowup === true && (
-                        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0 ml-2">
-                          <Check className="w-3 h-3 text-primary-foreground" />
-                        </div>
+              {currentStep === 5 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <div className="mb-6">
+                    <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
+                      {t("retirementPage.step5.title")}
+                    </h2>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step5.subtitle")}</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                    <Card
+                      onClick={() => setNeedsHealthFollowup(true)}
+                      className={cn(
+                        "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
+                        needsHealthFollowup === true
+                          ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
+                          : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                       )}
-                    </div>
-                  </CardHeader>
-                </Card>
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
+                              <Heart className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <CardTitle className="text-base">{t("retirementPage.step5.yes")}</CardTitle>
+                              <CardDescription className="mt-1">
+                                {t("retirementPage.step5.yesDescription")}
+                              </CardDescription>
+                            </div>
+                          </div>
+                          {needsHealthFollowup === true && (
+                            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0 ml-2">
+                              <Check className="w-3 h-3 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                      </CardHeader>
+                    </Card>
 
-                <Card
-                  onClick={() => setNeedsHealthFollowup(false)}
-                  className={cn(
-                    "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
-                    needsHealthFollowup === false
-                      ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
-                      : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
-                  )}
-                >
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3 flex-1">
-                        <div className="p-2 rounded-xl bg-muted group-hover:scale-110 transition-transform duration-300">
-                          <X className="w-5 h-5 text-muted-foreground" />
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-base">{t("retirementPage.step5.no")}</CardTitle>
-                          <CardDescription className="mt-1">
-                            {t("retirementPage.step5.noDescription")}
-                          </CardDescription>
-                        </div>
-                      </div>
-                      {needsHealthFollowup === false && (
-                        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0 ml-2">
-                          <Check className="w-3 h-3 text-primary-foreground" />
-                        </div>
+                    <Card
+                      onClick={() => setNeedsHealthFollowup(false)}
+                      className={cn(
+                        "group cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary/40 rounded-xl",
+                        needsHealthFollowup === false
+                          ? "border-primary/60 bg-linear-to-br from-primary/10 via-primary/5 to-transparent shadow-lg ring-2 ring-primary/30"
+                          : "border-border/50 bg-background/50 hover:border-primary/50 hover:bg-linear-to-br hover:from-primary/5 hover:to-transparent backdrop-blur-sm",
                       )}
-                    </div>
-                  </CardHeader>
-                </Card>
-              </div>
-            </div>
-          )}
+                    >
+                      <CardHeader>
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-start gap-3 flex-1">
+                            <div className="p-2 rounded-xl bg-muted group-hover:scale-110 transition-transform duration-300">
+                              <X className="w-5 h-5 text-muted-foreground" />
+                            </div>
+                            <div className="flex-1">
+                              <CardTitle className="text-base">{t("retirementPage.step5.no")}</CardTitle>
+                              <CardDescription className="mt-1">
+                                {t("retirementPage.step5.noDescription")}
+                              </CardDescription>
+                            </div>
+                          </div>
+                          {needsHealthFollowup === false && (
+                            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0 ml-2">
+                              <Check className="w-3 h-3 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  </div>
+                </div>
+              )}
 
               {currentStep === 6 && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
@@ -554,9 +526,7 @@ export default function Retraite() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("retirementPage.step6.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("retirementPage.step6.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("retirementPage.step6.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <Card
@@ -624,19 +594,15 @@ export default function Retraite() {
                 </div>
               )}
 
-          {currentStep === 7 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-              <ServiceSelectionSection userProfile="retraite" />
-            </div>
-          )}
+              {currentStep === 7 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <ServiceSelectionSection userProfile="retraite" />
+                </div>
+              )}
 
               {currentStep === 8 && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <AppointmentStep
-                    onAppointmentChange={setAppointment}
-                    selectedServicesCount={0}
-                    totalEstimate={0}
-                  />
+                  <AppointmentStep onAppointmentChange={setAppointment} selectedServicesCount={0} totalEstimate={0} />
                 </div>
               )}
             </div>

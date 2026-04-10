@@ -1,14 +1,16 @@
 "use client";
 
 import { Check, Info } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Service } from "../types";
-import { ServiceDetailDialog } from "./service-detail-dialog";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
+
+import type { Service } from "../types";
 import { getServiceTranslationKey, getSubcategoryTranslationKey } from "../utils";
+import { ServiceDetailDialog } from "./service-detail-dialog";
 
 interface ServiceCardProps {
   service: Service;
@@ -36,9 +38,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <CardTitle className="text-base leading-tight">
-                {t(`services.${serviceKey}.title`)}
-              </CardTitle>
+              <CardTitle className="text-base leading-tight">{t(`services.${serviceKey}.title`)}</CardTitle>
               {service.price && (
                 <Badge variant="secondary" className="text-xs shrink-0">
                   {service.price}
@@ -54,9 +54,7 @@ export function ServiceCard({ service, isSelected, onToggle }: ServiceCardProps)
           <div
             className={cn(
               "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all duration-300",
-              isSelected
-                ? "bg-primary border-primary"
-                : "border-muted-foreground/30",
+              isSelected ? "bg-primary border-primary" : "border-muted-foreground/30",
             )}
           >
             {isSelected && <Check className="w-3 h-3 text-primary-foreground" />}

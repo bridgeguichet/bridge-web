@@ -1,42 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  DollarSign,
-  ArrowRight,
-  ArrowLeft,
-  Check,
-  Package2,
-  X,
-  TrendingUp,
-  Clock,
-  Building2,
-  Factory,
-  Landmark,
-  Home,
-  Truck,
-  Cpu,
-  Sprout,
-  ShoppingBag,
-  HelpCircle,
-  Calendar,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ServiceSelectionSection } from "@/features/services";
-import { AppointmentStep } from "@/features/appointment";
-import type { AppointmentData } from "@/features/appointment";
-import { Logo } from "@/components/logo";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  Building2,
+  Calendar,
+  Check,
+  Clock,
+  Cpu,
+  DollarSign,
+  Factory,
+  HelpCircle,
+  Home,
+  Landmark,
+  Package2,
+  ShoppingBag,
+  Sprout,
+  TrendingUp,
+  Truck,
+  X,
+} from "lucide-react";
+
+import { Logo } from "@/components/logo";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { AppointmentData } from "@/features/appointment";
+import { AppointmentStep } from "@/features/appointment";
+import { ServiceSelectionSection } from "@/features/services";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 const investmentBudgetIds = ["small", "medium", "large", "veryLarge"];
 
@@ -139,11 +137,12 @@ export default function Investisseur() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              {t("investorPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("investorPage.title").split(" ")[1]}</span>
+              {t("investorPage.title").split(" ")[0]}{" "}
+              <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">
+                {t("investorPage.title").split(" ")[1]}
+              </span>
             </h1>
-            <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              {t("investorPage.subtitle")}
-            </p>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base">{t("investorPage.subtitle")}</p>
           </div>
 
           <div className="md:hidden">
@@ -168,19 +167,12 @@ export default function Investisseur() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 mx-auto",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-105",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-105",
                           isCompleted && "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <div
                         className={cn(
@@ -221,20 +213,12 @@ export default function Investisseur() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-110",
-                          isCompleted &&
-                            "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-110",
+                          isCompleted && "bg-primary/20 text-primary border-primary",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <span
                         className={cn(
@@ -270,9 +254,7 @@ export default function Investisseur() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("investorPage.step1.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("investorPage.step1.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("investorPage.step1.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {investmentBudgetIds.map((budgetId) => (
@@ -321,9 +303,7 @@ export default function Investisseur() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("investorPage.step2.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("investorPage.step2.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("investorPage.step2.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {investmentSectorConfigs.map((sector) => {
@@ -342,7 +322,12 @@ export default function Investisseur() {
                           <CardHeader>
                             <div className="flex items-start justify-between">
                               <div className="flex items-start gap-3 flex-1">
-                                <div className={cn("p-2 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300", sector.color)}>
+                                <div
+                                  className={cn(
+                                    "p-2 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300",
+                                    sector.color,
+                                  )}
+                                >
                                   <SectorIcon className="w-4 h-4" />
                                 </div>
                                 <div className="flex-1">
@@ -375,9 +360,7 @@ export default function Investisseur() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("investorPage.step3.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("investorPage.step3.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("investorPage.step3.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {investmentHorizonConfigs.map((horizon) => {
@@ -395,7 +378,12 @@ export default function Investisseur() {
                         >
                           <CardHeader>
                             <div className="flex flex-col items-center text-center gap-3">
-                              <div className={cn("p-3 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300", horizon.color)}>
+                              <div
+                                className={cn(
+                                  "p-3 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300",
+                                  horizon.color,
+                                )}
+                              >
                                 <HorizonIcon className="w-6 h-6" />
                               </div>
                               <div>
@@ -427,9 +415,7 @@ export default function Investisseur() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("investorPage.step4.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("investorPage.step4.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("investorPage.step4.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <Card
@@ -497,21 +483,17 @@ export default function Investisseur() {
                 </div>
               )}
 
-          {/* Step 5: Services Selection */}
-          {currentStep === 5 && (
-            <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-              <ServiceSelectionSection userProfile="investissement" />
-            </div>
-          )}
+              {/* Step 5: Services Selection */}
+              {currentStep === 5 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <ServiceSelectionSection userProfile="investissement" />
+                </div>
+              )}
 
               {/* Step 6: Appointment Booking */}
               {currentStep === 6 && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <AppointmentStep
-                    onAppointmentChange={setAppointment}
-                    selectedServicesCount={0}
-                    totalEstimate={0}
-                  />
+                  <AppointmentStep onAppointmentChange={setAppointment} selectedServicesCount={0} totalEstimate={0} />
                 </div>
               )}
             </div>

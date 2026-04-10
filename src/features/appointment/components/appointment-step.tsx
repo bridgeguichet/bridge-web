@@ -1,15 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+
 import { Calendar as CalendarIcon, Info } from "lucide-react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TimeSlotSelector } from "./time-slot-selector";
-import { AppointmentSummary } from "./appointment-summary";
+import { useTranslation } from "@/lib/i18n/use-translation";
+
 import type { AppointmentData, TimeSlot } from "../types";
 import { generateTimeSlots, getDisabledDatesMatcher } from "../utils";
-import { useTranslation } from "@/lib/i18n/use-translation";
+import { AppointmentSummary } from "./appointment-summary";
+import { TimeSlotSelector } from "./time-slot-selector";
 
 interface AppointmentStepProps {
   /**
@@ -116,9 +119,7 @@ export function AppointmentStep({
 
       <Alert>
         <Info className="h-4 w-4" />
-        <AlertDescription>
-          {t("appointment.alert")}
-        </AlertDescription>
+        <AlertDescription>{t("appointment.alert")}</AlertDescription>
       </Alert>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -129,9 +130,7 @@ export function AppointmentStep({
                 <CalendarIcon className="w-5 h-5" />
                 {t("appointment.chooseDate")}
               </CardTitle>
-              <CardDescription>
-                {t("appointment.chooseDateDescription")}
-              </CardDescription>
+              <CardDescription>{t("appointment.chooseDateDescription")}</CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center">
               <Calendar
@@ -149,9 +148,7 @@ export function AppointmentStep({
             <Card className="animate-in fade-in slide-in-from-bottom-4 duration-300">
               <CardHeader>
                 <CardTitle>{t("appointment.chooseTimeSlot")}</CardTitle>
-                <CardDescription>
-                  {t("appointment.chooseTimeSlotDescription")}
-                </CardDescription>
+                <CardDescription>{t("appointment.chooseTimeSlotDescription")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <TimeSlotSelector

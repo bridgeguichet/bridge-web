@@ -1,42 +1,39 @@
 "use client";
 
 import { useState } from "react";
+
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import {
-  MapPin,
-  Briefcase,
-  DollarSign,
-  Home,
-  ArrowRight,
   ArrowLeft,
-  Check,
-  Plane,
-  Package2,
-  X,
-  Clock,
+  ArrowRight,
+  Briefcase,
   Building2,
-  FileCheck,
-  Landmark,
   Calendar,
+  Check,
+  Clock,
+  DollarSign,
+  FileCheck,
+  Home,
+  Landmark,
+  MapPin,
+  Package2,
+  Plane,
+  X,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ServiceSelectionSection } from "@/features/services";
-import { AppointmentStep } from "@/features/appointment";
 import type { AppointmentData } from "@/features/appointment";
-import { Logo } from "@/components/logo";
-import Link from "next/link";
+import { AppointmentStep } from "@/features/appointment";
+import { ServiceSelectionSection } from "@/features/services";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 const cityIds = ["kinshasa", "lubumbashi", "kolwezi", "matadi"];
 
@@ -79,7 +76,7 @@ export default function Expat() {
   const router = useRouter();
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(1);
-  
+
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<string>("");
   const [selectedBudget, setSelectedBudget] = useState<string>("");
@@ -166,11 +163,12 @@ export default function Expat() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              {t("expatPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("expatPage.title").split(" ")[1]}</span>
+              {t("expatPage.title").split(" ")[0]}{" "}
+              <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">
+                {t("expatPage.title").split(" ")[1]}
+              </span>
             </h1>
-            <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              {t("expatPage.subtitle")}
-            </p>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base">{t("expatPage.subtitle")}</p>
           </div>
 
           <div className="md:hidden">
@@ -195,19 +193,12 @@ export default function Expat() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 mx-auto",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-105",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-105",
                           isCompleted && "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <div
                         className={cn(
@@ -248,20 +239,12 @@ export default function Expat() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-110",
-                          isCompleted &&
-                            "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-110",
+                          isCompleted && "bg-primary/20 text-primary border-primary",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <span
                         className={cn(
@@ -290,15 +273,13 @@ export default function Expat() {
 
           <div className="flex-1 min-w-0">
             <div className="min-h-[280px] mb-6">
-          {currentStep === 1 && (
+              {currentStep === 1 && (
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="mb-6">
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step1.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step1.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step1.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {cityIds.map((cityId) => (
@@ -339,9 +320,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step2.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step2.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step2.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {projectTypeConfigs.map((project) => {
@@ -392,9 +371,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step3.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step3.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step3.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {budgetRangeIds.map((rangeId) => (
@@ -414,9 +391,7 @@ export default function Expat() {
                               <div className="p-2 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
                                 <DollarSign className="w-4 h-4" />
                               </div>
-                              <CardTitle className="text-base">
-                                {t(`diasporaPage.budgetRanges.${rangeId}`)}
-                              </CardTitle>
+                              <CardTitle className="text-base">{t(`diasporaPage.budgetRanges.${rangeId}`)}</CardTitle>
                             </div>
                             {selectedBudget === rangeId && (
                               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
@@ -437,9 +412,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step4.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step4.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step4.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {lifestyleConfigs.map((lifestyle) => (
@@ -497,9 +470,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step5.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step5.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step5.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                     {missionDurationConfigs.map((duration) => {
@@ -517,7 +488,12 @@ export default function Expat() {
                         >
                           <CardHeader>
                             <div className="flex flex-col items-center text-center gap-3">
-                              <div className={cn("p-3 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300", duration.color)}>
+                              <div
+                                className={cn(
+                                  "p-3 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 group-hover:scale-110 transition-transform duration-300",
+                                  duration.color,
+                                )}
+                              >
                                 <DurationIcon className="w-6 h-6" />
                               </div>
                               <div>
@@ -548,9 +524,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step6.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step6.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step6.subtitle")}</p>
                   </div>
                   <Card className="p-6 border-border/50 bg-background/50 backdrop-blur-sm rounded-xl">
                     <div className="space-y-4">
@@ -563,9 +537,7 @@ export default function Expat() {
                             <Label htmlFor="employer" className="text-base font-semibold">
                               {t("expatPage.step6.employerLabel")}
                             </Label>
-                            <p className="text-muted-foreground text-sm mt-1">
-                              {t("expatPage.step6.employerHelp")}
-                            </p>
+                            <p className="text-muted-foreground text-sm mt-1">{t("expatPage.step6.employerHelp")}</p>
                           </div>
                           <Input
                             id="employer"
@@ -587,9 +559,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step7.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step7.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step7.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <Card
@@ -609,9 +579,7 @@ export default function Expat() {
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-base">{t("expatPage.step7.yes")}</CardTitle>
-                              <CardDescription className="mt-1">
-                                {t("expatPage.step7.yesDescription")}
-                              </CardDescription>
+                              <CardDescription className="mt-1">{t("expatPage.step7.yesDescription")}</CardDescription>
                             </div>
                           </div>
                           {needsDocuments === true && (
@@ -640,9 +608,7 @@ export default function Expat() {
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-base">{t("expatPage.step7.no")}</CardTitle>
-                              <CardDescription className="mt-1">
-                                {t("expatPage.step7.noDescription")}
-                              </CardDescription>
+                              <CardDescription className="mt-1">{t("expatPage.step7.noDescription")}</CardDescription>
                             </div>
                           </div>
                           {needsDocuments === false && (
@@ -663,9 +629,7 @@ export default function Expat() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("expatPage.step8.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("expatPage.step8.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("expatPage.step8.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     <Card
@@ -685,9 +649,7 @@ export default function Expat() {
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-base">{t("expatPage.step8.yes")}</CardTitle>
-                              <CardDescription className="mt-1">
-                                {t("expatPage.step8.yesDescription")}
-                              </CardDescription>
+                              <CardDescription className="mt-1">{t("expatPage.step8.yesDescription")}</CardDescription>
                             </div>
                           </div>
                           {needsBanking === true && (
@@ -716,9 +678,7 @@ export default function Expat() {
                             </div>
                             <div className="flex-1">
                               <CardTitle className="text-base">{t("expatPage.step8.no")}</CardTitle>
-                              <CardDescription className="mt-1">
-                                {t("expatPage.step8.noDescription")}
-                              </CardDescription>
+                              <CardDescription className="mt-1">{t("expatPage.step8.noDescription")}</CardDescription>
                             </div>
                           </div>
                           {needsBanking === false && (
@@ -733,21 +693,17 @@ export default function Expat() {
                 </div>
               )}
 
-            {currentStep === 9 && (
-              <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                <ServiceSelectionSection userProfile="expat" />
-              </div>
-            )}
+              {currentStep === 9 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <ServiceSelectionSection userProfile="expat" />
+                </div>
+              )}
 
-            {currentStep === 10 && (
-              <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                <AppointmentStep
-                  onAppointmentChange={setAppointment}
-                  selectedServicesCount={0}
-                  totalEstimate={0}
-                />
-              </div>
-            )}
+              {currentStep === 10 && (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                  <AppointmentStep onAppointmentChange={setAppointment} selectedServicesCount={0} totalEstimate={0} />
+                </div>
+              )}
             </div>
 
             <div className="flex items-center justify-between gap-4 pt-5 border-t border-border/50 mt-6">

@@ -1,17 +1,33 @@
 "use client";
 
 import { useState } from "react";
+
 import Link from "next/link";
-import { useTranslation } from "@/lib/i18n/use-translation";
-import { ArrowLeft, ArrowRight, TrendingUp, Building2, Lock, Sparkles, CheckCircle2, AlertCircle, DollarSign, Target, BarChart3, PieChart } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  DollarSign,
+  Lock,
+  PieChart,
+  Sparkles,
+  Target,
+  TrendingUp,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 export default function SimulateurInvestisseur() {
   const { t } = useTranslation();
@@ -42,7 +58,7 @@ export default function SimulateurInvestisseur() {
             className="inline-flex items-center gap-2 text-muted-foreground text-sm hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-{t("simulator.backToPathways")}
+            {t("simulator.backToPathways")}
           </Link>
         </div>
 
@@ -57,7 +73,9 @@ export default function SimulateurInvestisseur() {
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {t("simulator.stepOf", { current: currentStep, total: 3 })}
+          </p>
         </div>
 
         {currentStep === 1 && (
@@ -68,12 +86,19 @@ export default function SimulateurInvestisseur() {
                 <CardDescription>{t("simulator.investor.interestedSector")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.typeInvestissement} onValueChange={(value) => setFormData({ ...formData, typeInvestissement: value })}>
+                <RadioGroup
+                  value={formData.typeInvestissement}
+                  onValueChange={(value) => setFormData({ ...formData, typeInvestissement: value })}
+                >
                   <div className="space-y-3">
                     {[
                       { value: "immobilier", labelKey: "simulator.investor.types.residential", icon: Building2 },
                       { value: "commercial", labelKey: "simulator.investor.types.commercial", icon: Building2 },
-                      { value: "business", labelKey: "simulator.investor.types.businessParticipation", icon: TrendingUp },
+                      {
+                        value: "business",
+                        labelKey: "simulator.investor.types.businessParticipation",
+                        icon: TrendingUp,
+                      },
                       { value: "mixte", labelKey: "simulator.investor.types.diversified", icon: PieChart },
                     ].map((option) => {
                       const Icon = option.icon;
@@ -84,7 +109,7 @@ export default function SimulateurInvestisseur() {
                             "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                             formData.typeInvestissement === option.value
                               ? "border-purple-500 bg-purple-500/5"
-                              : "border-border hover:border-purple-500/30"
+                              : "border-border hover:border-purple-500/30",
                           )}
                           onClick={() => setFormData({ ...formData, typeInvestissement: option.value })}
                         >
@@ -107,13 +132,32 @@ export default function SimulateurInvestisseur() {
                 <CardDescription>{t("simulator.investor.howLongEnvisage")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.horizon} onValueChange={(value) => setFormData({ ...formData, horizon: value })}>
+                <RadioGroup
+                  value={formData.horizon}
+                  onValueChange={(value) => setFormData({ ...formData, horizon: value })}
+                >
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "court", labelKey: "simulator.investor.horizons.short", descKey: "simulator.investor.horizons.shortDesc" },
-                      { value: "moyen", labelKey: "simulator.investor.horizons.medium", descKey: "simulator.investor.horizons.mediumDesc" },
-                      { value: "long", labelKey: "simulator.investor.horizons.long", descKey: "simulator.investor.horizons.longDesc" },
-                      { value: "patrimoine", labelKey: "simulator.investor.horizons.heritage", descKey: "simulator.investor.horizons.heritageDesc" },
+                      {
+                        value: "court",
+                        labelKey: "simulator.investor.horizons.short",
+                        descKey: "simulator.investor.horizons.shortDesc",
+                      },
+                      {
+                        value: "moyen",
+                        labelKey: "simulator.investor.horizons.medium",
+                        descKey: "simulator.investor.horizons.mediumDesc",
+                      },
+                      {
+                        value: "long",
+                        labelKey: "simulator.investor.horizons.long",
+                        descKey: "simulator.investor.horizons.longDesc",
+                      },
+                      {
+                        value: "patrimoine",
+                        labelKey: "simulator.investor.horizons.heritage",
+                        descKey: "simulator.investor.horizons.heritageDesc",
+                      },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -121,7 +165,7 @@ export default function SimulateurInvestisseur() {
                           "flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                           formData.horizon === option.value
                             ? "border-purple-500 bg-purple-500/5"
-                            : "border-border hover:border-purple-500/30"
+                            : "border-border hover:border-purple-500/30",
                         )}
                         onClick={() => setFormData({ ...formData, horizon: option.value })}
                       >
@@ -141,7 +185,7 @@ export default function SimulateurInvestisseur() {
 
             <div className="flex justify-end">
               <Button onClick={handleNext} disabled={!formData.typeInvestissement || !formData.horizon} size="lg">
-{t("simulator.continue")}
+                {t("simulator.continue")}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -183,7 +227,9 @@ export default function SimulateurInvestisseur() {
               <CardContent className="space-y-6">
                 <div className="text-center">
                   <p className="text-4xl font-bold text-purple-500">
-                    {t(`simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`)}
+                    {t(
+                      `simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`,
+                    )}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">{t("simulator.investor.riskProfile")}</p>
                 </div>
@@ -205,7 +251,7 @@ export default function SimulateurInvestisseur() {
             <div className="flex gap-3">
               <Button variant="outline" onClick={handleBack} size="lg" className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-{t("simulator.back")}
+                {t("simulator.back")}
               </Button>
               <Button onClick={handleNext} size="lg" className="flex-1">
                 {t("simulator.viewPreview")}
@@ -221,7 +267,9 @@ export default function SimulateurInvestisseur() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-purple-500" />
-                  <Badge variant="outline" className="text-purple-500 border-purple-500">{t("simulator.common.personalizedPreview")}</Badge>
+                  <Badge variant="outline" className="text-purple-500 border-purple-500">
+                    {t("simulator.common.personalizedPreview")}
+                  </Badge>
                 </div>
                 <CardTitle>{t("simulator.investor.yourProfile")}</CardTitle>
                 <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
@@ -241,7 +289,9 @@ export default function SimulateurInvestisseur() {
                   <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-center">
                     <BarChart3 className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
                     <p className="text-2xl font-bold text-emerald-500">
-                      {t(`simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`)}
+                      {t(
+                        `simulator.investor.risks.${formData.risque[0] === "1" ? "prudent" : formData.risque[0] === "2" ? "moderate" : formData.risque[0] === "3" ? "balanced" : formData.risque[0] === "4" ? "dynamic" : "aggressive"}`,
+                      )}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">{t("simulator.investor.riskProfile")}</p>
                   </div>
@@ -250,13 +300,15 @@ export default function SimulateurInvestisseur() {
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.investor.previewNote") }} />
+                    <p
+                      className="text-sm text-muted-foreground"
+                      dangerouslySetInnerHTML={{ __html: t("simulator.investor.previewNote") }}
+                    />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -265,9 +317,7 @@ export default function SimulateurInvestisseur() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">{t("simulator.investor.unlockStrategy")}</h3>
-                    <p className="text-muted-foreground">
-                      {t("simulator.investor.unlockDesc")}
-                    </p>
+                    <p className="text-muted-foreground">{t("simulator.investor.unlockDesc")}</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                     <Button asChild variant="outline" size="lg" className="text-base hover:text-white">
@@ -304,7 +354,7 @@ export default function SimulateurInvestisseur() {
             <div className="text-center">
               <Button variant="ghost" onClick={handleBack} className="hover:text-white">
                 <ArrowLeft className="w-4 h-4 mr-2" />
-{t("simulator.modifyAnswers")}
+                {t("simulator.modifyAnswers")}
               </Button>
             </div>
           </div>

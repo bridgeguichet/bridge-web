@@ -1,17 +1,35 @@
 "use client";
 
 import { useState } from "react";
+
 import Link from "next/link";
-import { useTranslation } from "@/lib/i18n/use-translation";
-import { ArrowLeft, ArrowRight, Globe, Home, Users, Briefcase, Lock, Sparkles, CheckCircle2, AlertCircle, TrendingUp, Calendar, MapPin, DollarSign } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  Calendar,
+  CheckCircle2,
+  DollarSign,
+  Globe,
+  Home,
+  Lock,
+  MapPin,
+  Sparkles,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 export default function SimulateurDiaspora() {
   const { t } = useTranslation();
@@ -57,7 +75,9 @@ export default function SimulateurDiaspora() {
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {t("simulator.stepOf", { current: currentStep, total: 3 })}
+          </p>
         </div>
 
         {currentStep === 1 && (
@@ -68,13 +88,20 @@ export default function SimulateurDiaspora() {
                 <CardDescription>{t("simulator.diaspora.selectBestProject")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.objectif} onValueChange={(value) => setFormData({ ...formData, objectif: value })}>
+                <RadioGroup
+                  value={formData.objectif}
+                  onValueChange={(value) => setFormData({ ...formData, objectif: value })}
+                >
                   <div className="space-y-3">
                     {[
                       { value: "visite", labelKey: "simulator.diaspora.goals.familyVisit", icon: Users },
                       { value: "investissement", labelKey: "simulator.diaspora.goals.realEstate", icon: Home },
                       { value: "business", labelKey: "simulator.diaspora.goals.business", icon: Briefcase },
-                      { value: "installation", labelKey: "simulator.diaspora.goals.progressiveSettlement", icon: MapPin },
+                      {
+                        value: "installation",
+                        labelKey: "simulator.diaspora.goals.progressiveSettlement",
+                        icon: MapPin,
+                      },
                     ].map((option) => {
                       const Icon = option.icon;
                       return (
@@ -84,7 +111,7 @@ export default function SimulateurDiaspora() {
                             "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                             formData.objectif === option.value
                               ? "border-blue-500 bg-blue-500/5"
-                              : "border-border hover:border-blue-500/30"
+                              : "border-border hover:border-blue-500/30",
                           )}
                           onClick={() => setFormData({ ...formData, objectif: option.value })}
                         >
@@ -107,13 +134,32 @@ export default function SimulateurDiaspora() {
                 <CardDescription>{t("simulator.diaspora.howLong")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.duree} onValueChange={(value) => setFormData({ ...formData, duree: value })}>
+                <RadioGroup
+                  value={formData.duree}
+                  onValueChange={(value) => setFormData({ ...formData, duree: value })}
+                >
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { value: "court", labelKey: "simulator.diaspora.durations.short", descKey: "simulator.diaspora.durations.shortDesc" },
-                      { value: "moyen", labelKey: "simulator.diaspora.durations.medium", descKey: "simulator.diaspora.durations.mediumDesc" },
-                      { value: "long", labelKey: "simulator.diaspora.durations.long", descKey: "simulator.diaspora.durations.longDesc" },
-                      { value: "permanent", labelKey: "simulator.diaspora.durations.permanent", descKey: "simulator.diaspora.durations.permanentDesc" },
+                      {
+                        value: "court",
+                        labelKey: "simulator.diaspora.durations.short",
+                        descKey: "simulator.diaspora.durations.shortDesc",
+                      },
+                      {
+                        value: "moyen",
+                        labelKey: "simulator.diaspora.durations.medium",
+                        descKey: "simulator.diaspora.durations.mediumDesc",
+                      },
+                      {
+                        value: "long",
+                        labelKey: "simulator.diaspora.durations.long",
+                        descKey: "simulator.diaspora.durations.longDesc",
+                      },
+                      {
+                        value: "permanent",
+                        labelKey: "simulator.diaspora.durations.permanent",
+                        descKey: "simulator.diaspora.durations.permanentDesc",
+                      },
                     ].map((option) => (
                       <div
                         key={option.value}
@@ -121,7 +167,7 @@ export default function SimulateurDiaspora() {
                           "flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                           formData.duree === option.value
                             ? "border-blue-500 bg-blue-500/5"
-                            : "border-border hover:border-blue-500/30"
+                            : "border-border hover:border-blue-500/30",
                         )}
                         onClick={() => setFormData({ ...formData, duree: option.value })}
                       >
@@ -219,7 +265,9 @@ export default function SimulateurDiaspora() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-blue-500" />
-                  <Badge variant="outline" className="text-blue-500 border-blue-500">{t("simulator.common.personalizedPreview")}</Badge>
+                  <Badge variant="outline" className="text-blue-500 border-blue-500">
+                    {t("simulator.common.personalizedPreview")}
+                  </Badge>
                 </div>
                 <CardTitle>{t("simulator.diaspora.yourProfile")}</CardTitle>
                 <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
@@ -233,7 +281,16 @@ export default function SimulateurDiaspora() {
                   </div>
                   <div className="p-4 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-center">
                     <Calendar className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
-                    <p className="text-2xl font-bold text-emerald-500">{formData.duree === "court" ? "3" : formData.duree === "moyen" ? "6" : formData.duree === "long" ? "18" : "36"}+</p>
+                    <p className="text-2xl font-bold text-emerald-500">
+                      {formData.duree === "court"
+                        ? "3"
+                        : formData.duree === "moyen"
+                          ? "6"
+                          : formData.duree === "long"
+                            ? "18"
+                            : "36"}
+                      +
+                    </p>
                     <p className="text-xs text-muted-foreground mt-1">{t("simulator.common.estimatedMonths")}</p>
                   </div>
                   <div className="p-4 rounded-lg bg-purple-500/5 border border-purple-500/20 text-center">
@@ -246,13 +303,15 @@ export default function SimulateurDiaspora() {
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.diaspora.previewNote") }} />
+                    <p
+                      className="text-sm text-muted-foreground"
+                      dangerouslySetInnerHTML={{ __html: t("simulator.diaspora.previewNote") }}
+                    />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -261,9 +320,7 @@ export default function SimulateurDiaspora() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">{t("simulator.diaspora.unlockStrategy")}</h3>
-                    <p className="text-muted-foreground">
-                      {t("simulator.diaspora.unlockDesc")}
-                    </p>
+                    <p className="text-muted-foreground">{t("simulator.diaspora.unlockDesc")}</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                     <Button asChild variant="outline" size="lg" className="text-base hover:text-white">

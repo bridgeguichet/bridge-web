@@ -1,22 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 
-import {
-  ArrowRight,
-  Calculator,
-  Coffee,
-  Globe,
-  Plane,
-  Shield,
-  Sparkles,
-  ThumbsUp,
-  TrendingUp,
-  Users,
-  WalletCards,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, Calculator, Shield, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -24,13 +11,12 @@ import { Button } from "@/components/ui/button";
 import { TextEffect } from "@/components/ui/text-effect";
 import Footer from "@/external-components/footer";
 import { HeroHeader } from "@/external-components/header";
-
 import { cn } from "@/lib/utils";
 
-const getParcoursList = (t: (key: string) => string) => [
+const getParcoursList = (_t: (key: string) => string) => [
   {
     id: "diaspora",
-    icon: Globe,
+    image: "/media/image-diaspora.jpg",
     color: "text-blue-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
@@ -41,7 +27,7 @@ const getParcoursList = (t: (key: string) => string) => [
   },
   {
     id: "expat",
-    icon: Plane,
+    image: "/media/image-expat.jpg",
     color: "text-emerald-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
@@ -52,7 +38,7 @@ const getParcoursList = (t: (key: string) => string) => [
   },
   {
     id: "investisseur",
-    icon: TrendingUp,
+    image: "/media/image-invest.jpg",
     color: "text-purple-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
@@ -63,7 +49,7 @@ const getParcoursList = (t: (key: string) => string) => [
   },
   {
     id: "nextgen",
-    icon: Zap,
+    image: "/media/image-nextgen.jpg",
     color: "text-amber-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
@@ -74,7 +60,7 @@ const getParcoursList = (t: (key: string) => string) => [
   },
   {
     id: "retraite",
-    icon: Coffee,
+    image: "/media/image-retraite.jpg",
     color: "text-rose-500",
     bgColor: "bg-rose-500",
     bgGradient: "from-rose-500/10 via-transparent to-transparent",
@@ -88,7 +74,7 @@ const getParcoursList = (t: (key: string) => string) => [
 export default function ExternalPage() {
   const { t, i18n } = useTranslation();
   const parcoursList = getParcoursList(t);
-  const imageSrc = i18n.language === 'en' ? '/media/simulateur-etape1_en.png' : '/media/simulateur-etape1.png';
+  const imageSrc = i18n.language === "en" ? "/media/simulateur-etape1_en.png" : "/media/simulateur-etape1.png";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -150,16 +136,16 @@ export default function ExternalPage() {
 
         <section
           id="simulateur"
-          className="-ml-[50vw] -mr-[50vw] relative bg-primary/10 right-1/2 left-1/2 w-screen scroll-mt-28 sm:scroll-mt-32"
+          className="-ml-[50vw] -mr-[50vw] relative right-1/2 left-1/2 w-screen scroll-mt-28 bg-primary/10 sm:scroll-mt-32"
         >
           <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
             <div className="-z-10 pointer-events-none absolute inset-0 overflow-hidden">
-              <div className="-left-32 top-0 absolute size-96 rounded-full bg-accent/5 blur-3xl" />
-              <div className="-right-32 bottom-0 absolute size-96 rounded-full bg-primary/5 blur-3xl" />
+              <div className="-left-32 absolute top-0 size-96 rounded-full bg-accent/5 blur-3xl" />
+              <div className="-right-32 absolute bottom-0 size-96 rounded-full bg-primary/5 blur-3xl" />
             </div>
 
             <div className="mb-12 text-center">
-              <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-background/80 px-4 py-1.5 text-accent text-xs font-medium backdrop-blur-sm">
+              <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-background/80 px-4 py-1.5 font-medium text-accent text-xs backdrop-blur-sm">
                 <Calculator className="size-3.5" />
                 {t("simulationSection.badge")}
               </div>
@@ -176,7 +162,7 @@ export default function ExternalPage() {
                 <div className="group flex gap-5">
                   <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-accent/20 shadow-lg">
                       1
                     </div>
                   </div>
@@ -193,7 +179,7 @@ export default function ExternalPage() {
                 <div className="group flex gap-5">
                   <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-accent/20 shadow-lg">
                       2
                     </div>
                   </div>
@@ -210,7 +196,7 @@ export default function ExternalPage() {
                 <div className="group flex gap-5">
                   <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-accent/20 shadow-lg">
                       3
                     </div>
                   </div>
@@ -227,7 +213,7 @@ export default function ExternalPage() {
                 <div className="group flex gap-5">
                   <div className="relative flex h-14 w-14 shrink-0 items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-accent/10 transition-transform group-hover:scale-110" />
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-lg shadow-accent/20">
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-accent font-bold text-background text-xl shadow-accent/20 shadow-lg">
                       4
                     </div>
                   </div>
@@ -243,7 +229,11 @@ export default function ExternalPage() {
 
                 <div className="relative mt-10 pt-8">
                   <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-border to-transparent" />
-                  <Button asChild size="lg" className="group w-full h-14 text-base font-semibold shadow-lg shadow-primary/10 transition-all hover:shadow-xl hover:shadow-primary/20">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="group h-14 w-full font-semibold text-base shadow-lg shadow-primary/10 transition-all hover:shadow-primary/20 hover:shadow-xl"
+                  >
                     <Link href="/simulateur-parcours">
                       {t("simulationSection.cta.button")}
                       <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -256,10 +246,10 @@ export default function ExternalPage() {
                 </div>
               </div>
 
-              <div className="relative lg:block hidden">
+              <div className="relative hidden lg:block">
                 <div className="sticky top-24">
                   <div className="relative">
-                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-br from-accent/20 to-primary/20 blur-2xl" />
+                    <div className="-inset-4 absolute rounded-3xl bg-linear-to-br from-accent/20 to-primary/20 blur-2xl" />
                     <div className="relative aspect-4/5 overflow-hidden rounded-3xl border border-accent/10 shadow-2xl">
                       <Image
                         src="/media/image-fille.jpg"
@@ -283,7 +273,7 @@ export default function ExternalPage() {
           <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
             <div className="flex flex-col gap-8 sm:gap-10">
               <div className="mx-auto max-w-3xl text-center">
-                <div className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 mb-4 text-muted-foreground text-xs backdrop-blur">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
                   <Sparkles className="size-4 text-primary" />
                   <span>{t("parcoursPage.badge")}</span>
                 </div>
@@ -296,79 +286,81 @@ export default function ExternalPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-                {parcoursList.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.id}
-                      href={`/${item.id}`}
+                {parcoursList.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/${item.id}`}
+                    className={cn(
+                      "group relative overflow-hidden rounded-3xl border-2 bg-background transition-all duration-500 ease-out",
+                      "hover:-translate-y-1 hover:scale-[1.01] hover:shadow-primary/10 hover:shadow-xl",
+                      item.bgHover,
+                      item.borderHover,
+                    )}
+                  >
+                    <div
                       className={cn(
-                        "group relative overflow-hidden rounded-3xl border-2 bg-background transition-all duration-500 ease-out",
-                        "hover:-translate-y-1 hover:scale-[1.01] hover:shadow-xl hover:shadow-primary/10",
-                        item.bgHover,
-                        item.borderHover,
+                        "absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100",
+                        item.bgGradient,
                       )}
-                    >
-                      <div
-                        className={cn(
-                          "absolute inset-0 opacity-0 transition-opacity duration-500 bg-linear-to-br group-hover:opacity-100",
-                          item.bgGradient,
-                        )}
-                      />
+                    />
 
-                      <div className="relative z-10 p-6 sm:p-8">
-                        <div className="flex items-start justify-between gap-4">
-                          <div
-                            className={cn(
-                              "rounded-2xl border-2 bg-linear-to-br from-background to-muted/50 p-4 shadow-lg transition-all duration-300",
-                              "group-hover:rotate-3 group-hover:scale-110",
-                              item.color,
-                            )}
-                          >
-                            <Icon className="h-9 w-9 transition-transform duration-300 group-hover:scale-110" />
-                          </div>
-
-                          {item.showBadge && (
-                            <Badge variant={item.badgeVariant} className="shrink-0">
-                              {t("parcoursPage.popular")}
-                            </Badge>
+                    <div className="relative z-10 p-6 sm:p-8">
+                      <div className="flex items-start justify-between gap-4">
+                        <div
+                          className={cn(
+                            "relative h-28 w-28 overflow-hidden rounded-2xl border-2 shadow-lg transition-all duration-300 sm:h-32 sm:w-32",
+                            "group-hover:rotate-3 group-hover:scale-110",
                           )}
+                        >
+                          <Image
+                            src={item.image}
+                            alt={t(`parcoursPage.parcours.${item.id}.title`)}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-110"
+                            sizes="(max-width: 640px) 112px, 128px"
+                          />
                         </div>
 
-                        <p className="mt-6 font-semibold text-xl tracking-tight transition-colors group-hover:text-primary">
-                          {t(`parcoursPage.parcours.${item.id}.title`)}
-                        </p>
-                        <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                          {t(`parcoursPage.parcours.${item.id}.description`)}
-                        </p>
-
-                        <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4 transition-all duration-300 group-hover:bg-primary/10">
-                          <span className="font-semibold text-muted-foreground text-sm transition-colors group-hover:text-primary">
-                            {t("parcoursPage.startNow")}
-                          </span>
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-background shadow-sm transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
-                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                          </div>
-                        </div>
+                        {item.showBadge && (
+                          <Badge variant={item.badgeVariant} className="shrink-0">
+                            {t("parcoursPage.popular")}
+                          </Badge>
+                        )}
                       </div>
 
-                      <div
-                        className={cn(
-                          "pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full opacity-0 blur-3xl transition-all duration-700",
-                          "group-hover:scale-150 group-hover:opacity-30",
-                          item.bgColor,
-                        )}
-                      />
-                      <div
-                        className={cn(
-                          "pointer-events-none absolute -top-16 -left-16 h-32 w-32 rounded-full opacity-0 blur-3xl transition-all duration-700",
-                          "group-hover:scale-125 group-hover:opacity-20",
-                          item.bgColor,
-                        )}
-                      />
-                    </Link>
-                  );
-                })}
+                      <p className="mt-6 font-semibold text-xl tracking-tight transition-colors group-hover:text-primary">
+                        {t(`parcoursPage.parcours.${item.id}.title`)}
+                      </p>
+                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
+                        {t(`parcoursPage.parcours.${item.id}.description`)}
+                      </p>
+
+                      <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4 transition-all duration-300 group-hover:bg-primary/10">
+                        <span className="font-semibold text-muted-foreground text-sm transition-colors group-hover:text-primary">
+                          {t("parcoursPage.startNow")}
+                        </span>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-background shadow-sm transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={cn(
+                        "-bottom-16 -right-16 pointer-events-none absolute h-40 w-40 rounded-full opacity-0 blur-3xl transition-all duration-700",
+                        "group-hover:scale-150 group-hover:opacity-30",
+                        item.bgColor,
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        "-top-16 -left-16 pointer-events-none absolute h-32 w-32 rounded-full opacity-0 blur-3xl transition-all duration-700",
+                        "group-hover:scale-125 group-hover:opacity-20",
+                        item.bgColor,
+                      )}
+                    />
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

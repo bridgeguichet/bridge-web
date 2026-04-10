@@ -1,17 +1,34 @@
 "use client";
 
 import { useState } from "react";
+
 import Link from "next/link";
-import { useTranslation } from "@/lib/i18n/use-translation";
-import { ArrowLeft, ArrowRight, Plane, Home, Briefcase, Lock, Sparkles, CheckCircle2, AlertCircle, Calendar, Users, DollarSign, Building2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  Building2,
+  Calendar,
+  CheckCircle2,
+  DollarSign,
+  Home,
+  Lock,
+  Plane,
+  Sparkles,
+  Users,
+} from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 export default function SimulateurExpat() {
   const { t } = useTranslation();
@@ -57,7 +74,9 @@ export default function SimulateurExpat() {
             </div>
           </div>
           <Progress value={progressPercentage} className="h-2" />
-          <p className="text-sm text-muted-foreground mt-2">{t("simulator.stepOf", { current: currentStep, total: 3 })}</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            {t("simulator.stepOf", { current: currentStep, total: 3 })}
+          </p>
         </div>
 
         {currentStep === 1 && (
@@ -68,7 +87,10 @@ export default function SimulateurExpat() {
                 <CardDescription>{t("simulator.expat.professionalSituation")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.typeContrat} onValueChange={(value) => setFormData({ ...formData, typeContrat: value })}>
+                <RadioGroup
+                  value={formData.typeContrat}
+                  onValueChange={(value) => setFormData({ ...formData, typeContrat: value })}
+                >
                   <div className="space-y-3">
                     {[
                       { value: "local", labelKey: "simulator.expat.contracts.local", icon: Building2 },
@@ -84,7 +106,7 @@ export default function SimulateurExpat() {
                             "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                             formData.typeContrat === option.value
                               ? "border-emerald-500 bg-emerald-500/5"
-                              : "border-border hover:border-emerald-500/30"
+                              : "border-border hover:border-emerald-500/30",
                           )}
                           onClick={() => setFormData({ ...formData, typeContrat: option.value })}
                         >
@@ -107,7 +129,10 @@ export default function SimulateurExpat() {
                 <CardDescription>{t("simulator.expat.workDomain")}</CardDescription>
               </CardHeader>
               <CardContent>
-                <RadioGroup value={formData.secteur} onValueChange={(value) => setFormData({ ...formData, secteur: value })}>
+                <RadioGroup
+                  value={formData.secteur}
+                  onValueChange={(value) => setFormData({ ...formData, secteur: value })}
+                >
                   <div className="grid grid-cols-2 gap-3">
                     {[
                       { value: "ong", labelKey: "simulator.expat.sectors.ngo" },
@@ -123,7 +148,7 @@ export default function SimulateurExpat() {
                           "flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all",
                           formData.secteur === option.value
                             ? "border-emerald-500 bg-emerald-500/5"
-                            : "border-border hover:border-emerald-500/30"
+                            : "border-border hover:border-emerald-500/30",
                         )}
                         onClick={() => setFormData({ ...formData, secteur: option.value })}
                       >
@@ -218,7 +243,9 @@ export default function SimulateurExpat() {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="w-5 h-5 text-emerald-500" />
-                  <Badge variant="outline" className="text-emerald-500 border-emerald-500">{t("simulator.common.personalizedPreview")}</Badge>
+                  <Badge variant="outline" className="text-emerald-500 border-emerald-500">
+                    {t("simulator.common.personalizedPreview")}
+                  </Badge>
                 </div>
                 <CardTitle>{t("simulator.expat.yourProfile")}</CardTitle>
                 <CardDescription>{t("simulator.common.basedOnAnswers")}</CardDescription>
@@ -245,13 +272,15 @@ export default function SimulateurExpat() {
                 <div className="p-4 rounded-lg bg-muted/50 border border-dashed">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" />
-                    <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: t("simulator.expat.previewNote") }} />
+                    <p
+                      className="text-sm text-muted-foreground"
+                      dangerouslySetInnerHTML={{ __html: t("simulator.expat.previewNote") }}
+                    />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            
             <Card className="border-2 border-primary bg-linear-to-br from-primary/5 to-background">
               <CardContent className="pt-6">
                 <div className="text-center space-y-4">
@@ -260,9 +289,7 @@ export default function SimulateurExpat() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold mb-2">{t("simulator.expat.unlockPackage")}</h3>
-                    <p className="text-muted-foreground">
-                      {t("simulator.expat.unlockDesc")}
-                    </p>
+                    <p className="text-muted-foreground">{t("simulator.expat.unlockDesc")}</p>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                     <Button asChild variant="outline" size="lg" className="text-base hover:text-white">

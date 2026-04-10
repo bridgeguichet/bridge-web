@@ -1,36 +1,33 @@
 "use client";
 
 import { useState } from "react";
+
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import {
-  MapPin,
-  Briefcase,
-  DollarSign,
-  Home,
-  ArrowRight,
   ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  Calendar,
   Check,
+  DollarSign,
   Globe,
+  Home,
+  MapPin,
   Package2,
   X,
-  Calendar,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ServiceSelectionSection } from "@/features/services";
-import { AppointmentStep } from "@/features/appointment";
-import type { AppointmentData } from "@/features/appointment";
+
 import { Logo } from "@/components/logo";
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import type { AppointmentData } from "@/features/appointment";
+import { AppointmentStep } from "@/features/appointment";
+import { ServiceSelectionSection } from "@/features/services";
 import { useTranslation } from "@/lib/i18n/use-translation";
+import { cn } from "@/lib/utils";
 
 const cityIds = ["kinshasa", "lubumbashi", "kolwezi", "matadi"];
 
@@ -133,11 +130,12 @@ export default function Diaspora() {
 
           <div className="mb-6">
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-linear-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-              {t("diasporaPage.title").split(" ")[0]} <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">{t("diasporaPage.title").split(" ")[1]}</span>
+              {t("diasporaPage.title").split(" ")[0]}{" "}
+              <span className="text-3xl md:text-4xl lg:text-5xl text-primary font-batangas">
+                {t("diasporaPage.title").split(" ")[1]}
+              </span>
             </h1>
-            <p className="text-muted-foreground mt-2 text-sm md:text-base">
-              {t("diasporaPage.subtitle")}
-            </p>
+            <p className="text-muted-foreground mt-2 text-sm md:text-base">{t("diasporaPage.subtitle")}</p>
           </div>
 
           <div className="md:hidden">
@@ -162,19 +160,12 @@ export default function Diaspora() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 mx-auto",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-105",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-105",
                           isCompleted && "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <div
                         className={cn(
@@ -215,20 +206,12 @@ export default function Diaspora() {
                       <div
                         className={cn(
                           "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300",
-                          isActive &&
-                            "bg-primary text-primary-foreground border-primary scale-110",
-                          isCompleted &&
-                            "bg-primary/20 text-primary border-primary",
-                          !isActive &&
-                            !isCompleted &&
-                            "bg-muted text-muted-foreground border-border",
+                          isActive && "bg-primary text-primary-foreground border-primary scale-110",
+                          isCompleted && "bg-primary/20 text-primary border-primary",
+                          !isActive && !isCompleted && "bg-muted text-muted-foreground border-border",
                         )}
                       >
-                        {isCompleted ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <StepIcon className="w-4 h-4" />
-                        )}
+                        {isCompleted ? <Check className="w-4 h-4" /> : <StepIcon className="w-4 h-4" />}
                       </div>
                       <span
                         className={cn(
@@ -263,9 +246,7 @@ export default function Diaspora() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("diasporaPage.step1.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("diasporaPage.step1.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("diasporaPage.step1.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {cityIds.map((cityId) => (
@@ -305,9 +286,7 @@ export default function Diaspora() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("diasporaPage.step2.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("diasporaPage.step2.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("diasporaPage.step2.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {projectTypeConfigs.map((project) => {
@@ -358,9 +337,7 @@ export default function Diaspora() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("diasporaPage.step3.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("diasporaPage.step3.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("diasporaPage.step3.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {budgetRangeIds.map((rangeId) => (
@@ -380,9 +357,7 @@ export default function Diaspora() {
                               <div className="p-2 rounded-xl bg-linear-to-br from-primary/20 to-primary/10 text-primary group-hover:scale-110 transition-transform duration-300">
                                 <DollarSign className="w-4 h-4" />
                               </div>
-                              <CardTitle className="text-base">
-                                {t(`diasporaPage.budgetRanges.${rangeId}`)}
-                              </CardTitle>
+                              <CardTitle className="text-base">{t(`diasporaPage.budgetRanges.${rangeId}`)}</CardTitle>
                             </div>
                             {selectedBudget === rangeId && (
                               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
@@ -403,9 +378,7 @@ export default function Diaspora() {
                     <h2 className="text-xl md:text-2xl font-bold mb-2 bg-linear-to-r from-foreground to-foreground/80 bg-clip-text">
                       {t("diasporaPage.step4.title")}
                     </h2>
-                    <p className="text-muted-foreground text-sm">
-                      {t("diasporaPage.step4.subtitle")}
-                    </p>
+                    <p className="text-muted-foreground text-sm">{t("diasporaPage.step4.subtitle")}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {lifestyleConfigs.map((lifestyle) => (
@@ -465,11 +438,7 @@ export default function Diaspora() {
 
               {currentStep === 6 && (
                 <div className="animate-in fade-in-from-right-4 duration-500">
-                  <AppointmentStep
-                    onAppointmentChange={setAppointment}
-                    selectedServicesCount={0}
-                    totalEstimate={0}
-                  />
+                  <AppointmentStep onAppointmentChange={setAppointment} selectedServicesCount={0} totalEstimate={0} />
                 </div>
               )}
             </div>

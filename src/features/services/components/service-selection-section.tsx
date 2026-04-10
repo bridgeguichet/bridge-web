@@ -1,16 +1,25 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+
 import { ChevronDown, ChevronUp, Filter, Package2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n/use-translation";
 import { cn } from "@/lib/utils";
-import { ServiceCard } from "./service-card";
+
+import { servicePacks, services } from "../data";
+import {
+  detectMatchingPacks,
+  getCategoryTranslationKey,
+  getRelevantServices,
+  getServiceById,
+  groupServicesByCategory,
+} from "../utils";
 import { PackRecommendation } from "./pack-recommendation";
 import { SelectionSummary } from "./selection-summary";
-import { services, servicePacks } from "../data";
-import { detectMatchingPacks, getRelevantServices, groupServicesByCategory, getServiceById, getCategoryTranslationKey } from "../utils";
-import { useTranslation } from "@/lib/i18n/use-translation";
+import { ServiceCard } from "./service-card";
 
 interface ServiceSelectionSectionProps {
   userProfile?: string;
@@ -23,10 +32,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
   const [showAllServices, setShowAllServices] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
 
-  const relevantServices = useMemo(
-    () => getRelevantServices(services, userProfile),
-    [userProfile],
-  );
+  const relevantServices = useMemo(() => getRelevantServices(services, userProfile), [userProfile]);
 
   const displayedServices = showAllServices ? services : relevantServices;
 
@@ -47,17 +53,17 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
     } else {
       newSelected.add(serviceId);
     }
-    
+
     const packsToRemove = Array.from(selectedPacks).filter((packId) => {
       const pack = servicePacks.find((p) => p.id === packId);
       return pack?.services.includes(serviceId);
     });
-    
+
     const newSelectedPacks = new Set(selectedPacks);
     for (const packId of packsToRemove) {
       newSelectedPacks.delete(packId);
     }
-    
+
     setSelectedServices(newSelected);
     setSelectedPacks(newSelectedPacks);
   };
@@ -78,7 +84,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
       const newSelected = new Set(pack.services);
       const newSelectedPacks = new Set(selectedPacks);
       newSelectedPacks.add(packId);
-      
+
       setSelectedServices(newSelected);
       setSelectedPacks(newSelectedPacks);
     }
@@ -98,20 +104,14 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
   );
 
   const categoriesArray = Array.from(groupedServices.entries());
-  const displayedCategories = showAllServices
-    ? categoriesArray
-    : categoriesArray.slice(0, 3);
+  const displayedCategories = showAllServices ? categoriesArray : categoriesArray.slice(0, 3);
 
   return (
     <div className="relative">
       <div className="mb-8">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2">
-            {t("services.interface.title")}
-          </h2>
-          <p className="text-muted-foreground">
-            {t("services.interface.subtitle")}
-          </p>
+          <h2 className="text-2xl font-bold mb-2">{t("services.interface.title")}</h2>
+          <p className="text-muted-foreground">{t("services.interface.subtitle")}</p>
         </div>
 
         <div className="flex items-center gap-3 flex-wrap">
@@ -132,21 +132,16 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
         <div className="lg:col-span-2 space-y-6">
           {displayedCategories.map(([category, categoryServices]) => {
             const isExpanded = expandedCategories.has(category) || showAllServices;
-            const displayServices = isExpanded
-              ? categoryServices
-              : categoryServices.slice(0, 3);
+            const displayServices = isExpanded ? categoryServices : categoryServices.slice(0, 3);
 
             return (
               <div key={category} className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-lg">{t(`services.categories.${getCategoryTranslationKey(category)}`)}</h3>
+                  <h3 className="font-semibold text-lg">
+                    {t(`services.categories.${getCategoryTranslationKey(category)}`)}
+                  </h3>
                   {categoryServices.length > 3 && !showAllServices && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleToggleCategory(category)}
-                      className="gap-2"
-                    >
+                    <Button variant="ghost" size="sm" onClick={() => handleToggleCategory(category)} className="gap-2">
                       {isExpanded ? (
                         <>
                           {t("services.interface.viewLess")}
@@ -178,12 +173,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
 
           {!showAllServices && (
             <div className="flex justify-center pt-4">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => setShowAllServices(true)}
-                className="gap-2"
-              >
+              <Button variant="outline" size="lg" onClick={() => setShowAllServices(true)} className="gap-2">
                 {t("services.interface.viewAllServices")}
                 <ChevronDown className="w-4 h-4" />
               </Button>
@@ -192,12 +182,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
 
           {showAllServices && categoriesArray.length > displayedCategories.length && (
             <div className="flex justify-center pt-4">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => setShowAllServices(false)}
-                className="gap-2"
-              >
+              <Button variant="outline" size="lg" onClick={() => setShowAllServices(false)} className="gap-2">
                 {t("services.interface.viewRecommendedServices")}
                 <ChevronUp className="w-4 h-4" />
               </Button>
@@ -209,7 +194,9 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
           <div className="sticky top-6 space-y-4">
             <SelectionSummary
               selectedServices={selectedServiceObjects}
-              selectedPacks={Array.from(selectedPacks).map((id) => servicePacks.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => p !== undefined)}
+              selectedPacks={Array.from(selectedPacks)
+                .map((id) => servicePacks.find((p) => p.id === id))
+                .filter((p): p is NonNullable<typeof p> => p !== undefined)}
               onRemove={handleToggleService}
               onClear={handleClearSelection}
             />
@@ -221,9 +208,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                   <h3 className="font-semibold text-lg">{t("services.interface.recommendedPacks")}</h3>
                 </div>
                 {matchingPacks.slice(0, 2).map((pack) => {
-                  const includedServices = pack.services.filter((serviceId) =>
-                    selectedServices.has(serviceId),
-                  );
+                  const includedServices = pack.services.filter((serviceId) => selectedServices.has(serviceId));
                   const isSelected = selectedPacks.has(pack.id);
                   return (
                     <PackRecommendation
@@ -241,9 +226,7 @@ export function ServiceSelectionSection({ userProfile }: ServiceSelectionSection
                 <div className="inline-flex p-3 rounded-full bg-muted mb-3">
                   <Package2 className="w-6 h-6 text-muted-foreground" />
                 </div>
-                <h3 className="font-semibold mb-2">
-                  {t("services.interface.discoverPacks")}
-                </h3>
+                <h3 className="font-semibold mb-2">{t("services.interface.discoverPacks")}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   {t("services.interface.discoverPacksDescription")}
                 </p>

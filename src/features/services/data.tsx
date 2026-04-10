@@ -4,7 +4,8 @@ export const services: Service[] = [
   {
     id: "conseil-standard",
     title: "Séance stratégique (standard)",
-    description: "Échange personnalisé pour comprendre votre projet, répondre à vos questions et vous orienter efficacement avant votre arrivée en RDC.",
+    description:
+      "Échange personnalisé pour comprendre votre projet, répondre à vos questions et vous orienter efficacement avant votre arrivée en RDC.",
     shortDescription: "Échange personnalisé pour comprendre votre projet et vous orienter.",
     category: "Conseil Avant Départ",
     relevantFor: ["court-sejour", "installation", "investissement", "exploration", "expat"],
@@ -12,7 +13,8 @@ export const services: Service[] = [
   {
     id: "conseil-premium",
     title: "Séance stratégique (premium)",
-    description: "Analyse approfondie pour profils exigeants (investisseurs, expatriés, projets complexes) avec recommandations concrètes et plan d'action.",
+    description:
+      "Analyse approfondie pour profils exigeants (investisseurs, expatriés, projets complexes) avec recommandations concrètes et plan d'action.",
     shortDescription: "Analyse approfondie avec recommandations et plan d'action.",
     category: "Conseil Avant Départ",
     relevantFor: ["installation", "investissement", "expat"],
@@ -20,7 +22,8 @@ export const services: Service[] = [
   {
     id: "audit-projet",
     title: "Audit projet diaspora",
-    description: "Étude complète de votre projet (retour ou investissement) avec identification des risques, opportunités et stratégie d'implantation.",
+    description:
+      "Étude complète de votre projet (retour ou investissement) avec identification des risques, opportunités et stratégie d'implantation.",
     shortDescription: "Étude complète avec identification des risques et opportunités.",
     category: "Conseil Avant Départ",
     relevantFor: ["installation", "investissement"],
@@ -28,7 +31,8 @@ export const services: Service[] = [
   {
     id: "conseil-expat-premium",
     title: "Conseil expatriation premium",
-    description: "Accompagnement complet pour préparer votre expatriation : formalités, logistique, intégration culturelle et conseils pratiques.",
+    description:
+      "Accompagnement complet pour préparer votre expatriation : formalités, logistique, intégration culturelle et conseils pratiques.",
     shortDescription: "Accompagnement complet pour préparer votre expatriation.",
     category: "Conseil Avant Départ",
     relevantFor: ["expat"],
@@ -60,7 +64,8 @@ export const services: Service[] = [
   {
     id: "accueil-simple",
     title: "Accueil aéroport simple",
-    description: "Un agent vous accueille à l'aéroport pour faciliter vos premières démarches et vous orienter dès votre arrivée.",
+    description:
+      "Un agent vous accueille à l'aéroport pour faciliter vos premières démarches et vous orienter dès votre arrivée.",
     shortDescription: "Agent d'accueil à l'aéroport pour vous orienter.",
     category: "Arrivée & Mobilité",
     subcategory: "Accueil & Coordination",
@@ -96,7 +101,8 @@ export const services: Service[] = [
   {
     id: "assistance-48h",
     title: "Assistance 48h",
-    description: "Accompagnement intensif pendant vos premières 48h pour éviter erreurs, pertes de temps et mauvaises décisions.",
+    description:
+      "Accompagnement intensif pendant vos premières 48h pour éviter erreurs, pertes de temps et mauvaises décisions.",
     shortDescription: "Accompagnement intensif pendant vos premières 48h.",
     category: "Arrivée & Mobilité",
     subcategory: "Accueil & Coordination",
@@ -518,11 +524,7 @@ export const servicePacks: ServicePack[] = [
     price: "200$",
     category: "NextGen",
     description: "Démarrage idéal pour jeunes professionnels",
-    services: [
-      "coaching-individuel-nextgen",
-      "cv-lettre-motivation",
-      "preparation-entretien",
-    ],
+    services: ["coaching-individuel-nextgen", "cv-lettre-motivation", "preparation-entretien"],
     valueProposition: "Optimisez votre profil et préparez-vous au marché",
     relevantFor: ["nextgen", "employment"],
   },
@@ -532,11 +534,7 @@ export const servicePacks: ServicePack[] = [
     price: "250$",
     category: "NextGen",
     description: "Accompagnement complet pour étudiants",
-    services: [
-      "orientation-etudes",
-      "orientation-financement-nextgen",
-      "recherche-stage",
-    ],
+    services: ["orientation-etudes", "orientation-financement-nextgen", "recherche-stage"],
     valueProposition: "Structurez votre parcours académique et professionnel",
     relevantFor: ["nextgen", "study"],
   },
@@ -576,12 +574,7 @@ export const servicePacks: ServicePack[] = [
     price: "800$",
     category: "Retraite",
     description: "L'essentiel pour une arrivée sereine",
-    services: [
-      "accueil-simple",
-      "chauffeur-simple",
-      "recherche-logement",
-      "orientation-medicale",
-    ],
+    services: ["accueil-simple", "chauffeur-simple", "recherche-logement", "orientation-medicale"],
     valueProposition: "Installation de base avec orientation santé",
     relevantFor: ["retraite"],
   },

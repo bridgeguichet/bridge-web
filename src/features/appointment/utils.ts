@@ -1,5 +1,6 @@
 import { format, isAfter, isBefore, isToday, startOfDay } from "date-fns";
 import { fr } from "date-fns/locale";
+
 import type { CounselorAvailability, TimeSlot } from "./types";
 
 /**
@@ -20,10 +21,7 @@ export const DEFAULT_AVAILABILITY: CounselorAvailability = {
  * @param availability - Counselor availability configuration
  * @returns boolean indicating if date is available
  */
-export function isDateAvailable(
-  date: Date,
-  availability: CounselorAvailability = DEFAULT_AVAILABILITY,
-): boolean {
+export function isDateAvailable(date: Date, availability: CounselorAvailability = DEFAULT_AVAILABILITY): boolean {
   const today = startOfDay(new Date());
   const checkDate = startOfDay(date);
 
@@ -50,10 +48,7 @@ export function isDateAvailable(
  * @param availability - Counselor availability configuration
  * @returns Array of time slots
  */
-export function generateTimeSlots(
-  date: Date,
-  availability: CounselorAvailability = DEFAULT_AVAILABILITY,
-): TimeSlot[] {
+export function generateTimeSlots(date: Date, availability: CounselorAvailability = DEFAULT_AVAILABILITY): TimeSlot[] {
   const slots: TimeSlot[] = [];
   const { startHour, endHour, slotDurationMinutes } = availability;
 
@@ -98,9 +93,7 @@ export function formatAppointmentDate(date: Date): string {
  * Get disabled dates matcher for Calendar component
  * Disables weekends and past dates
  */
-export function getDisabledDatesMatcher(
-  availability: CounselorAvailability = DEFAULT_AVAILABILITY,
-) {
+export function getDisabledDatesMatcher(availability: CounselorAvailability = DEFAULT_AVAILABILITY) {
   return (date: Date) => {
     return !isDateAvailable(date, availability);
   };
