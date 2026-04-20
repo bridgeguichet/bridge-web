@@ -2,14 +2,20 @@
 
 import { useRouter } from "next/navigation";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { useSession as useBetterSession } from "@/lib/auth/auth-client";
 import { extractErrorMessage } from "@/lib/error-handler";
 
 import { authService } from "./services";
 import { useAuthStore } from "./store";
-import type { LoginCredentials } from "./types";
+import type { LoginCredentials, RegisterData } from "./types";
+
+// Hook session Better Auth
+export function useSession() {
+  return useBetterSession();
+}
 
 export function useLogin() {
   const router = useRouter();
@@ -17,11 +23,32 @@ export function useLogin() {
   const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
   return useMutation({
-    mutationFn: (credentials: LoginCredentials) => authService.login(credentials),
+    mutationFn: (credentials: LoginCredentials) =>
+      authService.login(credentials),
     onSuccess: (data) => {
       setCurrentUser(data.user);
-      queryClient.setQueryData(["profile"], data.user);
+      queryClient.setQueryData(["session"], data);
       toast.success("Connexion réussie");
+      router.push("/dashboard");
+    },
+    onError: (error) => {
+      toast.error(extractErrorMessage(error));
+    },
+  });
+}
+
+export function useRegister() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+
+  return useMutation({
+    mutationFn: (registerData: RegisterData) =>
+      authService.register(registerData),
+    onSuccess: (data) => {
+      setCurrentUser(data.user);
+      queryClient.setQueryData(["session"], data);
+      toast.success("Compte créé avec succès");
       router.push("/dashboard");
     },
     onError: (error) => {
@@ -49,18 +76,11 @@ export function useLogout() {
   });
 }
 
-export function useProfile(enabled = true) {
-  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
-
-  return useQuery({
-    queryKey: ["profile"],
-    queryFn: async () => {
-      const data = await authService.getProfile();
-      setCurrentUser(data.user);
-      return data.user;
+export function useGoogleLogin() {
+  return useMutation({
+    mutationFn: () => authService.signInWithGoogle(),
+    onError: (error) => {
+      toast.error(extractErrorMessage(error));
     },
-    staleTime: 1000 * 60 * 5,
-    retry: 1,
-    enabled,
   });
 }

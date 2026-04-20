@@ -1,36 +1,66 @@
-import axios from "axios";
+import { authClient } from "@/lib/auth/auth-client";
 
-import axiosInstance from "@/lib/axios";
-
-import type { LoginCredentials, LoginResponse, LogoutResponse, ProfileResponse, RefreshResponse, User } from "./types";
-
-const authApiClient = axios.create({
-  baseURL: "/api/auth",
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import type {
+  LoginCredentials,
+  LoginResponse,
+  ProfileResponse,
+  RegisterData,
+  User,
+} from "./types";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
-    const { data } = await authApiClient.post<LoginResponse>("/login", credentials);
-    return data;
+    const { data, error } = await authClient.signIn.email({
+      email: credentials.email,
+      password: credentials.password,
+    });
+
+    if (error) {
+      throw new Error(error.message || "Erreur lors de la connexion");
+    }
+
+    return {
+      success: true,
+      user: data?.user as User,
+    };
   },
 
-  logout: async (): Promise<LogoutResponse> => {
-    const { data } = await authApiClient.post<LogoutResponse>("/logout");
-    return data;
+  register: async (registerData: RegisterData): Promise<LoginResponse> => {
+    const { data, error } = await authClient.signUp.email({
+      email: registerData.email,
+      password: registerData.password,
+      name: registerData.name,
+    });
+
+    if (error) {
+      throw new Error(error.message || "Erreur lors de l'inscription");
+    }
+
+    return {
+      success: true,
+      user: data?.user as User,
+    };
   },
 
-  refresh: async (): Promise<RefreshResponse> => {
-    const { data } = await authApiClient.post<RefreshResponse>("/token/refresh");
-    return data;
+  logout: async () => {
+    await authClient.signOut();
+    return { success: true };
   },
 
   getProfile: async (): Promise<ProfileResponse> => {
-    const { data } = await axiosInstance.get<User>("/api/auth/profile/");
-    return { user: data };
+    const { data: session } = await authClient.getSession();
+    if (!session?.user) {
+      throw new Error("Non authentifié");
+    }
+    return { user: session.user as User };
+  },
+
+  // Google OAuth
+  signInWithGoogle: async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
   },
 
   validateEmail: (email: string): boolean => {
@@ -38,11 +68,13 @@ export const authService = {
     return emailRegex.test(email);
   },
 
-  validatePassword: (password: string): { valid: boolean; message?: string } => {
-    if (password.length < 6) {
+  validatePassword: (
+    password: string,
+  ): { valid: boolean; message?: string } => {
+    if (password.length < 8) {
       return {
         valid: false,
-        message: "Le mot de passe doit contenir au moins 6 caractères",
+        message: "Le mot de passe doit contenir au moins 8 caractères",
       };
     }
 

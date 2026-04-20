@@ -1,14 +1,22 @@
 export interface User {
   id: string;
   email: string;
-  full_name: string;
-  is_staff: boolean;
-  is_superuser: boolean;
-  avatar?: string;
-  organization?: {
+  name: string;
+  emailVerified: boolean;
+  image?: string;
+  role: string; // customer, vendor, admin
+  phone?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Session {
+  user: User;
+  session: {
     id: string;
-    name: string;
-    role: "admin" | "manager" | "inspecteur" | "transporteur" | "collecteur";
+    userId: string;
+    expiresAt: Date;
+    token: string;
   };
 }
 
@@ -17,16 +25,18 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterData {
+  email: string;
+  password: string;
+  name: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   user: User;
 }
 
 export interface LogoutResponse {
-  success: boolean;
-}
-
-export interface RefreshResponse {
   success: boolean;
 }
 
