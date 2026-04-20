@@ -1,3 +1,7 @@
+import { config } from "dotenv";
+
+config();
+
 import { db } from "./index";
 import {
   accounts,

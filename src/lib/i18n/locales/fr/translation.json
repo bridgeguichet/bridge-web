@@ -699,7 +699,12 @@
           "Informations nécessaires à la prestation demandée"
         ],
         "subtitle": "Les données sont collectées via :",
-        "sources": ["Formulaires du site", "Échanges email", "Contrats", "Réservations"]
+        "sources": [
+          "Formulaires du site",
+          "Échanges email",
+          "Contrats",
+          "Réservations"
+        ]
       },
       "finalite": {
         "title": "Finalité du traitement",
@@ -715,7 +720,11 @@
       "baseLegale": {
         "title": "Base légale",
         "intro": "Le traitement repose sur :",
-        "list": ["L'exécution d'un contrat", "Le consentement du client", "L'intérêt légitime de Bridge"]
+        "list": [
+          "L'exécution d'un contrat",
+          "Le consentement du client",
+          "L'intérêt légitime de Bridge"
+        ]
       },
       "conservation": {
         "title": "Conservation des données",
@@ -738,7 +747,12 @@
       "droits": {
         "title": "Droits des utilisateurs",
         "intro": "Le client peut demander :",
-        "list": ["Accès à ses données", "Rectification", "Suppression", "Limitation du traitement"],
+        "list": [
+          "Accès à ses données",
+          "Rectification",
+          "Suppression",
+          "Limitation du traitement"
+        ],
         "note": "Toute demande doit être adressée à l'email officiel du site."
       },
       "fraudes": {
@@ -843,7 +857,10 @@
       "conformite": {
         "title": "Conformité & Anti-corruption",
         "intro": "Le client s'engage à respecter :",
-        "list": ["Les lois anti-corruption applicables", "Les normes internationales de conformité"],
+        "list": [
+          "Les lois anti-corruption applicables",
+          "Les normes internationales de conformité"
+        ],
         "highlight": "Toute tentative de corruption, fraude ou pratique illicite entraînera résiliation immédiate sans remboursement."
       },
       "conformiteInter": {
@@ -858,13 +875,20 @@
       "fraude": {
         "title": "Prévention contre la fraude",
         "intro": "Bridge reconnaît comme officiels uniquement :",
-        "list": ["Les emails et numéros publiés sur son site", "Les contrats émis via ses canaux validés"],
+        "list": [
+          "Les emails et numéros publiés sur son site",
+          "Les contrats émis via ses canaux validés"
+        ],
         "highlight": "Bridge décline toute responsabilité en cas d'escroquerie liée à des contacts non référencés."
       },
       "confidentialite": {
         "title": "Confidentialité",
         "intro": "Le client s'engage à préserver la confidentialité :",
-        "list": ["Des stratégies", "Des méthodologies", "Des documents transmis"]
+        "list": [
+          "Des stratégies",
+          "Des méthodologies",
+          "Des documents transmis"
+        ]
       },
       "forceMajeure": {
         "title": "Force majeure",
@@ -873,7 +897,11 @@
       "resiliation": {
         "title": "Résiliation",
         "intro": "Bridge peut suspendre ou résilier toute relation en cas de :",
-        "list": ["Non-paiement", "Contournement", "Non-respect des présentes conditions"]
+        "list": [
+          "Non-paiement",
+          "Contournement",
+          "Non-respect des présentes conditions"
+        ]
       },
       "droitApplicable": {
         "title": "Droit applicable",
@@ -1954,5 +1982,65 @@
     "counselor": "Conseiller",
     "selectDateAndTime": "Sélectionnez une date et un créneau horaire",
     "confirmationEmail": "Un email de confirmation vous sera envoyé après validation du paiement."
+  },
+  "marketplace": {
+    "title": "Marketplace BRIDGE",
+    "categories": "Catégories",
+    "all": "Tous",
+    "search": "Rechercher un service...",
+    "addToCart": "Ajouter au panier",
+    "viewDetails": "Voir détails",
+    "pricePerUnit": "{{price}} USD / {{unit}}",
+    "noServices": "Aucun service disponible dans cette catégorie.",
+    "loading": "Chargement des services...",
+    "discover": "Découvrir nos services"
+  },
+  "cart": {
+    "title": "Panier",
+    "empty": "Votre panier est vide",
+    "total": "Total",
+    "clear": "Vider le panier",
+    "checkout": "Passer commande",
+    "quantity": "Quantité",
+    "remove": "Retirer",
+    "itemAdded": "Service ajouté au panier"
+  },
+  "orders": {
+    "title": "Mes commandes",
+    "orderNumber": "N° Commande",
+    "status": "Statut",
+    "total": "Montant total",
+    "date": "Date",
+    "pending": "En attente",
+    "confirmed": "Confirmée",
+    "in_progress": "En cours",
+    "completed": "Terminée",
+    "cancelled": "Annulée",
+    "paymentMethod": "Méthode de paiement",
+    "cash": "Paiement en espèces",
+    "mobile_money": "Mobile Money",
+    "summary": "Résumé de la commande",
+    "confirmOrder": "Confirmer la commande",
+    "processing": "Traitement...",
+    "orderCreated": "Commande créée avec succès",
+    "orderCancelled": "Commande annulée",
+    "statusUpdated": "Statut mis à jour"
+  },
+  "admin": {
+    "orders": {
+      "title": "Gestion des Commandes",
+      "actions": "Actions",
+      "details": "Détails"
+    },
+    "resources": {
+      "title": "Gestion des Ressources",
+      "addResource": "Ajouter une ressource",
+      "drivers": "Chauffeurs",
+      "vehicles": "Véhicules",
+      "staff": "Personnel",
+      "available": "Disponible",
+      "busy": "Occupé",
+      "unavailable": "Indisponible"
+    }
   }
 }

@@ -715,7 +715,11 @@
       "baseLegale": {
         "title": "Legal basis",
         "intro": "Processing is based on:",
-        "list": ["Performance of a contract", "Customer consent", "Bridge's legitimate interest"]
+        "list": [
+          "Performance of a contract",
+          "Customer consent",
+          "Bridge's legitimate interest"
+        ]
       },
       "conservation": {
         "title": "Data retention",
@@ -738,7 +742,12 @@
       "droits": {
         "title": "User rights",
         "intro": "The customer may request:",
-        "list": ["Access to data", "Correction", "Deletion", "Restriction of processing"],
+        "list": [
+          "Access to data",
+          "Correction",
+          "Deletion",
+          "Restriction of processing"
+        ],
         "note": "Any request must be sent to the official email address published on the website."
       },
       "fraudes": {
@@ -778,11 +787,21 @@
       "nature": {
         "title": "Nature of services",
         "intro": "Bridge acts exclusively as:",
-        "list": ["Strategic facilitator", "Coordinator", "Referral intermediary", "Structuring advisor"],
+        "list": [
+          "Strategic facilitator",
+          "Coordinator",
+          "Referral intermediary",
+          "Structuring advisor"
+        ],
         "text1": "Bridge is neither a bank, nor a law firm, nor an insurer, nor an administrative authority.",
         "text2": "Bridge is subject to an obligation of means, not an obligation of results.",
         "subtitle": "No service guarantees:",
-        "noGuarantee": ["Obtaining a loan", "Administrative approval", "Successful investment", "Project profitability"]
+        "noGuarantee": [
+          "Obtaining a loan",
+          "Administrative approval",
+          "Successful investment",
+          "Project profitability"
+        ]
       },
       "responsabilite": {
         "title": "Limitation of liability",
@@ -800,7 +819,11 @@
         "text1": "Partners presented by Bridge are legally independent.",
         "text2": "Any contractual relationship entered into directly between the customer and a partner is separate from Bridge.",
         "subtitle": "If the customer chooses to work outside Bridge coordination:",
-        "list": ["Bridge disclaims any responsibility", "No refund will be possible", "No mediation will be provided"]
+        "list": [
+          "Bridge disclaims any responsibility",
+          "No refund will be possible",
+          "No mediation will be provided"
+        ]
       },
       "antiContournement": {
         "title": "Anti-circumvention clause",
@@ -821,12 +844,18 @@
       "remboursement": {
         "title": "No-refund policy",
         "intro": "Due to the intellectual and strategic nature of the services:",
-        "list": ["Payments are final", "No refund is possible once the mission has started"]
+        "list": [
+          "Payments are final",
+          "No refund is possible once the mission has started"
+        ]
       },
       "conformite": {
         "title": "Compliance & Anti-corruption",
         "intro": "The customer agrees to comply with:",
-        "list": ["Applicable anti-corruption laws", "International compliance standards"],
+        "list": [
+          "Applicable anti-corruption laws",
+          "International compliance standards"
+        ],
         "highlight": "Any attempt at corruption, fraud or illegal practice will result in immediate termination without refund."
       },
       "conformiteInter": {
@@ -1940,5 +1969,65 @@
     "counselor": "Advisor",
     "selectDateAndTime": "Select a date and time slot",
     "confirmationEmail": "A confirmation email will be sent to you after payment validation."
+  },
+  "marketplace": {
+    "title": "BRIDGE Marketplace",
+    "categories": "Categories",
+    "all": "All",
+    "search": "Search for a service...",
+    "addToCart": "Add to cart",
+    "viewDetails": "View details",
+    "pricePerUnit": "{{price}} USD / {{unit}}",
+    "noServices": "No services available in this category.",
+    "loading": "Loading services...",
+    "discover": "Discover our services"
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "clear": "Clear cart",
+    "checkout": "Checkout",
+    "quantity": "Quantity",
+    "remove": "Remove",
+    "itemAdded": "Service added to cart"
+  },
+  "orders": {
+    "title": "My orders",
+    "orderNumber": "Order #",
+    "status": "Status",
+    "total": "Total amount",
+    "date": "Date",
+    "pending": "Pending",
+    "confirmed": "Confirmed",
+    "in_progress": "In progress",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "paymentMethod": "Payment method",
+    "cash": "Cash payment",
+    "mobile_money": "Mobile Money",
+    "summary": "Order summary",
+    "confirmOrder": "Confirm order",
+    "processing": "Processing...",
+    "orderCreated": "Order created successfully",
+    "orderCancelled": "Order cancelled",
+    "statusUpdated": "Status updated"
+  },
+  "admin": {
+    "orders": {
+      "title": "Order Management",
+      "actions": "Actions",
+      "details": "Details"
+    },
+    "resources": {
+      "title": "Resource Management",
+      "addResource": "Add resource",
+      "drivers": "Drivers",
+      "vehicles": "Vehicles",
+      "staff": "Staff",
+      "available": "Available",
+      "busy": "Busy",
+      "unavailable": "Unavailable"
+    }
   }
 }
