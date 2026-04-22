@@ -1,115 +1,195 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { CheckCircle2, Shield, Clock } from "lucide-react";
+import { useState } from "react";
 
-import { BorderDeco } from "@/components/ornaments/border-deco";
-import { SunburstPattern } from "@/components/patterns/sunburst";
+import { motion } from "framer-motion";
+import { Search } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 interface HeroSectionProps {
   onExplore: () => void;
+  onSearch?: (query: string) => void;
 }
 
-export function HeroSection({ onExplore }: HeroSectionProps) {
+const AVATARS = [
+  {
+    label: "Chauffeur",
+    initials: "AK",
+    color: "bg-violet-500",
+    top: "8%",
+    right: "22%",
+  },
+  {
+    label: "Cuisinière",
+    initials: "MN",
+    color: "bg-rose-400",
+    top: "18%",
+    right: "5%",
+  },
+  {
+    label: "Agent immo",
+    initials: "JD",
+    color: "bg-emerald-500",
+    top: "52%",
+    right: "18%",
+  },
+  {
+    label: "Gardien",
+    initials: "PL",
+    color: "bg-amber-500",
+    top: "68%",
+    right: "2%",
+  },
+];
+
+const SHAPES = [
+  { type: "circle", size: 180, top: "0%", right: "30%", color: "bg-pink-200" },
+  { type: "circle", size: 140, top: "30%", right: "0%", color: "bg-lime-200" },
+  { type: "triangle", top: "55%", right: "28%", color: "border-b-violet-200" },
+  { type: "circle", size: 100, top: "70%", right: "12%", color: "bg-sky-200" },
+];
+
+export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSearch) onSearch(query);
+    else onExplore();
+  };
+
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-primary pt-14">
-      <div className="absolute inset-0 text-accent/20">
-        <SunburstPattern />
-      </div>
-
-      <div className="container relative z-10 mx-auto px-4 py-20">
-        <div className="max-w-6xl">
+    <section
+      className="relative overflow-hidden"
+      style={{ background: "oklch(0.97 0.008 260)" }}
+    >
+      <div className="container mx-auto px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 min-h-[560px] items-center gap-8 py-20">
+          {/* Left — content */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -32 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="space-y-8"
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-6 max-w-xl"
           >
-            <div className="inline-block">
-              <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 mb-6">
-                <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-                <span className="text-sm font-semibold text-white">
-                  150+ services • 2,500+ clients satisfaits
-                </span>
-              </div>
-            </div>
+            <h1 className="text-5xl lg:text-[3.75rem] font-black leading-[1.05] tracking-tight text-gray-900">
+              Connectons vos besoins
+              <br />
+              <span className="text-primary">à Kinshasa</span>
+            </h1>
 
-            <BorderDeco className="inline-block p-8 border-2 border-white/20 bg-white/5 backdrop-blur-sm">
-              <h1 className="font-batangas text-7xl md:text-[7rem] text-white leading-[0.9] tracking-tighter">
-                VOTRE VIE
-                <br />
-                <span className="text-accent">SIMPLIFIÉE</span>
-                <br />À KINSHASA
-              </h1>
-            </BorderDeco>
-
-            <p className="text-xl md:text-2xl text-white/90 max-w-2xl font-medium leading-relaxed">
-              Services vérifiés • Réservation instantanée • Accompagnement
-              personnalisé
+            <p className="text-lg text-gray-500 leading-relaxed">
+              Trouvez des prestataires vérifiés pour tous vos besoins — de la
+              maison au bureau, livraison immédiate.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            {/* Search bar */}
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden"
+            >
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Rechercher un service…"
+                className="flex-1 px-5 py-4 text-sm text-gray-700 placeholder:text-gray-400 outline-none bg-transparent"
+              />
               <Button
-                size="lg"
-                onClick={onExplore}
-                className="text-lg px-10 py-7 bg-accent text-primary hover:bg-accent/90 font-bold shadow-2xl shadow-accent/20 hover:scale-105 transition-transform"
+                type="submit"
+                className="m-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-5 h-10"
               >
-                Explorer les services →
+                <Search className="w-4 h-4" />
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-10 py-7 border-2 border-white/30 text-white hover:bg-white/10 hover:border-white font-semibold backdrop-blur-sm"
-              >
-                Parler à un conseiller
-              </Button>
+            </form>
+
+            {/* Suggestion chips */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Chauffeur privé",
+                "Nettoyage domicile",
+                "Aide administrative",
+                "Livraison",
+              ].map((s) => (
+                <button
+                  key={s}
+                  onClick={onExplore}
+                  className="text-xs px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 hover:border-primary hover:text-primary transition-colors shadow-sm"
+                >
+                  {s}
+                </button>
+              ))}
             </div>
 
-            <div className="flex flex-wrap gap-6 text-sm text-white/80">
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-accent" />
-                <span>Paiement sécurisé</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-accent" />
-                <span>Services vérifiés</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-accent" />
-                <span>Support 24/7</span>
-              </div>
+            {/* Trust strip */}
+            <div className="flex items-center gap-6 pt-2 text-sm text-gray-400">
+              <span className="font-semibold text-gray-700">150+</span> services
+              <span className="w-px h-4 bg-gray-200" />
+              <span className="font-semibold text-gray-700">2 500+</span>{" "}
+              clients satisfaits
+              <span className="w-px h-4 bg-gray-200" />
+              <span className="font-semibold text-gray-700">4.8★</span> note
+              moyenne
             </div>
           </motion.div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute bottom-16 right-16 hidden lg:flex gap-4"
-        >
-          <div
-            className="w-32 h-32 bg-white shadow-2xl flex flex-col items-center justify-center border-4 border-accent"
-            style={{
-              clipPath:
-                "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-            }}
-          >
-            <div className="text-4xl font-black text-primary">150+</div>
-            <div className="text-xs text-gray-600 text-center">Services</div>
+          {/* Right — floating avatars */}
+          <div className="relative hidden lg:block h-[480px]">
+            {/* Background shapes */}
+            {SHAPES.map((shape, i) => (
+              <div
+                key={i}
+                className="absolute"
+                style={{ top: shape.top, right: shape.right }}
+              >
+                {shape.type === "circle" && (
+                  <div
+                    className={`rounded-full opacity-70 ${shape.color}`}
+                    style={{ width: shape.size, height: shape.size }}
+                  />
+                )}
+                {shape.type === "triangle" && (
+                  <div
+                    className="w-0 h-0 opacity-60"
+                    style={{
+                      borderLeft: "60px solid transparent",
+                      borderRight: "60px solid transparent",
+                      borderBottom: "104px solid oklch(0.88 0.08 290 / 0.6)",
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+
+            {/* Avatar cards */}
+            {AVATARS.map((avatar, i) => (
+              <motion.div
+                key={avatar.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.3 + i * 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                className="absolute flex flex-col items-center gap-1.5"
+                style={{ top: avatar.top, right: avatar.right }}
+              >
+                <div
+                  className={`w-20 h-20 rounded-full ${avatar.color} flex items-center justify-center shadow-xl border-4 border-white`}
+                >
+                  <span className="text-white font-black text-lg">
+                    {avatar.initials}
+                  </span>
+                </div>
+                <div className="bg-white rounded-full px-3 py-1 text-xs font-semibold text-gray-700 shadow-md border border-gray-100">
+                  {avatar.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
-          <div
-            className="w-32 h-32 bg-white shadow-2xl flex flex-col items-center justify-center border-4 border-primary"
-            style={{
-              clipPath:
-                "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-            }}
-          >
-            <div className="text-4xl font-black text-accent">4.8★</div>
-            <div className="text-xs text-gray-600 text-center">Note</div>
-          </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
