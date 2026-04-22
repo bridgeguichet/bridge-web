@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { motion } from "framer-motion";
 
@@ -15,6 +15,7 @@ import { ServiceCardWrapper } from "@/features/marketplace/components/service-ca
 import { SocialProof } from "@/features/marketplace/components/social-proof";
 import { TrustBadges } from "@/features/marketplace/components/trust-badges";
 import { useCategories, useServices } from "@/features/marketplace/hooks";
+import { HeroHeader } from "@/external-components/header";
 
 export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>();
@@ -34,11 +35,24 @@ export default function MarketplacePage() {
     scrollToServices();
   };
 
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+    }
+  }, []);
+
   const featuredServices = services?.slice(0, 6) || [];
   const allServices = services || [];
 
   return (
     <div className="min-h-screen">
+      <HeroHeader/>
       <HeroSection onExplore={scrollToServices} />
 
       <CategoryShowcase
@@ -89,11 +103,13 @@ export default function MarketplacePage() {
         </section>
       )}
 
-      <SocialProof />
+      <div id="temoignages">
+        <SocialProof />
+      </div>
 
       <HowItWorks onGetStarted={scrollToServices} />
 
-      <section ref={servicesRef} className="py-20 bg-gray-50">
+      <section ref={servicesRef} id="services" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

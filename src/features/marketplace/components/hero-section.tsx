@@ -13,7 +13,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ onExplore }: HeroSectionProps) {
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-primary">
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-primary pt-14">
       <div className="absolute inset-0 text-accent/20">
         <SunburstPattern />
       </div>

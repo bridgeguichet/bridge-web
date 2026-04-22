@@ -5,14 +5,15 @@ import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { orderAssignments, orderItems, orders } from "@/lib/db/schema";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
     if (!session) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
     }
 
-    const [order] = await db.select().from(orders).where(eq(orders.id, params.id));
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
 
     if (!order) {
       return NextResponse.json({ error: "Commande non trouvée" }, { status: 404 });
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 
-    const items = await db.select().from(orderItems).where(eq(orderItems.orderId, params.id));
+    const items = await db.select().from(orderItems).where(eq(orderItems.orderId, id));
 
     const assignments =
       items.length > 0
@@ -37,8 +38,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
     if (!session || session.user.role !== "admin") {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
@@ -50,7 +52,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
     const [updatedOrder] = await db
       .update(orders)
       .set({ status, updatedAt: new Date() })
-      .where(eq(orders.id, params.id))
+      .where(eq(orders.id, id))
       .returning();
 
     return NextResponse.json(updatedOrder);

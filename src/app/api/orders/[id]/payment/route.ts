@@ -6,8 +6,9 @@ import { db } from "@/lib/db";
 import { orders, payments } from "@/lib/db/schema";
 import { processPayment } from "@/lib/payments";
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
     if (!session) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const body = await request.json();
     const { method, metadata } = body;
 
-    const [order] = await db.select().from(orders).where(eq(orders.id, params.id));
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
 
     if (!order) {
       return NextResponse.json({ error: "Commande non trouvée" }, { status: 404 });

@@ -423,18 +423,18 @@
   },
   "external-header": {
     "about": "À propos",
-    "parcours": "Parcours",
-    "simulation": "Simulation",
+    "service": "Service",
+    "temoignage": "Témoignage",
     "account": "Connexion"
   },
   "external-hero": {
     "minidescription": "Le Guichet Diaspora & Expat",
-    "title": "Et si votre retour en RDC était enfin simple ?",
-    "description": "Anticipez chaque étape de votre installation ou de votre investissement en 3 minutes.",
+    "title": "Et si vivre et réussir à Kinshasa devenait enfin simple ?",
+    "description": "Logement, mobilité, services, conciergerie tout en un seul endroit.",
     "feature1": "Démarches simplifiées",
     "feature2": "Suivi centralisé",
     "feature3": "Accompagnement",
-    "ctaSimulation": "Simuler mon parcours",
+    "ctaDecouvrir": "Découvrir nos services",
     "rejoindrePlateforme": "Rejoindre la plateforme"
   },
   "parcoursSection": {
@@ -572,34 +572,34 @@
       "note": "Vous pourrez affiner vos réponses et enregistrer votre progression dans votre espace."
     }
   },
-  "parcoursPage": {
-    "badge": "Trouvez votre parcours idéal",
-    "title": "Choisissez Votre Parcours",
-    "description": "Sélectionnez le profil qui vous correspond le mieux afin que nous puissions adapter votre expérience et vous proposer les services les plus pertinents.",
+  "servicePage": {
+    "badge": "Trouvez votre service idéal",
+    "title": "Choisissez Votre Service",
+    "description": "BRIDGE vous donne accès à des services sélectionnés pour répondre aux exigences de votre quotidien à Kinshasa. \nChoisissez une catégorie, explorez les options disponibles et profitez d'une expérience simple, rapide et efficace.",
     "startNow": "Démarrer maintenant",
-    "popular": "Populaire",
-    "parcours": {
-      "diaspora": {
-        "title": "Diaspora",
-        "description": "Vous êtes d'origine congolaise et vivez à l'étranger ? Découvrez des services sur-mesure pour vous."
+    "categories": {
+      "mobilite": {
+        "title": "Mobilité",
+        "description": "Déplacements simplifiés"
       },
-      "expat": {
-        "title": "Expatrié",
-        "description": "Vous venez vous installer au Congo ? Facilitez votre intégration et votre quotidien."
+      "logement": {
+        "title": "Logement",
+        "description": "Séjours et hébergements"
       },
-      "investisseur": {
-        "title": "Investisseur",
-        "description": "Saisissez les meilleures opportunités d'investissement et développez vos projets."
+      "maison": {
+        "title": "Maison",
+        "description": "Personnel domestique"
       },
-      "nextgen": {
-        "title": "NextGen (18-26 ans)",
-        "description": "Les services pour propulser la nouvelle génération vers l'avenir de leurs ambitions."
+      "prestation": {
+        "title": "Prestation de services",
+        "description": "Services du quotidien"
       },
-      "retraite": {
-        "title": "Retraite",
-        "description": "Préparez sereinement votre avenir ou profitez de vos vieux jours en toute tranquillité."
+      "conciergerie": {
+        "title": "Conciergerie",
+        "description": "Gestion et assistance"
       }
-    }
+    },
+    "exploreAll": "Explorer tous nos services"
   },
   "contactSection": {
     "meetUs": "Vous préférez nous rencontrer ?",

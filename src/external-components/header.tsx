@@ -3,7 +3,7 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Menu, X } from "lucide-react";
+import { Menu, User, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Logo } from "@/components/logo";
@@ -18,126 +18,94 @@ export const HeroHeader = () => {
 
   const menuItems = [
     { name: t("external-header.about"), href: "https://www.bridgeguichet.net/a-propos" },
-    { name: t("external-header.parcours"), href: "#parcours" },
-    { name: t("external-header.simulation"), href: "#simulateur" },
+    { name: t("external-header.service"), href: "/marketplace#services" },
+    { name: t("external-header.temoignage"), href: "/marketplace#temoignages" },
   ];
 
   React.useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 100);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <header>
-      <nav data-state={menuState && "active"} className="fixed z-20 w-full px-2 bg-white">
-        <div
-          className={cn(
-            "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
-            isScrolled && "bg-background/50 max-w-5xl rounded-2xl border backdrop-blur-lg lg:px-5",
-          )}
-        >
-          <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
-            <div className="flex w-full justify-between lg:w-auto">
-              <Link href="/" aria-label="home" className="flex items-center space-x-2">
+      <nav
+        className={cn(
+          "fixed top-0 z-50 w-full border-b transition-all duration-500",
+          isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-white border-gray-200",
+        )}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            <div className="flex items-center gap-12">
+              <Link href="/" className="flex items-center">
                 <Logo />
               </Link>
 
-              <button
-                onClick={() => setMenuState(!menuState)}
-                aria-label={menuState == true ? "Close Menu" : "Open Menu"}
-                className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
-              >
-                <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
-                <X className="in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-6 -rotate-180 scale-0 opacity-0 duration-200" />
-              </button>
-            </div>
-
-            <div className="absolute inset-0 m-auto hidden size-fit lg:block">
-              <ul className="flex gap-8 text-sm">
+              <ul className="hidden items-center gap-10 lg:flex">
                 {menuItems.map((item, index) => (
                   <li key={index}>
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
-                      >
-                        <span>{item.name}</span>
-                      </Link>
-                    ) : (
-                      <button
-                        type="button"
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
-                      >
-                        <span>{item.name}</span>
-                      </button>
-                    )}
+                    <Link
+                      href={item.href}
+                      className="text-sm font-medium text-gray-700 transition-colors hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-background in-data-[state=active]:block lg:in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-              <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
-                  {menuItems.map((item, index) => (
-                    <li key={index}>
-                      {item.href ? (
-                        <Link
-                          href={item.href}
-                          onClick={() => setMenuState(false)}
-                          className="text-muted-foreground hover:text-accent-foreground block duration-150"
-                        >
-                          <span>{item.name}</span>
-                        </Link>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => setMenuState(false)}
-                          className="text-muted-foreground hover:text-accent-foreground block duration-150"
-                        >
-                          <span>{item.name}</span>
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {/* <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link href="#">
-                    <span>Login</span>
-                  </Link>
-                </Button> */}
-                <ExternalLanguageSwitcher />
-                <Button
-                  asChild
-                  //   size=""
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link href="/login">
-                    <span>{t("external-header.account")}</span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  //   size="sm"
-                  className={cn(isScrolled ? "hidden lg:inline-flex" : "hidden")}
-                >
-                  <Link href="/contact">
-                    <span>{t("external-header.account")}</span>
-                  </Link>
-                </Button>
-              </div>
+            <div className="flex items-center gap-3">
+              <ExternalLanguageSwitcher />
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 rounded-full hover:bg-gray-100"
+                asChild
+              >
+                <Link href="/user-dashboard">
+                  <User className="h-5 w-5 text-gray-700" />
+                </Link>
+              </Button>
+
+              <button
+                onClick={() => setMenuState(!menuState)}
+                className="ml-2 lg:hidden"
+              >
+                {menuState ? (
+                  <X className="h-6 w-6 text-gray-700" />
+                ) : (
+                  <Menu className="h-6 w-6 text-gray-700" />
+                )}
+              </button>
             </div>
           </div>
         </div>
+
+        {menuState && (
+          <div className="border-t bg-white lg:hidden">
+            <div className="mx-auto max-w-7xl px-4 py-4">
+              <ul className="space-y-3">
+                {menuItems.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setMenuState(false)}
+                      className="block py-2 text-base font-medium text-gray-700 hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

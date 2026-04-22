@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 import { useSession as useBetterSession } from "@/lib/auth/auth-client";
@@ -73,6 +73,20 @@ export function useLogout() {
     onError: (error) => {
       toast.error(extractErrorMessage(error));
     },
+  });
+}
+
+export function useProfile(enabled = true) {
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+
+  return useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const response = await authService.getProfile();
+      setCurrentUser(response.user);
+      return response;
+    },
+    enabled,
   });
 }
 

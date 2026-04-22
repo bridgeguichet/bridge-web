@@ -53,9 +53,14 @@ export async function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL("/auth/login", request.url));
   // }
 
+  // TEMPORAIREMENT DÉSACTIVÉ POUR LES TESTS
+  // if (!accessToken && !refreshToken && request.nextUrl.pathname.startsWith("/user-dashboard")) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/user-dashboard/:path*"],
 };

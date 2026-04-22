@@ -73,8 +73,8 @@
   },
   "external-header": {
     "about": "About",
-    "parcours": "Journey",
-    "simulation": "Simulation",
+    "service": "Service",
+    "temoignage": "Testimonial",
     "account": "Account"
   },
   "landing": {
@@ -564,42 +564,42 @@
   },
   "external-hero": {
     "minidescription": "The Diaspora & Expat counter",
-    "title": "What if your return to the DRC finally became simple?",
-    "description": "Anticipate each step of your settlement or investment in 3 minutes.",
+    "title": "What if living and succeeding in Kinshasa finally became easy?",
+    "description": "Housing, transportation, services, and concierge support all in one place.",
     "feature1": "Simplified procedures",
     "feature2": "Centralized tracking",
     "feature3": "Support",
-    "ctaSimulation": "Simulate my journey",
+    "ctaDecouvrir": "Discover our services",
     "rejoindrePlateforme": "Join the platform"
   },
-  "parcoursPage": {
-    "badge": "Find your ideal journey",
-    "title": "Choose Your Journey",
-    "description": "Select the profile that best matches you so we can tailor your experience and offer you the most relevant services.",
+  "servicePage": {
+    "badge": "Find your ideal service",
+    "title": "Choose Your Service",
+    "description": "BRIDGE gives you access to services carefully selected to meet your everyday needs in Kinshasa. \nChoose a category, explore the available options, and enjoy a simple, fast, and efficient experience.",
     "startNow": "Start now",
-    "popular": "Popular",
-    "parcours": {
-      "diaspora": {
-        "title": "Diaspora",
-        "description": "Are you of Congolese origin and living abroad? Discover tailor-made services for you."
+    "categories": {
+      "mobilite": {
+        "title": "Mobility",
+        "description": "Simplified transportation"
       },
-      "expat": {
-        "title": "Expatriate",
-        "description": "Are you coming to settle in Congo? Facilitate your integration and daily life."
+      "logement": {
+        "title": "Housing",
+        "description": "Stays and accommodations"
       },
-      "investisseur": {
-        "title": "Investor",
-        "description": "Seize the best investment opportunities and develop your projects."
+      "maison": {
+        "title": "Home",
+        "description": "Domestic staff"
       },
-      "nextgen": {
-        "title": "NextGen (18-26 years)",
-        "description": "Services to propel the new generation towards the future of their ambitions."
+      "prestation": {
+        "title": "Service provision",
+        "description": "Everyday services"
       },
-      "retraite": {
-        "title": "Retirement",
-        "description": "Prepare your future serenely or enjoy your golden years in complete peace of mind."
+      "conciergerie": {
+        "title": "Concierge",
+        "description": "Management and assistance"
       }
-    }
+    },
+    "exploreAll": "Explore all our services"
   },
   "contactSection": {
     "meetUs": "Prefer to meet us?",

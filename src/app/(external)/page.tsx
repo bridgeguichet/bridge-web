@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowRight, Calculator, Shield, Sparkles } from "lucide-react";
+import { ArrowRight, Calculator, Car, ClipboardList, Home, Shield, Sparkles, UserCog, Wrench } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ import Footer from "@/external-components/footer";
 import { HeroHeader } from "@/external-components/header";
 import { cn } from "@/lib/utils";
 
-const getParcoursList = (_t: (key: string) => string) => [
+{/*const getParcoursList = (_t: (key: string) => string) => [
   {
     id: "diaspora",
     image: "/media/image-diaspora.jpg",
@@ -69,11 +69,11 @@ const getParcoursList = (_t: (key: string) => string) => [
     showBadge: false,
     badgeVariant: null,
   },
-];
+];*/}
 
 export default function ExternalPage() {
   const { t, i18n } = useTranslation();
-  const parcoursList = getParcoursList(t);
+  //const parcoursList = getParcoursList(t);
   const imageSrc = i18n.language === "en" ? "/media/simulateur-etape1_en.png" : "/media/simulateur-etape1.png";
 
   return (
@@ -114,7 +114,7 @@ export default function ExternalPage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button asChild size="lg" className="rounded-3xl">
-                <a href="#simulateur">{t("external-hero.ctaSimulation")}</a>
+                <a href="#">{t("external-hero.ctaDecouvrir")}</a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-3xl hover:text-background">
                 <Link href="/auth/register">{t("external-hero.rejoindrePlateforme")}</Link>
@@ -135,10 +135,169 @@ export default function ExternalPage() {
         </section>
 
         <section
-          id="simulateur"
-          className="-ml-[50vw] -mr-[50vw] relative right-1/2 left-1/2 w-screen scroll-mt-28 bg-primary/10 sm:scroll-mt-32"
+          id="service"
+          className="-ml-[50vw] -mr-[50vw] relative bg-primary/10 right-1/2 left-1/2 w-screen scroll-mt-28 sm:mt-12 sm:scroll-mt-32 sm:py-14"
         >
-          <div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+          <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+            <div className="flex flex-col gap-8 sm:gap-10">
+              <div className="mx-auto max-w-3xl text-center">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
+                  <Sparkles className="size-4 text-primary" />
+                  <span>{t("servicePage.badge")}</span>
+                </div>
+
+                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">{t("servicePage.title")}</h2>
+
+                <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
+                  {t("servicePage.description")}
+                </p>
+              </div>
+
+              {/*<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                {parcoursList.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/${item.id}`}
+                    className={cn(
+                      "group relative overflow-hidden rounded-3xl border-2 bg-background transition-all duration-500 ease-out",
+                      "hover:-translate-y-1 hover:scale-[1.01] hover:shadow-primary/10 hover:shadow-xl",
+                      item.bgHover,
+                      item.borderHover,
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100",
+                        item.bgGradient,
+                      )}
+                    />
+
+                    <div className="relative z-10 p-6 sm:p-8">
+                      <div className="flex items-start justify-between gap-4">
+                        <div
+                          className={cn(
+                            "relative h-28 w-28 overflow-hidden rounded-2xl border-2 shadow-lg transition-all duration-300 sm:h-32 sm:w-32",
+                            "group-hover:rotate-3 group-hover:scale-110",
+                          )}
+                        >
+                          <Image
+                            src={item.image}
+                            alt={t(`parcoursPage.parcours.${item.id}.title`)}
+                            fill
+                            className="object-cover transition-transform duration-300 group-hover:scale-110"
+                            sizes="(max-width: 640px) 112px, 128px"
+                          />
+                        </div>
+
+                        {item.showBadge && (
+                          <Badge variant={item.badgeVariant} className="shrink-0">
+                            {t("parcoursPage.popular")}
+                          </Badge>
+                        )}
+                      </div>
+
+                      <p className="mt-6 font-semibold text-xl tracking-tight transition-colors group-hover:text-primary">
+                        {t(`parcoursPage.parcours.${item.id}.title`)}
+                      </p>
+                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
+                        {t(`parcoursPage.parcours.${item.id}.description`)}
+                      </p>
+
+                      <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4 transition-all duration-300 group-hover:bg-primary/10">
+                        <span className="font-semibold text-muted-foreground text-sm transition-colors group-hover:text-primary">
+                          {t("parcoursPage.startNow")}
+                        </span>
+                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-background shadow-sm transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={cn(
+                        "-bottom-16 -right-16 pointer-events-none absolute h-40 w-40 rounded-full opacity-0 blur-3xl transition-all duration-700",
+                        "group-hover:scale-150 group-hover:opacity-30",
+                        item.bgColor,
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        "-top-16 -left-16 pointer-events-none absolute h-32 w-32 rounded-full opacity-0 blur-3xl transition-all duration-700",
+                        "group-hover:scale-125 group-hover:opacity-20",
+                        item.bgColor,
+                      )}
+                    />
+                  </Link>
+                ))}
+              </div>*/}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                {[
+                  { id: "mobilite", icon: Car, accent: "text-blue-500", bgAccent: "bg-blue-500" },
+                  { id: "logement", icon: Home, accent: "text-emerald-500", bgAccent: "bg-emerald-500" },
+                  { id: "maison", icon: UserCog, accent: "text-amber-500", bgAccent: "bg-amber-500" },
+                  { id: "prestation", icon: Wrench, accent: "text-purple-500", bgAccent: "bg-purple-500" },
+                  { id: "conciergerie", icon: ClipboardList, accent: "text-rose-500", bgAccent: "bg-rose-500" },
+                ].map((cat) => {
+                  const Icon = cat.icon;
+                  return (
+                    <Link
+                      key={cat.id}
+                      href="#"
+                      className={cn(
+                        "group relative overflow-hidden rounded-2xl border bg-background p-6 transition-all duration-300 sm:p-8",
+                        "hover:-translate-y-1 hover:scale-[1.03] hover:border-primary/30 hover:shadow-lg",
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "mb-5 flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-300",
+                          "bg-muted group-hover:bg-primary/10",
+                        )}
+                      >
+                        <Icon className={cn("h-6 w-6 transition-colors duration-300", cat.accent)} />
+                      </div>
+
+                      <h3 className="font-semibold text-foreground text-lg tracking-tight transition-colors duration-300 group-hover:text-primary">
+                        {t(`servicePage.categories.${cat.id}.title`)}
+                      </h3>
+                      <p className="mt-1.5 text-muted-foreground text-sm leading-relaxed">
+                        {t(`servicePage.categories.${cat.id}.description`)}
+                      </p>
+
+                      <div className="mt-5 flex items-center gap-1.5 font-medium text-muted-foreground text-xs transition-colors duration-300 group-hover:text-primary">
+                        <span>{t("servicePage.startNow")}</span>
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                      </div>
+
+                      <div
+                        className={cn(
+                          "-bottom-10 -right-10 pointer-events-none absolute h-28 w-28 rounded-full opacity-0 blur-3xl transition-all duration-500",
+                          "group-hover:scale-150 group-hover:opacity-20",
+                          cat.bgAccent,
+                        )}
+                      />
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <div className="flex justify-center pt-2">
+                <Link
+                  href="/marketplace"
+                  className="inline-flex items-center gap-2 rounded-full border bg-background px-8 py-3 font-medium text-sm text-foreground shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md"
+                >
+                  {t("servicePage.exploreAll")}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="temoignage"
+          className="-ml-[50vw] -mr-[50vw] relative right-1/2 left-1/2 w-screen scroll-mt-28 sm:scroll-mt-32"
+        >
+          {/*<div className="relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
             <div className="-z-10 pointer-events-none absolute inset-0 overflow-hidden">
               <div className="-left-32 absolute top-0 size-96 rounded-full bg-accent/5 blur-3xl" />
               <div className="-right-32 absolute bottom-0 size-96 rounded-full bg-primary/5 blur-3xl" />
@@ -263,107 +422,7 @@ export default function ExternalPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section
-          id="parcours"
-          className="-ml-[50vw] -mr-[50vw] relative right-1/2 left-1/2 w-screen scroll-mt-28 sm:mt-12 sm:scroll-mt-32 sm:py-14"
-        >
-          <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-            <div className="flex flex-col gap-8 sm:gap-10">
-              <div className="mx-auto max-w-3xl text-center">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-muted-foreground text-xs backdrop-blur">
-                  <Sparkles className="size-4 text-primary" />
-                  <span>{t("parcoursPage.badge")}</span>
-                </div>
-
-                <h2 className="font-bold text-2xl tracking-tight sm:text-3xl lg:text-4xl">{t("parcoursPage.title")}</h2>
-
-                <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                  {t("parcoursPage.description")}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-                {parcoursList.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/${item.id}`}
-                    className={cn(
-                      "group relative overflow-hidden rounded-3xl border-2 bg-background transition-all duration-500 ease-out",
-                      "hover:-translate-y-1 hover:scale-[1.01] hover:shadow-primary/10 hover:shadow-xl",
-                      item.bgHover,
-                      item.borderHover,
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "absolute inset-0 bg-linear-to-br opacity-0 transition-opacity duration-500 group-hover:opacity-100",
-                        item.bgGradient,
-                      )}
-                    />
-
-                    <div className="relative z-10 p-6 sm:p-8">
-                      <div className="flex items-start justify-between gap-4">
-                        <div
-                          className={cn(
-                            "relative h-28 w-28 overflow-hidden rounded-2xl border-2 shadow-lg transition-all duration-300 sm:h-32 sm:w-32",
-                            "group-hover:rotate-3 group-hover:scale-110",
-                          )}
-                        >
-                          <Image
-                            src={item.image}
-                            alt={t(`parcoursPage.parcours.${item.id}.title`)}
-                            fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-110"
-                            sizes="(max-width: 640px) 112px, 128px"
-                          />
-                        </div>
-
-                        {item.showBadge && (
-                          <Badge variant={item.badgeVariant} className="shrink-0">
-                            {t("parcoursPage.popular")}
-                          </Badge>
-                        )}
-                      </div>
-
-                      <p className="mt-6 font-semibold text-xl tracking-tight transition-colors group-hover:text-primary">
-                        {t(`parcoursPage.parcours.${item.id}.title`)}
-                      </p>
-                      <p className="mt-3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-                        {t(`parcoursPage.parcours.${item.id}.description`)}
-                      </p>
-
-                      <div className="mt-6 flex items-center justify-between rounded-2xl bg-muted/50 p-4 transition-all duration-300 group-hover:bg-primary/10">
-                        <span className="font-semibold text-muted-foreground text-sm transition-colors group-hover:text-primary">
-                          {t("parcoursPage.startNow")}
-                        </span>
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-background shadow-sm transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
-                          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      className={cn(
-                        "-bottom-16 -right-16 pointer-events-none absolute h-40 w-40 rounded-full opacity-0 blur-3xl transition-all duration-700",
-                        "group-hover:scale-150 group-hover:opacity-30",
-                        item.bgColor,
-                      )}
-                    />
-                    <div
-                      className={cn(
-                        "-top-16 -left-16 pointer-events-none absolute h-32 w-32 rounded-full opacity-0 blur-3xl transition-all duration-700",
-                        "group-hover:scale-125 group-hover:opacity-20",
-                        item.bgColor,
-                      )}
-                    />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          </div>*/}
         </section>
       </main>
       <Footer />
