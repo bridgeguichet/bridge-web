@@ -31,4 +31,11 @@ export const queryKeys = {
     all: ["cart"] as const,
     items: () => [...queryKeys.cart.all, "items"] as const,
   },
+  packs: {
+    all: ["packs"] as const,
+    lists: () => [...queryKeys.packs.all, "list"] as const,
+    list: () => [...queryKeys.packs.lists()] as const,
+    detail: (id: string) => [...queryKeys.packs.all, id] as const,
+    items: (packId: string) => [...queryKeys.packs.detail(packId), "items"] as const,
+  },
 };

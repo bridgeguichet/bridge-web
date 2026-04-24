@@ -18,8 +18,8 @@ export const HeroHeader = () => {
 
   const menuItems = [
     { name: t("external-header.about"), href: "https://www.bridgeguichet.net/a-propos" },
-    { name: t("external-header.service"), href: "/marketplace#services" },
-    { name: t("external-header.temoignage"), href: "/marketplace#temoignages" },
+    { name: t("external-header.service"), href: "#services" },
+    { name: t("external-header.temoignage"), href: "#temoignage" },
   ];
 
   React.useEffect(() => {

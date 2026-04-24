@@ -130,25 +130,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-
-            <form className="mt-12 w-full max-w-xs">
-              <div className="space-y-2.5">
-                <Label className="block text-sm font-medium" htmlFor="email">
-                  {t("external-footer.newsletter")}
-                </Label>
-                <Input
-                  className="input variant-mixed sz-md"
-                  placeholder={t("external-footer.emailPlaceholder")}
-                  type="email"
-                  id="email"
-                  required
-                  name="email"
-                />
-              </div>
-              <Button type="submit" className="mt-3">
-                <span>{t("external-footer.subscribe")}</span>
-              </Button>
-            </form>
           </div>
         </div>
         <div className="bg-muted mt-16 flex items-center justify-between rounded-md p-4 px-6 py-3">

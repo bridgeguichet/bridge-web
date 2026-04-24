@@ -2029,5 +2029,25 @@
       "busy": "Busy",
       "unavailable": "Unavailable"
     }
+  },
+  "testimonialSection": {
+    "title": "Success stories Bridge",
+    "subtitle": "4.7/5 Based on 1,070 reviews on Bridge",
+    "cardTitle": "Discover testimonials",
+    "cardDescription": "Click to see video and written testimonials from our users sharing their experience with Bridge",
+    "ctaButton": "View testimonials",
+    "authorName": "Austin Theory",
+    "authorRole": "Entrepreneur, Founder - SiteKrafter, Filmora"
+  },
+  "monpackSection": {
+    "badge": "New",
+    "title": "Create Your Custom Pack",
+    "description": "Optimize your budget with a personalized pack. Choose your services category by category and view your invoice in real time.",
+    "features": {
+      "guided": "Guided category journey",
+      "realtime": "Real-time invoice",
+      "autosave": "Auto-save"
+    },
+    "cta": "Start my customization"
   }
 }

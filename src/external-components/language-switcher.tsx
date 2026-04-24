@@ -29,12 +29,12 @@ export function ExternalLanguageSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="gap-1.5 font-semibold uppercase"
+          className="h-9 gap-1 rounded-full font-semibold uppercase hover:bg-gray-100"
         >
-          <span className="text-sm">{currentLanguage.code}</span>
-          <ChevronDown className="size-4" />
+          <span className="text-xs text-gray-700">{currentLanguage.code}</span>
+          <ChevronDown className="h-3 w-3 text-gray-700" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[140px]">
