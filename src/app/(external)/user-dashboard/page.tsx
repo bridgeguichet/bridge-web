@@ -5,11 +5,26 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, CreditCard, Heart, Package, ShoppingBag, ShoppingCart, Sparkles, TrendingUp } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/external-components/user-dashboard/empty-state";
 import { StatsCard } from "@/external-components/user-dashboard/stats-card";
 import { useCartStore } from "@/features/cart/store";
+import { useOrders } from "@/features/orders/hooks";
+
+const ORDER_STATUS_LABELS: Record<
+  string,
+  {
+    label: string;
+    variant: "default" | "secondary" | "destructive" | "outline";
+  }
+> = {
+  pending: { label: "En attente", variant: "secondary" },
+  in_progress: { label: "En cours", variant: "default" },
+  completed: { label: "Terminée", variant: "outline" },
+  cancelled: { label: "Annulée", variant: "destructive" },
+};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -37,34 +52,43 @@ const itemVariants = {
 export default function UserDashboard() {
   const cartItems = useCartStore((state) => state.items);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const { data: orders, isLoading: ordersLoading } = useOrders();
+
+  const activeOrders =
+    orders?.filter(
+      (o) => o.status === "in_progress" || o.status === "pending",
+    ) || [];
+  const totalSpent =
+    orders?.reduce((sum, o) => sum + parseFloat(o.totalAmount || "0"), 0) ?? 0;
+  const recentOrders = orders?.slice(0, 3) || [];
 
   const stats = [
     {
       icon: CreditCard,
       label: "Total dépenses",
-      value: "$2,450",
-      trend: "+12% ce mois",
+      value: ordersLoading ? "..." : `$${totalSpent.toFixed(0)}`,
+      trend: `${orders?.length ?? 0} commandes`,
       trendUp: true,
     },
     {
       icon: Package,
       label: "Commandes en cours",
-      value: "3",
-      trend: "2 en livraison",
-      trendUp: true,
+      value: ordersLoading ? "..." : String(activeOrders.length),
+      trend: activeOrders.length > 0 ? "Voir le suivi" : "Aucune active",
+      trendUp: activeOrders.length > 0,
     },
     {
       icon: Heart,
       label: "Services favoris",
-      value: "8",
-      trend: "+2 cette semaine",
-      trendUp: true,
+      value: "0",
+      trend: "Fonctionnalité à venir",
+      trendUp: false,
     },
     {
       icon: TrendingUp,
-      label: "Transactions ce mois",
-      value: "12",
-      trend: "+4 vs mois dernier",
+      label: "Total commandes",
+      value: ordersLoading ? "..." : String(orders?.length ?? 0),
+      trend: "Depuis le début",
       trendUp: true,
     },
   ];
@@ -92,8 +116,6 @@ export default function UserDashboard() {
       variant: "primary" as const,
     },
   ];
-
-  const recentOrders: unknown[] = [];
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-10">
@@ -218,8 +240,17 @@ export default function UserDashboard() {
               </Link>
             </Button>
           </CardHeader>
-          <CardContent className="p-6">
-            {recentOrders.length === 0 ? (
+          <CardContent>
+            {ordersLoading ? (
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-14 rounded-lg bg-gray-100 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : recentOrders.length === 0 ? (
               <EmptyState
                 icon={Package}
                 title="Aucun pack pour le moment"
@@ -230,7 +261,39 @@ export default function UserDashboard() {
                 }}
               />
             ) : (
-              <div className="space-y-4">{/* Orders list will be added here */}</div>
+              <div className="space-y-3">
+                {recentOrders.map((order) => {
+                  const statusInfo = ORDER_STATUS_LABELS[order.status] ?? {
+                    label: order.status,
+                    variant: "outline" as const,
+                  };
+                  return (
+                    <div
+                      key={order.id}
+                      className="flex items-center justify-between rounded-lg border px-4 py-3"
+                    >
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">
+                          Commande #{order.id.slice(0, 8)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(
+                            order.createdAt as unknown as string,
+                          ).toLocaleDateString("fr-FR")}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-gray-900">
+                          ${parseFloat(order.totalAmount || "0").toFixed(2)}
+                        </span>
+                        <Badge variant={statusInfo.variant}>
+                          {statusInfo.label}
+                        </Badge>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             )}
           </CardContent>
         </Card>

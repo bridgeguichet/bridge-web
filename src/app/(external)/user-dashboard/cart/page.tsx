@@ -29,55 +29,64 @@ import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/external-components/user-dashboard/empty-state";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
-import type { ServiceWithDetails } from "@/features/marketplace/types";
-import { useCreateTransaction, useTransactionsStore } from "@/features/transactions";
-import { cn } from "@/lib/utils";
-
-const PREVIEW_COLORS: Record<string, string> = {
-  car: "from-violet-500 to-violet-600",
-  home: "from-rose-500 to-rose-600",
-  users: "from-emerald-500 to-emerald-600",
-  briefcase: "from-amber-500 to-amber-600",
-  bell: "from-sky-500 to-sky-600",
-};
-
-const PREVIEW_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  car: Car,
-  home: Home,
-  users: Users,
-  briefcase: Briefcase,
-  bell: Bell,
-};
 
 export default function CartPage() {
   const router = useRouter();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
-  const { data: services, isLoading } = useServices();
-  const { mutate: createTransaction } = useCreateTransaction();
+  const { data: services } = useServices();
+
+  const PREVIEW_ICONS: Record<string, React.ElementType> = {
+    briefcase: Briefcase,
+    car: Car,
+    home: Home,
+    package: Package,
+    users: Users,
+  };
+
+  const PREVIEW_COLORS: Record<string, string> = {
+    briefcase: "from-blue-400 to-indigo-500",
+    car: "from-emerald-400 to-teal-500",
+    home: "from-orange-400 to-amber-500",
+    package: "from-purple-400 to-violet-500",
+    users: "from-pink-400 to-rose-500",
+  };
 
   const cartServices = items.map((item) => ({
     ...item,
-    service: services?.find((s: ServiceWithDetails) => s.id === item.serviceId),
+    service: services?.find((s) => s.id === item.serviceId),
+    variant: services
+      ?.find((s) => s.id === item.serviceId)
+      ?.variants?.find((v) => v.id === item.variantId),
   }));
 
+  // Calculate totals using variant prices when available
   const subtotal = cartServices.reduce((sum, item) => {
-    const price = parseFloat(item.service?.basePrice || "0");
-    return sum + price * item.quantity;
+    const price = item.variant
+      ? item.variant.priceModifier
+      : item.service?.basePrice || "0";
+    return sum + parseFloat(price) * item.quantity;
   }, 0);
-  const serviceFee = subtotal * 0.05;
-  const total = subtotal + serviceFee;
+
+  const taxes = subtotal * 0.1;
+  const total = subtotal + taxes;
 
   if (items.length === 0) {
     return (
       <div className="space-y-6">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
               <ShoppingCart className="w-6 h-6 text-primary" />
             </div>
             <div>
               <h1 className="text-3xl font-black text-gray-900">Mon panier</h1>
-              <p className="text-muted-foreground">Gérez vos services avant de passer commande</p>
+              <p className="text-muted-foreground">
+                Gérez vos services avant de passer commande
+              </p>
             </div>
           </div>
         </motion.div>
@@ -110,18 +119,20 @@ export default function CartPage() {
         transition={{ duration: 0.5 }}
         className="flex items-center justify-between"
       >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <ShoppingCart className="w-6 h-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-black text-gray-900">Mon panier</h1>
-            <p className="text-muted-foreground">
-              {items.length} service{items.length > 1 ? "s" : ""} sélectionné{items.length > 1 ? "s" : ""}
-            </p>
-          </div>
+        <div>
+          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
+            Mon panier
+          </h1>
+          <p className="mt-2 text-lg text-gray-600">
+            {items.length} article{items.length > 1 ? "s" : ""} dans votre
+            panier
+          </p>
         </div>
-        <Button variant="ghost" onClick={clearCart} className="text-red-600 hover:text-red-700 hover:bg-red-50">
+        <Button
+          variant="ghost"
+          onClick={clearCart}
+          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+        >
           <Trash2 className="mr-2 h-4 w-4" />
           Vider le panier
         </Button>
@@ -130,84 +141,108 @@ export default function CartPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Cart items */}
         <div className="lg:col-span-2 space-y-4">
-          {isLoading ? (
-            <Card>
-              <CardContent className="p-8">
-                <div className="h-24 bg-muted animate-pulse rounded" />
-              </CardContent>
-            </Card>
-          ) : (
-            cartServices.map((item, index) => {
-              const icon = item.service?.category?.icon || "briefcase";
-              const previewGradient = PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-500";
-              const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase;
+          {cartServices.map((item, index) => {
+            const icon = item.service?.category?.icon || "briefcase";
+            const previewGradient =
+              PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-500";
+            const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase;
+            const displayName = item.variant
+              ? `${item.service?.nameFr} - ${item.variant.nameFr}`
+              : item.service?.nameFr ||
+                `Service #${item.serviceId.slice(0, 8)}`;
+            const unitPrice = item.variant
+              ? parseFloat(item.variant.priceModifier)
+              : parseFloat(item.service?.basePrice || "0");
+            const itemTotal = unitPrice * item.quantity;
 
-              return (
-                <motion.div
-                  key={item.serviceId}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Card className="overflow-hidden group hover:shadow-md transition-shadow">
-                    <CardContent className="p-0">
-                      <div className="flex items-stretch">
-                        {/* Image zone */}
-                        <div className={cn("w-32 shrink-0 bg-linear-to-br flex items-center justify-center", previewGradient)}>
-                          <IconComponent className="w-10 h-10 text-white/70" />
-                        </div>
+            return (
+              <motion.div
+                key={item.serviceId}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      {/* Icon */}
+                      <div
+                        className={`h-24 w-24 shrink-0 rounded-lg bg-gradient-to-br ${previewGradient} flex items-center justify-center`}
+                      >
+                        <IconComponent className="h-10 w-10 text-white" />
+                      </div>
 
-                        <div className="flex-1 p-5 flex flex-col justify-between">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <Badge variant="secondary" className="mb-2 text-xs">
-                                {item.service?.category?.nameFr || "Service"}
-                              </Badge>
-                              <h3 className="font-semibold text-lg text-gray-900">{item.service?.nameFr}</h3>
-                              <p className="text-sm text-muted-foreground">Par unité • {item.service?.priceUnit}</p>
-                            </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-bold text-gray-900 truncate">
+                          {displayName}
+                        </h3>
+                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                          {item.service?.descriptionFr || ""}
+                        </p>
+
+                        {/* Variant badge */}
+                        {item.variant && (
+                          <span className="mt-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                            Variante sélectionnée
+                          </span>
+                        )}
+
+                        <div className="mt-4 flex items-center gap-4">
+                          {/* Quantity controls */}
+                          <div className="flex items-center gap-2 rounded-lg border">
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => removeItem(item.serviceId, item.variantId)}
-                              className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="h-8 w-8"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.serviceId,
+                                  Math.max(1, item.quantity - 1),
+                                )
+                              }
                             >
-                              <X className="h-5 w-5" />
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="w-8 text-center font-semibold">
+                              {item.quantity}
+                            </span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.serviceId,
+                                  item.quantity + 1,
+                                )
+                              }
+                            >
+                              <Plus className="h-4 w-4" />
                             </Button>
                           </div>
 
-                          <div className="flex items-center justify-between mt-4">
-                            <div className="flex items-center gap-2 rounded-lg border bg-background">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 hover:bg-muted"
-                                onClick={() => updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)}
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="w-8 text-center font-semibold">{item.quantity}</span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 hover:bg-muted"
-                                onClick={() => updateQuantity(item.serviceId, item.quantity + 1, item.variantId)}
-                              >
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
-                            <span className="text-xl font-black text-primary">
-                              ${(parseFloat(item.service?.basePrice || "0") * item.quantity).toFixed(2)}
-                            </span>
-                          </div>
+                          {/* Price */}
+                          <span className="text-xl font-black text-primary">
+                            ${itemTotal.toFixed(2)}
+                          </span>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })
-          )}
+
+                      {/* Remove button */}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeItem(item.serviceId)}
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50 shrink-0"
+                      >
+                        <X className="h-5 w-5" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Summary */}
@@ -227,62 +262,23 @@ export default function CartPage() {
                   <span className="font-medium">{subtotal.toFixed(2)} USD</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Frais de service (5%)</span>
-                  <span className="font-medium">{serviceFee.toFixed(2)} USD</span>
+                  <span className="text-muted-foreground">Taxes (10%)</span>
+                  <span className="font-medium">{taxes.toFixed(2)} USD</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold">Total</span>
-                  <span className="text-2xl font-black">{total.toFixed(2)} USD</span>
+                <div className="border-t pt-4">
+                  <div className="flex justify-between">
+                    <span className="text-lg font-bold text-gray-900">
+                      Total
+                    </span>
+                    <span className="text-2xl font-black text-primary">
+                      ${total.toFixed(2)}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <Button
-                className="mt-6 w-full gap-2"
-                size="lg"
-                disabled={items.length === 0}
-                onClick={() => {
-                  // Créer une transaction locale pour simuler le paiement
-                  const transaction = createTransaction({
-                    type: "order",
-                    amount: total,
-                    paymentMethod: "mobile_money",
-                    description: `Commande depuis le panier (${items.length} article${items.length > 1 ? "s" : ""})`,
-                    items: cartServices.map((item) => ({
-                      id: item.serviceId,
-                      name: item.service?.nameFr || "Service",
-                      description: item.service?.descriptionFr ?? undefined,
-                      quantity: item.quantity,
-                      unitPrice: parseFloat(item.service?.basePrice || "0"),
-                      totalPrice: parseFloat(item.service?.basePrice || "0") * item.quantity,
-                      category: item.service?.category?.nameFr,
-                      icon: item.service?.category?.icon ?? undefined,
-                    })),
-                    metadata: {
-                      source: "user-dashboard-cart",
-                      serviceFee: serviceFee.toFixed(2),
-                      subtotal: subtotal.toFixed(2),
-                    },
-                  });
-
-                  // Simuler un paiement réussi après 1 seconde
-                  setTimeout(() => {
-                    const { transactions, updateTransactionStatus } = useTransactionsStore.getState();
-                    const createdTx = transactions.find((t: { id: string }) => t.id === transaction.id);
-                    if (createdTx) {
-                      updateTransactionStatus(transaction.id, "completed");
-                      toast.success("Paiement confirmé ! Votre commande est en cours de traitement.");
-                      clearCart();
-                      router.push("/user-dashboard/transactions");
-                    }
-                  }, 1500);
-
-                  toast.loading("Traitement du paiement en cours...");
-                }}
-              >
-                <CreditCard className="w-4 h-4" />
-                Payer maintenant
-                <ArrowRight className="w-4 h-4" />
+              <Button className="mt-6 w-full gap-2" size="lg" asChild>
+                <Link href="/checkout">Passer commande</Link>
               </Button>
 
               <Button variant="outline" className="mt-3 w-full" asChild>
@@ -291,7 +287,8 @@ export default function CartPage() {
 
               <div className="mt-4 p-3 bg-muted rounded-lg">
                 <p className="text-xs text-muted-foreground text-center">
-                  <span className="font-medium">Garantie satisfaction</span> • Annulation gratuite sous 24h
+                  <span className="font-medium">Garantie satisfaction</span> •
+                  Annulation gratuite sous 24h
                 </p>
               </div>
             </CardContent>

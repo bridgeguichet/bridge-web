@@ -36,11 +36,12 @@ export function useCreateOrder() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (orderData: CreateOrderRequest) => ordersService.createOrder(orderData),
+    mutationFn: (orderData: CreateOrderRequest) =>
+      ordersService.createOrder(orderData),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
       toast.success("Commande créée avec succès");
-      router.push(`/dashboard/orders/${data.id}`);
+      router.push("/user-dashboard/orders");
     },
     onError: (error) => {
       toast.error(extractErrorMessage(error));
@@ -52,10 +53,13 @@ export function useUpdateOrderStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) => ordersService.updateOrderStatus(id, status),
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
+      ordersService.updateOrderStatus(id, status),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(data.id) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.detail(data.id),
+      });
       toast.success("Statut mis à jour");
     },
     onError: (error) => {
@@ -71,7 +75,9 @@ export function useCancelOrder() {
     mutationFn: (id: string) => ordersService.cancelOrder(id),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.orders.detail(data.id) });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.orders.detail(data.id),
+      });
       toast.success("Commande annulée");
     },
     onError: (error) => {

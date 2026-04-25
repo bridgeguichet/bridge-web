@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -28,12 +30,28 @@ export default function CheckoutPage() {
     return sum + price * item.quantity;
   }, 0);
 
+  const vendorIds = [
+    ...new Set(cartServices.map((i) => i.service?.vendorId).filter(Boolean)),
+  ];
+  const hasMultipleVendors = vendorIds.length > 1;
+
   const handleCheckout = () => {
     if (items.length === 0) return;
 
-    // Récupérer le vendorId du premier service (pour simplifier, on suppose tous les services du même vendeur)
+    if (hasMultipleVendors) {
+      toast.error(
+        "Votre panier contient des services de plusieurs prestataires. Veuillez commander séparément.",
+      );
+      return;
+    }
+
     const vendorId = cartServices[0].service?.vendorId;
-    if (!vendorId) return;
+    if (!vendorId) {
+      toast.error(
+        "Impossible d'identifier le prestataire. Veuillez réessayer.",
+      );
+      return;
+    }
 
     createOrder(
       {
@@ -90,7 +108,9 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="container mx-auto py-8">
-        <p className="text-center text-muted-foreground">Votre panier est vide</p>
+        <p className="text-center text-muted-foreground">
+          Votre panier est vide
+        </p>
       </div>
     );
   }
@@ -99,6 +119,13 @@ export default function CheckoutPage() {
     <div className="container mx-auto py-8 max-w-2xl">
       <h1 className="text-3xl font-bold mb-8">Finaliser la commande</h1>
 
+      {hasMultipleVendors && (
+        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          ⚠️ Votre panier contient des services de plusieurs prestataires.
+          Veuillez les commander séparément pour finaliser.
+        </div>
+      )}
+
       <Card className="mb-6">
         <CardHeader>
           <CardTitle>Résumé de la commande</CardTitle>
@@ -106,12 +133,18 @@ export default function CheckoutPage() {
         <CardContent>
           <div className="space-y-2">
             {cartServices.map((item) => (
-              <div key={`${item.serviceId}-${item.variantId}`} className="flex justify-between">
+              <div
+                key={`${item.serviceId}-${item.variantId}`}
+                className="flex justify-between"
+              >
                 <span>
                   {item.service?.nameFr} x {item.quantity}
                 </span>
                 <span className="font-semibold">
-                  {(parseFloat(item.service?.basePrice || "0") * item.quantity).toFixed(2)} USD
+                  {(
+                    parseFloat(item.service?.basePrice || "0") * item.quantity
+                  ).toFixed(2)}{" "}
+                  USD
                 </span>
               </div>
             ))}
@@ -141,7 +174,12 @@ export default function CheckoutPage() {
         </CardContent>
       </Card>
 
-      <Button onClick={handleCheckout} disabled={isPending} className="w-full" size="lg">
+      <Button
+        onClick={handleCheckout}
+        disabled={isPending}
+        className="w-full"
+        size="lg"
+      >
         {isPending ? "Traitement..." : "Confirmer la commande"}
       </Button>
     </div>

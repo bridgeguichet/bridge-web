@@ -19,9 +19,12 @@ export const HeroHeader = () => {
   const itemCount = useCartStore((state) => state.getItemCount());
 
   const menuItems = [
-    { name: t("external-header.about"), href: "https://www.bridgeguichet.net/a-propos" },
-    { name: t("external-header.service"), href: "#services" },
-    { name: t("external-header.temoignage"), href: "#temoignage" },
+    {
+      name: t("external-header.about"),
+      href: "https://www.bridgeguichet.net/a-propos",
+    },
+    { name: t("external-header.service"), href: "/marketplace#services" },
+    { name: t("external-header.temoignage"), href: "/marketplace#services" },
   ];
 
   React.useEffect(() => {
@@ -37,7 +40,9 @@ export const HeroHeader = () => {
       <nav
         className={cn(
           "fixed top-0 z-50 w-full border-b transition-all duration-500",
-          isScrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-white border-gray-200",
+          isScrolled
+            ? "bg-white/80 backdrop-blur-md shadow-sm"
+            : "bg-white border-gray-200",
         )}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

@@ -8,8 +8,15 @@ interface FinalCTAProps {
 
 export function FinalCTA({ onExplore }: FinalCTAProps) {
   return (
-    <section className="py-16 bg-primary text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
+    <section className="py-20 bg-primary text-white relative overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-10"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, white 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
       <div className="absolute top-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
 
