@@ -3,11 +3,12 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Menu, User, X } from "lucide-react";
+import { Menu, ShoppingCart, User, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/features/cart/store";
 import { ExternalLanguageSwitcher } from "@/external-components/language-switcher";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +16,7 @@ export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { t } = useTranslation();
+  const itemCount = useCartStore((state) => state.getItemCount());
 
   const menuItems = [
     { name: t("external-header.about"), href: "https://www.bridgeguichet.net/a-propos" },
@@ -61,6 +63,17 @@ export const HeroHeader = () => {
 
             <div className="flex items-center gap-3">
               <ExternalLanguageSwitcher />
+
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-gray-100 relative" asChild>
+                <Link href="/cart">
+                  <ShoppingCart className="h-5 w-5 text-gray-700" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                      {itemCount > 99 ? "99+" : itemCount}
+                    </span>
+                  )}
+                </Link>
+              </Button>
 
               <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-gray-100" asChild>
                 <Link href="/user-dashboard">

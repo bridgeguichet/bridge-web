@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Bell, Briefcase, Car, Home, Star, Users } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -54,12 +54,12 @@ export function ServiceCardOctagon({ service, featured = false }: ServiceCardOct
         )}
 
         <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
-          <div className="text-6xl mb-4">
-            {service.category?.icon === "car" && "🚗"}
-            {service.category?.icon === "home" && "🏠"}
-            {service.category?.icon === "users" && "👥"}
-            {service.category?.icon === "briefcase" && "💼"}
-            {service.category?.icon === "bell" && "🔔"}
+          <div className="mb-4">
+            {service.category?.icon === "car" && <Car className="w-16 h-16 text-primary/80" />}
+            {service.category?.icon === "home" && <Home className="w-16 h-16 text-primary/80" />}
+            {service.category?.icon === "users" && <Users className="w-16 h-16 text-primary/80" />}
+            {service.category?.icon === "briefcase" && <Briefcase className="w-16 h-16 text-primary/80" />}
+            {service.category?.icon === "bell" && <Bell className="w-16 h-16 text-primary/80" />}
           </div>
 
           {service.category && (

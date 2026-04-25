@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Bell, Briefcase, Car, Home, Users } from "lucide-react";
 
 import type { CategoryWithSubs } from "../types";
 
@@ -9,21 +10,26 @@ interface CategoryShowcaseProps {
   onSelectCategory: (categoryId: string) => void;
 }
 
-const CATEGORY_STYLES: Record<string, { bg: string; illustration: string }> = {
-  car: { bg: "#6C6EDD", illustration: "🚗" },
-  home: { bg: "#8B2039", illustration: "🏠" },
-  users: { bg: "#2A7A2A", illustration: "👥" },
-  briefcase: { bg: "#C85A00", illustration: "💼" },
-  bell: { bg: "#5A6E00", illustration: "🔔" },
+interface CategoryStyle {
+  bg: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}
+
+const CATEGORY_STYLES: Record<string, CategoryStyle> = {
+  car: { bg: "#6C6EDD", Icon: Car },
+  home: { bg: "#8B2039", Icon: Home },
+  users: { bg: "#2A7A2A", Icon: Users },
+  briefcase: { bg: "#C85A00", Icon: Briefcase },
+  bell: { bg: "#5A6E00", Icon: Bell },
 };
 
 const FALLBACK_STYLES = [
-  { bg: "#6C6EDD", illustration: "✨" },
-  { bg: "#8B2039", illustration: "🌟" },
-  { bg: "#2A7A2A", illustration: "💫" },
-  { bg: "#C85A00", illustration: "🎉" },
-  { bg: "#5A6E00", illustration: "🎈" },
-  { bg: "#1A5A7A", illustration: "💡" },
+  { bg: "#6C6EDD", Icon: Car },
+  { bg: "#8B2039", Icon: Home },
+  { bg: "#2A7A2A", Icon: Users },
+  { bg: "#C85A00", Icon: Briefcase },
+  { bg: "#5A6E00", Icon: Bell },
+  { bg: "#1A5A7A", Icon: Briefcase },
 ];
 
 export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowcaseProps) {
@@ -37,6 +43,8 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
               (category.subcategories?.length || 0) > 0
                 ? `${category.subcategories!.length * 20}+ services`
                 : "100+ services";
+
+            const CategoryIcon = style.Icon;
 
             return (
               <motion.button
@@ -56,9 +64,7 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
               >
                 {/* Illustration zone */}
                 <div className="relative h-36 flex items-center justify-center" style={{ backgroundColor: style.bg }}>
-                  <span className="text-7xl select-none" role="img" aria-hidden>
-                    {style.illustration}
-                  </span>
+                  <CategoryIcon className="w-16 h-16 text-white" />
                 </div>
 
                 {/* Label zone */}

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Star, TrendingUp } from "lucide-react";
+import { Bell, Briefcase, Car, Home, Star, TrendingUp, Users } from "lucide-react";
 import { toast } from "sonner";
 
 import { ChevronPattern } from "@/components/patterns/chevron";
@@ -52,12 +52,12 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
 
         <div className="relative h-full flex flex-col p-8">
           <div className="flex items-start justify-between mb-4">
-            <div className="text-5xl">
-              {service.category?.icon === "car" && "🚗"}
-              {service.category?.icon === "home" && "🏠"}
-              {service.category?.icon === "users" && "👥"}
-              {service.category?.icon === "briefcase" && "💼"}
-              {service.category?.icon === "bell" && "🔔"}
+            <div>
+              {service.category?.icon === "car" && <Car className="w-14 h-14 text-white/90" />}
+              {service.category?.icon === "home" && <Home className="w-14 h-14 text-white/90" />}
+              {service.category?.icon === "users" && <Users className="w-14 h-14 text-white/90" />}
+              {service.category?.icon === "briefcase" && <Briefcase className="w-14 h-14 text-white/90" />}
+              {service.category?.icon === "bell" && <Bell className="w-14 h-14 text-white/90" />}
             </div>
 
             {service.category && (

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Heart, Star, Video } from "lucide-react";
+import { Bell, Briefcase, Car, Heart, Home, Star, Users, Video } from "lucide-react";
 import { toast } from "sonner";
 
 import { useCartStore } from "@/features/cart/store";
@@ -27,12 +27,12 @@ const PREVIEW_COLORS: Record<string, string> = {
   bell: "from-sky-500 to-sky-700",
 };
 
-const PREVIEW_EMOJI: Record<string, string> = {
-  car: "🚗",
-  home: "🏠",
-  users: "👥",
-  briefcase: "💼",
-  bell: "🔔",
+const PREVIEW_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  car: Car,
+  home: Home,
+  users: Users,
+  briefcase: Briefcase,
+  bell: Bell,
 };
 
 const BADGES = [
@@ -76,7 +76,7 @@ export function ServiceCard({ service, featured = false, badgeIndex = 0 }: Servi
 
   const icon = service.category?.icon || "briefcase";
   const previewGradient = PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-600";
-  const emoji = PREVIEW_EMOJI[icon] ?? "💼";
+  const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase;
   const badge = featured ? BADGES[badgeIndex % BADGES.length] : null;
   const avatarColor = AVATAR_COLORS[badgeIndex % AVATAR_COLORS.length];
   const initials = service.nameFr.slice(0, 2).toUpperCase();
@@ -90,9 +90,7 @@ export function ServiceCard({ service, featured = false, badgeIndex = 0 }: Servi
       {/* Preview image zone */}
       <div className={cn("relative h-44 bg-linear-to-br", previewGradient)}>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-8xl opacity-30 select-none" aria-hidden>
-            {emoji}
-          </span>
+          <IconComponent className="w-24 h-24 text-white/30" />
         </div>
         {/* Fake UI overlay to mimic a screenshot */}
         <div className="absolute inset-4 bg-white/10 rounded-xl border border-white/20 flex flex-col gap-1.5 p-3 backdrop-blur-sm">
