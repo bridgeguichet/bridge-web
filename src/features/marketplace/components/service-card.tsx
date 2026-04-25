@@ -6,7 +6,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Bell, Briefcase, Car, Heart, Home, Star, Users, Video } from "lucide-react";
+import {
+  Bell,
+  Briefcase,
+  Car,
+  Heart,
+  Home,
+  Star,
+  Users,
+  Video,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { useCartStore } from "@/features/cart/store";
@@ -28,7 +37,10 @@ const PREVIEW_COLORS: Record<string, string> = {
   bell: "from-sky-500 to-sky-700",
 };
 
-const PREVIEW_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const PREVIEW_ICONS: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
   car: Car,
   home: Home,
   users: Users,
@@ -96,7 +108,7 @@ export function ServiceCard({
     <motion.div
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col cursor-pointer"
-      onClick={() => router.push(`/marketplace/services/${service.id}`)}
+      onClick={() => router.push(`/services/${service.id}`)}
     >
       {/* Preview image zone */}
       <div className={cn("relative h-44 bg-linear-to-br", previewGradient)}>
@@ -189,7 +201,7 @@ export function ServiceCard({
             <span className="text-xs text-gray-400">/{service.priceUnit}</span>
           </div>
           <Link
-            href={`/marketplace/${service.id}`}
+            href={`/marketplace/services/${service.id}`}
             onClick={(e) => e.stopPropagation()}
             className="text-xs font-semibold px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
