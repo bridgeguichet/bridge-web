@@ -9,16 +9,18 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
 import { useCreateOrder } from "@/features/orders/hooks";
+import { useCreateTransaction } from "@/features/transactions";
 
 export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const { items, clearCart } = useCartStore();
   const { data: services } = useServices();
   const { mutate: createOrder, isPending } = useCreateOrder();
+  const { mutate: createTransaction } = useCreateTransaction();
 
   const cartServices = items.map((item) => ({
     ...item,
-    service: services?.find((s) => s.id === item.serviceId),
+    service: services?.find((s: { id: string }) => s.id === item.serviceId),
   }));
 
   const total = cartServices.reduce((sum, item) => {
@@ -36,7 +38,7 @@ export default function CheckoutPage() {
     createOrder(
       {
         items: items.map((item) => {
-          const service = services?.find((s) => s.id === item.serviceId);
+          const service = services?.find((s: { id: string }) => s.id === item.serviceId);
           const unitPrice = service?.basePrice || "0";
           return {
             serviceId: item.serviceId,
@@ -52,7 +54,33 @@ export default function CheckoutPage() {
         paymentMethod,
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          // Créer une transaction locale pour cette commande
+          createTransaction({
+            type: "order",
+            orderId: data.id,
+            amount: total,
+            paymentMethod: paymentMethod as "mobile_money" | "card" | "cash" | "bank_transfer",
+            description: `Commande #${data.orderNumber || data.id.slice(0, 8)}`,
+            items: items.map((item) => {
+              const service = services?.find((s: { id: string }) => s.id === item.serviceId);
+              const unitPrice = parseFloat(service?.basePrice || "0");
+              const totalPrice = unitPrice * item.quantity;
+              return {
+                id: item.serviceId,
+                name: service?.nameFr || "Service",
+                description: service?.descriptionFr ?? undefined,
+                quantity: item.quantity,
+                unitPrice,
+                totalPrice,
+                category: service?.category?.nameFr,
+              };
+            }),
+            metadata: {
+              orderNumber: data.orderNumber,
+              vendorId: vendorId,
+            },
+          });
           clearCart();
         },
       },

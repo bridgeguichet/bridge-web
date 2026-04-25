@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePackBuilderStore } from "@/features/pack-builder/store";
+import { useCreateTransaction } from "@/features/transactions";
 
 export default function PaiementPage() {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function PaiementPage() {
   const removeItem = usePackBuilderStore((state) => state.removeItem);
   const getTotalAmount = usePackBuilderStore((state) => state.getTotalAmount);
   const clearPack = usePackBuilderStore((state) => state.clearPack);
+  const { mutate: createTransaction } = useCreateTransaction();
 
   const totalAmount = getTotalAmount();
 
@@ -73,6 +75,30 @@ export default function PaiementPage() {
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
     setIsProcessing(false);
+
+    // Créer une transaction pour ce pack
+    createTransaction({
+      type: "pack",
+      amount: totalAmount,
+      paymentMethod: paymentMethod === "mobile_money" ? "mobile_money" : "card",
+      description: `Pack personnalisé (${items.length} service${items.length > 1 ? "s" : ""})`,
+      items: items.map((item) => ({
+        id: item.id || item.serviceId,
+        name: item.service?.nameFr || "Service",
+        description: item.variant?.nameFr ?? undefined,
+        quantity: item.quantity,
+        unitPrice: Number.parseFloat(item.unitPrice || "0"),
+        totalPrice: Number.parseFloat(item.totalPrice || "0"),
+        category: item.category?.nameFr,
+      })),
+      metadata: {
+        source: "pack-builder",
+        paymentMethod: paymentMethod,
+        mobileProvider: paymentMethod === "mobile_money" ? mobileProvider : undefined,
+        last4Digits: paymentMethod === "visa" ? cardNumber.slice(-4) : undefined,
+      },
+    });
+
     setIsSuccess(true);
   };
 

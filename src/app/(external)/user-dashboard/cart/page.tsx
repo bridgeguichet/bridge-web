@@ -8,6 +8,7 @@ import {
   Bell,
   Briefcase,
   Car,
+  CreditCard,
   Home,
   Minus,
   Package,
@@ -18,6 +19,8 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +30,7 @@ import { EmptyState } from "@/external-components/user-dashboard/empty-state";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
 import type { ServiceWithDetails } from "@/features/marketplace/types";
+import { useCreateTransaction, useTransactionsStore } from "@/features/transactions";
 import { cn } from "@/lib/utils";
 
 const PREVIEW_COLORS: Record<string, string> = {
@@ -46,8 +50,10 @@ const PREVIEW_ICONS: Record<string, React.ComponentType<{ className?: string }>>
 };
 
 export default function CartPage() {
+  const router = useRouter();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { data: services, isLoading } = useServices();
+  const { mutate: createTransaction } = useCreateTransaction();
 
   const cartServices = items.map((item) => ({
     ...item,
@@ -235,8 +241,47 @@ export default function CartPage() {
                 className="mt-6 w-full gap-2"
                 size="lg"
                 disabled={items.length === 0}
+                onClick={() => {
+                  // Créer une transaction locale pour simuler le paiement
+                  const transaction = createTransaction({
+                    type: "order",
+                    amount: total,
+                    paymentMethod: "mobile_money",
+                    description: `Commande depuis le panier (${items.length} article${items.length > 1 ? "s" : ""})`,
+                    items: cartServices.map((item) => ({
+                      id: item.serviceId,
+                      name: item.service?.nameFr || "Service",
+                      description: item.service?.descriptionFr ?? undefined,
+                      quantity: item.quantity,
+                      unitPrice: parseFloat(item.service?.basePrice || "0"),
+                      totalPrice: parseFloat(item.service?.basePrice || "0") * item.quantity,
+                      category: item.service?.category?.nameFr,
+                      icon: item.service?.category?.icon ?? undefined,
+                    })),
+                    metadata: {
+                      source: "user-dashboard-cart",
+                      serviceFee: serviceFee.toFixed(2),
+                      subtotal: subtotal.toFixed(2),
+                    },
+                  });
+
+                  // Simuler un paiement réussi après 1 seconde
+                  setTimeout(() => {
+                    const { transactions, updateTransactionStatus } = useTransactionsStore.getState();
+                    const createdTx = transactions.find((t: { id: string }) => t.id === transaction.id);
+                    if (createdTx) {
+                      updateTransactionStatus(transaction.id, "completed");
+                      toast.success("Paiement confirmé ! Votre commande est en cours de traitement.");
+                      clearCart();
+                      router.push("/user-dashboard/transactions");
+                    }
+                  }, 1500);
+
+                  toast.loading("Traitement du paiement en cours...");
+                }}
               >
-                Passer commande
+                <CreditCard className="w-4 h-4" />
+                Payer maintenant
                 <ArrowRight className="w-4 h-4" />
               </Button>
 
