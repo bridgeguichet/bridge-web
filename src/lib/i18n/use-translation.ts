@@ -1,5 +1,9 @@
 import { useTranslation as useI18nTranslation } from "react-i18next";
 
 export const useTranslation = () => {
-  return useI18nTranslation();
+  const result = useI18nTranslation();
+  return {
+    ...result,
+    language: result.i18n.language,
+  };
 };

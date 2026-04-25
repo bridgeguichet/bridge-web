@@ -37,38 +37,31 @@ export async function GET(request: NextRequest) {
         service: services,
         category: categories,
         vendor: vendors,
+        variant: serviceVariants,
       })
       .from(services)
       .leftJoin(categories, eq(services.categoryId, categories.id))
       .leftJoin(vendors, eq(services.vendorId, vendors.id))
+      .leftJoin(serviceVariants, eq(services.id, serviceVariants.serviceId))
       .where(and(...conditions));
 
-    // Récupérer les variants pour tous les services
-    const serviceIds = result.map((row) => row.service.id);
-    const allVariants =
-      serviceIds.length > 0
-        ? await db
-            .select()
-            .from(serviceVariants)
-            .where(eq(serviceVariants.serviceId, serviceIds[0]))
-        : [];
+    // Grouper les variantes par service
+    const servicesMap = new Map();
+    result.forEach((row) => {
+      if (!servicesMap.has(row.service.id)) {
+        servicesMap.set(row.service.id, {
+          ...row.service,
+          category: row.category,
+          vendor: row.vendor,
+          variants: [],
+        });
+      }
+      if (row.variant) {
+        servicesMap.get(row.service.id).variants.push(row.variant);
+      }
+    });
 
-    // Grouper les variants par serviceId
-    const variantsByService: Record<string, typeof allVariants> = {};
-    for (const serviceId of serviceIds) {
-      const variants = await db
-        .select()
-        .from(serviceVariants)
-        .where(eq(serviceVariants.serviceId, serviceId));
-      variantsByService[serviceId] = variants;
-    }
-
-    const formattedServices = result.map((row) => ({
-      ...row.service,
-      category: row.category,
-      vendor: row.vendor,
-      variants: variantsByService[row.service.id] || [],
-    }));
+    const formattedServices = Array.from(servicesMap.values());
 
     return NextResponse.json(formattedServices);
   } catch (error) {

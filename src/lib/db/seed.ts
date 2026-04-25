@@ -3,11 +3,21 @@ import { config } from "dotenv";
 config();
 
 import { db } from "./index";
-import { accounts, categories, resources, services, serviceVariants, subcategories, users, vendors } from "./schema";
+import {
+  accounts,
+  categories,
+  resources,
+  services,
+  serviceVariants,
+  subcategories,
+  users,
+  vendors,
+} from "./schema";
 
 // Generate ID compatible with Better Auth (nanoid-like)
 const generateId = () => {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let id = "";
   for (let i = 0; i < 32; i++) {
     id += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -101,14 +111,27 @@ const seedData = async () => {
       },
     ];
 
-    const createdCategories = await db.insert(categories).values(categoriesData).returning();
+    const createdCategories = await db
+      .insert(categories)
+      .values(categoriesData)
+      .returning();
     console.log("✅ Categories created");
 
-    const mobiliteCategory = createdCategories.find((c) => c.slug === "mobilite")!;
-    const logementCategory = createdCategories.find((c) => c.slug === "logement")!;
-    const personnelCategory = createdCategories.find((c) => c.slug === "personnel")!;
-    const servicesCategory = createdCategories.find((c) => c.slug === "services")!;
-    const conciergerieCategory = createdCategories.find((c) => c.slug === "conciergerie")!;
+    const mobiliteCategory = createdCategories.find(
+      (c) => c.slug === "mobilite",
+    )!;
+    const logementCategory = createdCategories.find(
+      (c) => c.slug === "logement",
+    )!;
+    const personnelCategory = createdCategories.find(
+      (c) => c.slug === "personnel",
+    )!;
+    const servicesCategory = createdCategories.find(
+      (c) => c.slug === "services",
+    )!;
+    const conciergerieCategory = createdCategories.find(
+      (c) => c.slug === "conciergerie",
+    )!;
 
     // 4. Services Mobilité
     const mobiliteServices = [
@@ -117,7 +140,8 @@ const seedData = async () => {
         categoryId: mobiliteCategory.id,
         nameFr: "Voiture avec chauffeur",
         nameEn: "Car with driver",
-        descriptionFr: "Service de voiture avec chauffeur professionnel à Kinshasa",
+        descriptionFr:
+          "Service de voiture avec chauffeur professionnel à Kinshasa",
         descriptionEn: "Professional car with driver service in Kinshasa",
         basePrice: "50",
         priceUnit: "day",
@@ -136,29 +160,59 @@ const seedData = async () => {
       },
     ];
 
-    const [voitureService, transfertService] = await db.insert(services).values(mobiliteServices).returning();
+    const [voitureService, transfertService] = await db
+      .insert(services)
+      .values(mobiliteServices)
+      .returning();
 
-    // Variants pour voiture avec chauffeur
+    // Variants pour voiture avec chauffeur (différents véhicules disponibles)
     await db.insert(serviceVariants).values([
       {
         serviceId: voitureService.id,
-        nameFr: "Sedan",
-        nameEn: "Sedan",
-        priceModifier: "50",
+        nameFr: "Sedan Standard",
+        nameEn: "Standard Sedan",
+        priceModifier: "50", // Prix absolu par jour
+        metadata: {
+          vehicleType: "sedan",
+          capacity: 4,
+          luggage: 2,
+          features: ["Climatisation", "Chauffeur professionnel"],
+          examples: ["Toyota Corolla", "Honda Accord"],
+        },
         sortOrder: 1,
       },
       {
         serviceId: voitureService.id,
-        nameFr: "RAV4",
-        nameEn: "RAV4",
+        nameFr: "SUV Compact (RAV4)",
+        nameEn: "Compact SUV (RAV4)",
         priceModifier: "100",
+        metadata: {
+          vehicleType: "suv",
+          capacity: 5,
+          luggage: 3,
+          features: ["4x4", "Climatisation", "GPS", "Chauffeur expérimenté"],
+          examples: ["Toyota RAV4", "Honda CR-V"],
+        },
         sortOrder: 2,
       },
       {
         serviceId: voitureService.id,
-        nameFr: "Prado",
-        nameEn: "Prado",
+        nameFr: "SUV Premium (Prado)",
+        nameEn: "Premium SUV (Prado)",
         priceModifier: "150",
+        metadata: {
+          vehicleType: "premium_suv",
+          capacity: 7,
+          luggage: 5,
+          features: [
+            "4x4",
+            "Cuir",
+            "Climatisation bi-zone",
+            "GPS",
+            "Chauffeur VIP",
+          ],
+          examples: ["Toyota Land Cruiser Prado", "Lexus GX"],
+        },
         sortOrder: 3,
       },
       {
@@ -166,6 +220,17 @@ const seedData = async () => {
         nameFr: "Van 12 places",
         nameEn: "12-seat Van",
         priceModifier: "200",
+        metadata: {
+          vehicleType: "van",
+          capacity: 12,
+          luggage: 8,
+          features: [
+            "Climatisation",
+            "Sièges confortables",
+            "Chauffeur + assistant",
+          ],
+          examples: ["Toyota Hiace", "Mercedes Sprinter"],
+        },
         sortOrder: 4,
       },
     ]);
@@ -174,17 +239,70 @@ const seedData = async () => {
     await db.insert(serviceVariants).values([
       {
         serviceId: transfertService.id,
-        nameFr: "Aller simple",
-        nameEn: "One way",
+        nameFr: "Aller simple - Sedan",
+        nameEn: "One way - Sedan",
         priceModifier: "60",
+        metadata: {
+          tripType: "one_way",
+          vehicleType: "sedan",
+          capacity: 4,
+          luggage: 2,
+          features: ["Climatisation", "Accueil personnalisé"],
+        },
         sortOrder: 1,
       },
       {
         serviceId: transfertService.id,
-        nameFr: "Aller-retour",
-        nameEn: "Round trip",
+        nameFr: "Aller-retour - Sedan",
+        nameEn: "Round trip - Sedan",
         priceModifier: "100",
+        metadata: {
+          tripType: "round_trip",
+          vehicleType: "sedan",
+          capacity: 4,
+          luggage: 2,
+          features: [
+            "Climatisation",
+            "Accueil personnalisé",
+            "Flexibilité horaire",
+          ],
+        },
         sortOrder: 2,
+      },
+      {
+        serviceId: transfertService.id,
+        nameFr: "Aller simple VIP - SUV Premium",
+        nameEn: "One way VIP - Premium SUV",
+        priceModifier: "120",
+        metadata: {
+          tripType: "one_way",
+          vehicleType: "premium_suv",
+          capacity: 7,
+          luggage: 5,
+          features: ["4x4", "Cuir", "WiFi", "Eau fraîche", "Chauffeur VIP"],
+        },
+        sortOrder: 3,
+      },
+      {
+        serviceId: transfertService.id,
+        nameFr: "Aller-retour VIP - SUV Premium",
+        nameEn: "Round trip VIP - Premium SUV",
+        priceModifier: "200",
+        metadata: {
+          tripType: "round_trip",
+          vehicleType: "premium_suv",
+          capacity: 7,
+          luggage: 5,
+          features: [
+            "4x4",
+            "Cuir",
+            "WiFi",
+            "Eau fraîche",
+            "Chauffeur VIP",
+            "Flexibilité horaire",
+          ],
+        },
+        sortOrder: 4,
       },
     ]);
 
@@ -254,7 +372,238 @@ const seedData = async () => {
       },
     ];
 
-    await db.insert(services).values(logementServices);
+    const [studioService, t3Service, villaService] = await db
+      .insert(services)
+      .values(logementServices)
+      .returning();
+
+    // Variantes pour Studio
+    await db.insert(serviceVariants).values([
+      {
+        serviceId: studioService.id,
+        nameFr: "Studio - Gombe Centre",
+        nameEn: "Studio - Gombe Center",
+        priceModifier: "80",
+        metadata: {
+          bedrooms: 1,
+          bathrooms: 1,
+          area: "35m²",
+          floor: 3,
+          location: "Gombe",
+          address: "Avenue des Aviateurs",
+          amenities: ["WiFi", "Climatisation", "Cuisine équipée", "Parking"],
+          available: true,
+        },
+        sortOrder: 1,
+      },
+      {
+        serviceId: studioService.id,
+        nameFr: "Studio - Ngaliema",
+        nameEn: "Studio - Ngaliema",
+        priceModifier: "70",
+        metadata: {
+          bedrooms: 1,
+          bathrooms: 1,
+          area: "30m²",
+          floor: 2,
+          location: "Ngaliema",
+          address: "Boulevard du 30 Juin",
+          amenities: ["WiFi", "Climatisation", "Cuisine équipée"],
+          available: true,
+        },
+        sortOrder: 2,
+      },
+    ]);
+
+    // Variantes pour Appartement T3
+    await db.insert(serviceVariants).values([
+      {
+        serviceId: t3Service.id,
+        nameFr: "T3 Standing - Gombe",
+        nameEn: "3BR Upscale - Gombe",
+        priceModifier: "150",
+        metadata: {
+          bedrooms: 3,
+          bathrooms: 2,
+          area: "95m²",
+          floor: 5,
+          location: "Gombe",
+          address: "Avenue Colonel Mondjiba",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Balcon",
+            "Parking",
+            "Gardien",
+          ],
+          available: true,
+        },
+        sortOrder: 1,
+      },
+      {
+        serviceId: t3Service.id,
+        nameFr: "T3 Familial - Ngaliema",
+        nameEn: "3BR Family - Ngaliema",
+        priceModifier: "120",
+        metadata: {
+          bedrooms: 3,
+          bathrooms: 2,
+          area: "85m²",
+          floor: 2,
+          location: "Ngaliema",
+          address: "Avenue Pumbu",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Jardin",
+            "Parking",
+          ],
+          available: true,
+        },
+        sortOrder: 2,
+      },
+      {
+        serviceId: t3Service.id,
+        nameFr: "T3 Vue Fleuve - Ma Campagne",
+        nameEn: "3BR River View - Ma Campagne",
+        priceModifier: "180",
+        metadata: {
+          bedrooms: 3,
+          bathrooms: 2,
+          area: "110m²",
+          floor: 8,
+          location: "Ma Campagne",
+          address: "Boulevard du 30 Juin",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Vue fleuve",
+            "Piscine commune",
+            "Parking",
+            "Sécurité 24/7",
+          ],
+          available: true,
+        },
+        sortOrder: 3,
+      },
+    ]);
+
+    // Variantes pour Villa
+    await db.insert(serviceVariants).values([
+      {
+        serviceId: villaService.id,
+        nameFr: "Villa 3 chambres - Gombe",
+        nameEn: "3BR Villa - Gombe",
+        priceModifier: "180",
+        metadata: {
+          bedrooms: 3,
+          bathrooms: 3,
+          area: "200m²",
+          landArea: "400m²",
+          location: "Gombe",
+          address: "Avenue Tombalbaye",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Jardin",
+            "Terrasse",
+            "Parking 2 voitures",
+            "Gardien",
+          ],
+          available: true,
+        },
+        sortOrder: 1,
+      },
+      {
+        serviceId: villaService.id,
+        nameFr: "Villa 5 chambres - Ngaliema",
+        nameEn: "5BR Villa - Ngaliema",
+        priceModifier: "250",
+        metadata: {
+          bedrooms: 5,
+          bathrooms: 4,
+          area: "300m²",
+          landArea: "600m²",
+          location: "Ngaliema",
+          address: "Avenue Kabambare",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Jardin",
+            "Terrasse",
+            "Garage 3 voitures",
+            "Gardien",
+            "Générateur",
+          ],
+          available: true,
+        },
+        sortOrder: 2,
+      },
+      {
+        serviceId: villaService.id,
+        nameFr: "Villa Premium avec Piscine - Binza",
+        nameEn: "Premium Villa with Pool - Binza",
+        priceModifier: "350",
+        metadata: {
+          bedrooms: 4,
+          bathrooms: 4,
+          area: "280m²",
+          landArea: "800m²",
+          location: "Binza",
+          address: "Avenue Kabasele",
+          amenities: [
+            "WiFi",
+            "Climatisation",
+            "Cuisine équipée",
+            "Piscine privée",
+            "Jardin paysager",
+            "Terrasse",
+            "Garage 3 voitures",
+            "Gardien 24/7",
+            "Générateur",
+            "Système d'alarme",
+          ],
+          available: true,
+        },
+        sortOrder: 3,
+      },
+      {
+        serviceId: villaService.id,
+        nameFr: "Villa de Luxe - Ma Campagne",
+        nameEn: "Luxury Villa - Ma Campagne",
+        priceModifier: "400",
+        metadata: {
+          bedrooms: 6,
+          bathrooms: 5,
+          area: "400m²",
+          landArea: "1000m²",
+          location: "Ma Campagne",
+          address: "Boulevard du 30 Juin",
+          amenities: [
+            "WiFi fibre",
+            "Climatisation centrale",
+            "Cuisine équipée premium",
+            "Piscine chauffée",
+            "Jacuzzi",
+            "Salle de sport",
+            "Home cinema",
+            "Jardin tropical",
+            "Garage 4 voitures",
+            "Personnel de maison",
+            "Générateur",
+            "Sécurité 24/7",
+          ],
+          available: true,
+        },
+        sortOrder: 4,
+      },
+    ]);
+
     console.log("✅ Housing services created");
 
     // 6. Services Personnel
