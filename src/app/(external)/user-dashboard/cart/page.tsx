@@ -4,8 +4,6 @@ import Link from "next/link";
 
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
-  Bell,
   Briefcase,
   Car,
   CreditCard,
@@ -22,18 +20,32 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/external-components/user-dashboard/empty-state";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
 
+const PREVIEW_ICONS: Record<string, React.ElementType> = {
+  briefcase: Briefcase,
+  car: Car,
+  home: Home,
+  package: Package,
+  users: Users,
+};
+
+const PREVIEW_COLORS: Record<string, string> = {
+  briefcase: "from-blue-400 to-indigo-500",
+  car: "from-emerald-400 to-teal-500",
+  home: "from-orange-400 to-amber-500",
+  package: "from-purple-400 to-violet-500",
+  users: "from-pink-400 to-rose-500",
+};
+
 export default function CartPage() {
   const router = useRouter();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
-  const { data: services } = useServices();
+  const { data: services, isLoading } = useServices();
 
   const PREVIEW_ICONS: Record<string, React.ElementType> = {
     briefcase: Briefcase,
@@ -226,6 +238,72 @@ export default function CartPage() {
                             ${itemTotal.toFixed(2)}
                           </span>
                         </div>
+
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-bold text-gray-900 truncate">
+                            {displayName}
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                            {item.service?.descriptionFr || ""}
+                          </p>
+
+                          {/* Variant badge */}
+                          {item.variant && (
+                            <span className="mt-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                              Variante sélectionnée
+                            </span>
+                          )}
+
+                          <div className="mt-4 flex items-center gap-4">
+                            {/* Quantity controls */}
+                            <div className="flex items-center gap-2 rounded-lg border">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() =>
+                                  updateQuantity(
+                                    item.serviceId,
+                                    Math.max(1, item.quantity - 1),
+                                  )
+                                }
+                              >
+                                <Minus className="h-4 w-4" />
+                              </Button>
+                              <span className="w-8 text-center font-semibold">
+                                {item.quantity}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() =>
+                                  updateQuantity(
+                                    item.serviceId,
+                                    item.quantity + 1,
+                                  )
+                                }
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            {/* Price */}
+                            <span className="text-xl font-black text-primary">
+                              ${itemTotal.toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Remove button */}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeItem(item.serviceId)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 shrink-0"
+                        >
+                          <X className="h-5 w-5" />
+                        </Button>
                       </div>
 
                       {/* Remove button */}
