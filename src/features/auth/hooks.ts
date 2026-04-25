@@ -5,16 +5,22 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { useSession as useBetterSession } from "@/lib/auth/auth-client";
 import { extractErrorMessage } from "@/lib/error-handler";
 
 import { authService } from "./services";
 import { useAuthStore } from "./store";
 import type { LoginCredentials, RegisterData } from "./types";
 
-// Hook session Better Auth
+// Hook session - utilise le store et React Query
 export function useSession() {
-  return useBetterSession();
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  return {
+    data: currentUser ? { user: currentUser } : null,
+    isAuthenticated,
+    isLoading: false,
+  };
 }
 
 export function useLogin() {
@@ -23,8 +29,7 @@ export function useLogin() {
   const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
   return useMutation({
-    mutationFn: (credentials: LoginCredentials) =>
-      authService.login(credentials),
+    mutationFn: (credentials: LoginCredentials) => authService.login(credentials),
     onSuccess: (data) => {
       setCurrentUser(data.user);
       queryClient.setQueryData(["session"], data);
@@ -43,8 +48,7 @@ export function useRegister() {
   const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
   return useMutation({
-    mutationFn: (registerData: RegisterData) =>
-      authService.register(registerData),
+    mutationFn: (registerData: RegisterData) => authService.register(registerData),
     onSuccess: (data) => {
       setCurrentUser(data.user);
       queryClient.setQueryData(["session"], data);

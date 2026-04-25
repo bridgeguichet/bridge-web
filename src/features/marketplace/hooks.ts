@@ -44,8 +44,7 @@ export function useServiceVariants(serviceId: string) {
 export function useInfiniteServices(filters?: ServiceFilters) {
   return useInfiniteQuery({
     queryKey: queryKeys.services.list(filters),
-    queryFn: ({ pageParam = 0 }) =>
-      marketplaceService.getServices({ ...filters, offset: pageParam as number }),
+    queryFn: ({ pageParam = 0 }) => marketplaceService.getServices({ ...filters, offset: pageParam as number }),
     getNextPageParam: (lastPage, pages) => (lastPage.length === 20 ? pages.length * 20 : undefined),
     initialPageParam: 0,
   });

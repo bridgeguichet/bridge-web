@@ -3,25 +3,28 @@ import { config } from "dotenv";
 config();
 
 import { db } from "./index";
-import {
-  accounts,
-  categories,
-  resources,
-  serviceVariants,
-  services,
-  subcategories,
-  users,
-  vendors,
-} from "./schema";
+import { accounts, categories, resources, services, serviceVariants, subcategories, users, vendors } from "./schema";
+
+// Generate ID compatible with Better Auth (nanoid-like)
+const generateId = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+  for (let i = 0; i < 32; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+};
 
 const seedData = async () => {
   console.log("🌱 Seeding database...");
 
   try {
     // 1. Créer utilisateur admin BRIDGE
+    const adminId = generateId();
     const [adminUser] = await db
       .insert(users)
       .values({
+        id: adminId,
         email: "admin@bridge-guichet.com",
         name: "BRIDGE Admin",
         emailVerified: true,
@@ -35,6 +38,7 @@ const seedData = async () => {
     // 1b. Créer account email/password pour admin
     // Note: Le mot de passe sera défini lors du premier login via Better Auth
     await db.insert(accounts).values({
+      id: generateId(),
       userId: adminUser.id,
       accountId: adminUser.email,
       providerId: "credential",
@@ -97,27 +101,14 @@ const seedData = async () => {
       },
     ];
 
-    const createdCategories = await db
-      .insert(categories)
-      .values(categoriesData)
-      .returning();
+    const createdCategories = await db.insert(categories).values(categoriesData).returning();
     console.log("✅ Categories created");
 
-    const mobiliteCategory = createdCategories.find(
-      (c) => c.slug === "mobilite",
-    )!;
-    const logementCategory = createdCategories.find(
-      (c) => c.slug === "logement",
-    )!;
-    const personnelCategory = createdCategories.find(
-      (c) => c.slug === "personnel",
-    )!;
-    const servicesCategory = createdCategories.find(
-      (c) => c.slug === "services",
-    )!;
-    const conciergerieCategory = createdCategories.find(
-      (c) => c.slug === "conciergerie",
-    )!;
+    const mobiliteCategory = createdCategories.find((c) => c.slug === "mobilite")!;
+    const logementCategory = createdCategories.find((c) => c.slug === "logement")!;
+    const personnelCategory = createdCategories.find((c) => c.slug === "personnel")!;
+    const servicesCategory = createdCategories.find((c) => c.slug === "services")!;
+    const conciergerieCategory = createdCategories.find((c) => c.slug === "conciergerie")!;
 
     // 4. Services Mobilité
     const mobiliteServices = [
@@ -126,8 +117,7 @@ const seedData = async () => {
         categoryId: mobiliteCategory.id,
         nameFr: "Voiture avec chauffeur",
         nameEn: "Car with driver",
-        descriptionFr:
-          "Service de voiture avec chauffeur professionnel à Kinshasa",
+        descriptionFr: "Service de voiture avec chauffeur professionnel à Kinshasa",
         descriptionEn: "Professional car with driver service in Kinshasa",
         basePrice: "50",
         priceUnit: "day",
@@ -146,10 +136,7 @@ const seedData = async () => {
       },
     ];
 
-    const [voitureService, transfertService] = await db
-      .insert(services)
-      .values(mobiliteServices)
-      .returning();
+    const [voitureService, transfertService] = await db.insert(services).values(mobiliteServices).returning();
 
     // Variants pour voiture avec chauffeur
     await db.insert(serviceVariants).values([

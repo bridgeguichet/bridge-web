@@ -26,18 +26,13 @@ const FALLBACK_STYLES = [
   { bg: "#1A5A7A", illustration: "💡" },
 ];
 
-export function CategoryShowcase({
-  categories,
-  onSelectCategory,
-}: CategoryShowcaseProps) {
+export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowcaseProps) {
   return (
     <section className="py-12 bg-white">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.slice(0, 6).map((category, index) => {
-            const style =
-              CATEGORY_STYLES[category.icon || ""] ||
-              FALLBACK_STYLES[index % FALLBACK_STYLES.length];
+            const style = CATEGORY_STYLES[category.icon || ""] || FALLBACK_STYLES[index % FALLBACK_STYLES.length];
             const count =
               (category.subcategories?.length || 0) > 0
                 ? `${category.subcategories!.length * 20}+ services`
@@ -60,27 +55,16 @@ export function CategoryShowcase({
                 className="group rounded-2xl overflow-hidden text-left shadow-sm hover:shadow-xl transition-shadow duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {/* Illustration zone */}
-                <div
-                  className="relative h-36 flex items-center justify-center"
-                  style={{ backgroundColor: style.bg }}
-                >
+                <div className="relative h-36 flex items-center justify-center" style={{ backgroundColor: style.bg }}>
                   <span className="text-7xl select-none" role="img" aria-hidden>
                     {style.illustration}
                   </span>
                 </div>
 
                 {/* Label zone */}
-                <div
-                  className="px-4 py-3"
-                  style={{ backgroundColor: style.bg }}
-                >
-                  <p className="text-sm font-bold text-white leading-tight line-clamp-2">
-                    {category.nameFr}
-                  </p>
-                  <p
-                    className="text-xs mt-0.5"
-                    style={{ color: "rgba(255,255,255,0.7)" }}
-                  >
+                <div className="px-4 py-3" style={{ backgroundColor: style.bg }}>
+                  <p className="text-sm font-bold text-white leading-tight line-clamp-2">{category.nameFr}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.7)" }}>
                     {count}
                   </p>
                 </div>

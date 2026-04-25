@@ -10,17 +10,9 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-          Mes transactions
-        </h1>
-        <p className="mt-2 text-lg text-gray-600">
-          Consultez l'historique de vos paiements
-        </p>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mes transactions</h1>
+        <p className="mt-2 text-lg text-gray-600">Consultez l'historique de vos paiements</p>
       </motion.div>
 
       <motion.div
@@ -35,13 +27,11 @@ export default function TransactionsPage() {
             description="Vos transactions apparaîtront ici une fois que vous aurez passé votre première commande."
             action={{
               label: "Explorer les services",
-              href: "/marketplace",
+              href: "/marketplace#services",
             }}
           />
         ) : (
-          <div className="space-y-4">
-            {/* Transactions list will be added here */}
-          </div>
+          <div className="space-y-4">{/* Transactions list will be added here */}</div>
         )}
       </motion.div>
     </div>

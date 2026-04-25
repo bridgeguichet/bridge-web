@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { desc, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
         unitPrice: item.unitPrice,
         totalPrice: item.totalPrice,
         metadata: item.metadata,
-      }))
+      })),
     );
 
     return NextResponse.json(order, { status: 201 });

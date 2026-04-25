@@ -37,11 +37,7 @@ export const packBuilderService = {
   },
 
   // Update item quantity
-  updateItemQuantity: async (
-    packId: string,
-    itemId: string,
-    quantity: number
-  ): Promise<PackWithDetails> => {
+  updateItemQuantity: async (packId: string, itemId: string, quantity: number): Promise<PackWithDetails> => {
     const { data } = await axiosInstance.patch(`/api/packs/${packId}/items/${itemId}`, {
       quantity,
     });

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -6,10 +7,7 @@ import { db } from "@/lib/db";
 import { categories, customPacks, packItems, services, serviceVariants } from "@/lib/db/schema";
 
 // GET /api/packs/[id] - Détails d'un pack avec items enrichis
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
@@ -55,9 +53,6 @@ export async function GET(
     return NextResponse.json({ ...pack, items: enrichedItems });
   } catch (error) {
     console.error("Error fetching pack:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la récupération du pack" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la récupération du pack" }, { status: 500 });
   }
 }

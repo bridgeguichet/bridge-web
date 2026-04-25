@@ -7,7 +7,7 @@ import { vendors } from "./vendors";
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   orderNumber: varchar("order_number", { length: 50 }).notNull().unique(),
-  customerId: uuid("customer_id")
+  customerId: text("customer_id")
     .notNull()
     .references(() => users.id),
   vendorId: uuid("vendor_id")

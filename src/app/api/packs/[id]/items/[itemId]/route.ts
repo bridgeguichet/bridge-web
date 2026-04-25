@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -23,10 +24,7 @@ async function recalculatePackTotal(packId: string) {
 }
 
 // DELETE /api/packs/[id]/items/[itemId] - Retirer un item
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string; itemId: string }> }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string; itemId: string }> }) {
   try {
     const { id: packId, itemId } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
@@ -61,18 +59,12 @@ export async function DELETE(
     return NextResponse.json({ ...updatedPack, items });
   } catch (error) {
     console.error("Error removing item:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la suppression de l'item" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la suppression de l'item" }, { status: 500 });
   }
 }
 
 // PATCH /api/packs/[id]/items/[itemId] - Modifier la quantité
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string; itemId: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string; itemId: string }> }) {
   try {
     const { id: packId, itemId } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
@@ -125,9 +117,6 @@ export async function PATCH(
     return NextResponse.json({ ...updatedPack, items });
   } catch (error) {
     console.error("Error updating item:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la mise à jour de l'item" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la mise à jour de l'item" }, { status: 500 });
   }
 }

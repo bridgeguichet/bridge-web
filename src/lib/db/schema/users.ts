@@ -1,15 +1,8 @@
-import {
-  boolean,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 // Table users compatible Better Auth
 export const users = pgTable("user", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: text("id").primaryKey(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("emailVerified").notNull().default(false),
   name: varchar("name", { length: 255 }).notNull(),
@@ -24,8 +17,8 @@ export const users = pgTable("user", {
 
 // Table session Better Auth
 export const sessions = pgTable("session", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("userId")
+  id: text("id").primaryKey(),
+  userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expiresAt: timestamp("expiresAt").notNull(),
@@ -38,8 +31,8 @@ export const sessions = pgTable("session", {
 
 // Table account Better Auth (pour OAuth et email/password)
 export const accounts = pgTable("account", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("userId")
+  id: text("id").primaryKey(),
+  userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   accountId: text("accountId").notNull(),
@@ -57,7 +50,7 @@ export const accounts = pgTable("account", {
 
 // Table verification Better Auth
 export const verifications = pgTable("verification", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
   expiresAt: timestamp("expiresAt").notNull(),

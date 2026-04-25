@@ -1,7 +1,7 @@
+import type { ServiceWithDetails } from "../types";
 import { ServiceCardHexagon } from "./service-card-hexagon";
 import { ServiceCardOctagon } from "./service-card-octagon";
 import { ServiceCardTrapeze } from "./service-card-trapeze";
-import type { ServiceWithDetails } from "../types";
 
 interface ServiceCardWrapperProps {
   service: ServiceWithDetails;

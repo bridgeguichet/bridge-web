@@ -10,7 +10,7 @@ interface PackBuilderStore {
   packId: string | null;
   items: PackItemWithDetails[];
   skippedCategories: string[];
-  
+
   setPackId: (id: string) => void;
   setCurrentCategoryIndex: (index: number) => void;
   nextCategory: () => void;
@@ -56,9 +56,7 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
           const exists = state.items.find((i) => i.id === item.id);
           if (exists) {
             return {
-              items: state.items.map((i) =>
-                i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-              ),
+              items: state.items.map((i) => (i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i)),
             };
           }
           return {
@@ -73,9 +71,7 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
 
       updateItemQuantity: (itemId, quantity) =>
         set((state) => ({
-          items: state.items.map((i) =>
-            i.id === itemId ? { ...i, quantity } : i
-          ),
+          items: state.items.map((i) => (i.id === itemId ? { ...i, quantity } : i)),
         })),
 
       clearPack: () =>
@@ -99,6 +95,6 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
         return items.filter((item) => item.categoryId === categoryId);
       },
     }),
-    { name: "bridge-pack-builder" }
-  )
+    { name: "bridge-pack-builder" },
+  ),
 );

@@ -62,26 +62,14 @@ export const HeroHeader = () => {
             <div className="flex items-center gap-3">
               <ExternalLanguageSwitcher />
 
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 rounded-full hover:bg-gray-100"
-                asChild
-              >
+              <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-gray-100" asChild>
                 <Link href="/user-dashboard">
                   <User className="h-5 w-5 text-gray-700" />
                 </Link>
               </Button>
 
-              <button
-                onClick={() => setMenuState(!menuState)}
-                className="ml-2 lg:hidden"
-              >
-                {menuState ? (
-                  <X className="h-6 w-6 text-gray-700" />
-                ) : (
-                  <Menu className="h-6 w-6 text-gray-700" />
-                )}
+              <button onClick={() => setMenuState(!menuState)} className="ml-2 lg:hidden">
+                {menuState ? <X className="h-6 w-6 text-gray-700" /> : <Menu className="h-6 w-6 text-gray-700" />}
               </button>
             </div>
           </div>

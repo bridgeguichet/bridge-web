@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import { ChevronPattern } from "@/components/patterns/chevron";
 import { Button } from "@/components/ui/button";
-
 import { useCartStore } from "@/features/cart/store";
 
 import type { ServiceWithDetails } from "../types";
@@ -68,13 +67,9 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
             )}
           </div>
 
-          <h3 className="text-2xl font-black mb-3 line-clamp-2">
-            {service.nameFr}
-          </h3>
+          <h3 className="text-2xl font-black mb-3 line-clamp-2">{service.nameFr}</h3>
 
-          <p className="text-sm text-white/80 line-clamp-3 mb-4 flex-1">
-            {service.descriptionFr}
-          </p>
+          <p className="text-sm text-white/80 line-clamp-3 mb-4 flex-1">{service.descriptionFr}</p>
 
           <div className="flex items-center gap-1 mb-6">
             {[...Array(5)].map((_, i) => (

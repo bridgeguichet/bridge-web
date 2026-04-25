@@ -26,25 +26,25 @@ export function AccountSwitcher() {
 
   const userWithAvatar = {
     ...currentUser,
-    avatar: currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.full_name)}`,
+    avatar: currentUser.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}`,
   };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="size-9 cursor-pointer rounded-lg">
-          <AvatarImage src={userWithAvatar.avatar} alt={userWithAvatar.full_name} />
-          <AvatarFallback className="rounded-lg">{getInitials(userWithAvatar.full_name)}</AvatarFallback>
+          <AvatarImage src={userWithAvatar.avatar} alt={userWithAvatar.name} />
+          <AvatarFallback className="rounded-lg">{getInitials(userWithAvatar.name)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-56 rounded-lg" side="bottom" align="end" sideOffset={4}>
         <div className="flex items-center gap-2 px-1 py-1.5">
           <Avatar className="size-9 rounded-lg">
-            <AvatarImage src={userWithAvatar.avatar} alt={userWithAvatar.full_name} />
-            <AvatarFallback className="rounded-lg">{getInitials(userWithAvatar.full_name)}</AvatarFallback>
+            <AvatarImage src={userWithAvatar.avatar} alt={userWithAvatar.name} />
+            <AvatarFallback className="rounded-lg">{getInitials(userWithAvatar.name)}</AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">{userWithAvatar.full_name}</span>
+            <span className="truncate font-semibold">{userWithAvatar.name}</span>
             <span className="truncate text-muted-foreground text-xs">{userWithAvatar.email}</span>
           </div>
         </div>

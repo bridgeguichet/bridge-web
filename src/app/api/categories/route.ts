@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
@@ -16,7 +17,7 @@ export async function GET() {
           ...category,
           subcategories: subs,
         };
-      })
+      }),
     );
 
     return NextResponse.json(categoriesWithSubs);

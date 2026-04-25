@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -25,10 +26,7 @@ async function recalculatePackTotal(packId: string) {
 }
 
 // POST /api/packs/[id]/items - Ajouter un item au pack
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: packId } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
@@ -82,9 +80,6 @@ export async function POST(
     return NextResponse.json({ ...updatedPack, items }, { status: 201 });
   } catch (error) {
     console.error("Error adding item to pack:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de l'ajout de l'item" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de l'ajout de l'item" }, { status: 500 });
   }
 }

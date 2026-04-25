@@ -32,20 +32,16 @@ export function CategoryProgress({ categories, currentIndex }: CategoryProgressP
                       "flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold text-sm transition-colors",
                       isCompleted && "border-primary bg-primary text-white",
                       isCurrent && "border-primary bg-white text-primary",
-                      isUpcoming && "border-gray-300 bg-white text-gray-400"
+                      isUpcoming && "border-gray-300 bg-white text-gray-400",
                     )}
                   >
-                    {isCompleted ? (
-                      <Check className="h-5 w-5" />
-                    ) : (
-                      <span>{index + 1}</span>
-                    )}
+                    {isCompleted ? <Check className="h-5 w-5" /> : <span>{index + 1}</span>}
                   </motion.div>
                   <span
                     className={cn(
                       "text-center text-xs font-medium",
                       isCurrent && "text-gray-900",
-                      !isCurrent && "text-gray-500"
+                      !isCurrent && "text-gray-500",
                     )}
                   >
                     {category.nameFr}
@@ -56,10 +52,7 @@ export function CategoryProgress({ categories, currentIndex }: CategoryProgressP
                 {index < categories.length - 1 && (
                   <div className="mx-2 h-0.5 flex-1 bg-gray-200">
                     <div
-                      className={cn(
-                        "h-full bg-primary transition-all duration-500",
-                        isCompleted ? "w-full" : "w-0"
-                      )}
+                      className={cn("h-full bg-primary transition-all duration-500", isCompleted ? "w-full" : "w-0")}
                     />
                   </div>
                 )}

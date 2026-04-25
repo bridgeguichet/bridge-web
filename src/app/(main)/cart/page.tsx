@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
 
@@ -35,13 +34,18 @@ export default function CartPage() {
         <>
           <div className="space-y-4">
             {cartServices.map((item) => (
-              <div key={`${item.serviceId}-${item.variantId}`} className="flex justify-between items-center border p-4 rounded">
+              <div
+                key={`${item.serviceId}-${item.variantId}`}
+                className="flex justify-between items-center border p-4 rounded"
+              >
                 <div>
                   <h3 className="font-semibold">{item.service?.nameFr}</h3>
                   <p className="text-sm text-muted-foreground">Quantité: {item.quantity}</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <p className="font-bold">{(parseFloat(item.service?.basePrice || "0") * item.quantity).toFixed(2)} USD</p>
+                  <p className="font-bold">
+                    {(parseFloat(item.service?.basePrice || "0") * item.quantity).toFixed(2)} USD
+                  </p>
                   <Button variant="destructive" size="sm" onClick={() => removeItem(item.serviceId, item.variantId)}>
                     Retirer
                   </Button>

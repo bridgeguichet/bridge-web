@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 
 import Footer from "@/external-components/footer";
 import { HeroHeader } from "@/external-components/header";
+import MonPack from "@/external-components/monpack";
 import TemoingageSection from "@/external-components/temoignage";
 import { CategoryShowcase } from "@/features/marketplace/components/category-showcase";
 import { FinalCTA } from "@/features/marketplace/components/final-cta";
@@ -13,7 +14,6 @@ import { HeroSection } from "@/features/marketplace/components/hero-section";
 import { ServiceCard } from "@/features/marketplace/components/service-card";
 import { useCategories, useServices } from "@/features/marketplace/hooks";
 import { cn } from "@/lib/utils";
-import MonPack from "@/external-components/monpack";
 
 const PAGE_SIZE = 8;
 
@@ -58,10 +58,9 @@ export default function MarketplacePage() {
       <HeroHeader />
       <HeroSection onExplore={scrollToServices} />
 
-      <MonPack/>
-      
-      <CategoryShowcase categories={categories || []} onSelectCategory={handleCategorySelect} />
+      <MonPack />
 
+      <CategoryShowcase categories={categories || []} onSelectCategory={handleCategorySelect} />
 
       {/* ───── Services section ───── */}
       <section ref={servicesRef} id="services" className="bg-white py-14">

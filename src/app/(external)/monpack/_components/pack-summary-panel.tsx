@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Package, Trash2 } from "lucide-react";
+import { Package, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -21,20 +21,6 @@ export function PackSummaryPanel({ packId }: PackSummaryPanelProps) {
   const handleRemoveItem = (itemId: string) => {
     removeItem(itemId);
     toast.success("Service retiré du pack");
-  };
-
-  const handleDownloadInvoice = () => {
-    // Mode local - afficher un alert avec le résumé
-    const invoiceData = {
-      packId,
-      items: items.map(item => ({
-        name: item.service?.nameFr,
-        quantity: item.quantity,
-        price: item.totalPrice,
-      })),
-      total: totalAmount.toFixed(2),
-    };
-    alert(`Facture temporaire:\n\n${JSON.stringify(invoiceData, null, 2)}`);
   };
 
   return (
@@ -62,20 +48,14 @@ export function PackSummaryPanel({ packId }: PackSummaryPanelProps) {
                   className="flex items-start justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-gray-900 text-sm">
-                      {item.service?.nameFr}
-                    </p>
-                    {item.variant && (
-                      <p className="text-gray-500 text-xs">{item.variant.nameFr}</p>
-                    )}
+                    <p className="font-medium text-gray-900 text-sm">{item.service?.nameFr}</p>
+                    {item.variant && <p className="text-gray-500 text-xs">{item.variant.nameFr}</p>}
                     <p className="mt-1 text-gray-600 text-xs">
                       Qté: {item.quantity} × ${item.unitPrice}
                     </p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <p className="font-semibold text-gray-900 text-sm">
-                      ${item.totalPrice}
-                    </p>
+                    <p className="font-semibold text-gray-900 text-sm">${item.totalPrice}</p>
                     <button
                       type="button"
                       onClick={() => handleRemoveItem(item.id)}
@@ -92,23 +72,8 @@ export function PackSummaryPanel({ packId }: PackSummaryPanelProps) {
             <div className="border-gray-200 border-t pt-4">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-gray-900">Total</span>
-                <span className="font-bold text-2xl text-primary">
-                  ${totalAmount.toFixed(2)}
-                </span>
+                <span className="font-bold text-2xl text-primary">${totalAmount.toFixed(2)}</span>
               </div>
-            </div>
-
-            {/* Actions */}
-            <div className="space-y-2">
-              <Button
-                onClick={handleDownloadInvoice}
-                variant="outline"
-                className="w-full gap-2"
-                size="sm"
-              >
-                <Download className="h-4 w-4" />
-                Télécharger la facture
-              </Button>
             </div>
           </>
         )}

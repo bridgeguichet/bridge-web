@@ -15,6 +15,7 @@ interface HeroSectionProps {
 const AVATARS = [
   {
     label: "Chauffeur",
+    image: "/media/img_chauffeur.jpg",
     initials: "AK",
     color: "bg-violet-500",
     top: "8%",
@@ -22,6 +23,7 @@ const AVATARS = [
   },
   {
     label: "Cuisinière",
+    image: "/media/cuisiniere.jpg",
     initials: "MN",
     color: "bg-rose-400",
     top: "18%",
@@ -29,6 +31,7 @@ const AVATARS = [
   },
   {
     label: "Agent immo",
+    image: "/media/agent_immo.jpg",
     initials: "JD",
     color: "bg-emerald-500",
     top: "52%",
@@ -36,6 +39,7 @@ const AVATARS = [
   },
   {
     label: "Gardien",
+    image: "/media/gardien.jpg",
     initials: "PL",
     color: "bg-amber-500",
     top: "68%",
@@ -60,10 +64,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
   };
 
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ background: "oklch(0.97 0.008 260)" }}
-    >
+    <section className="relative overflow-hidden" style={{ background: "oklch(0.97 0.008 260)" }}>
       <div className="container mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 min-h-[560px] items-center gap-8 py-20">
           {/* Left — content */}
@@ -80,8 +81,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
             </h1>
 
             <p className="text-lg text-gray-500 leading-relaxed">
-              Trouvez des prestataires vérifiés pour tous vos besoins — de la
-              maison au bureau, livraison immédiate.
+              Trouvez des prestataires vérifiés pour tous vos besoins — de la maison au bureau, livraison immédiate.
             </p>
 
             {/* Search bar */}
@@ -106,12 +106,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
 
             {/* Suggestion chips */}
             <div className="flex flex-wrap gap-2">
-              {[
-                "Chauffeur privé",
-                "Nettoyage domicile",
-                "Aide administrative",
-                "Livraison",
-              ].map((s) => (
+              {["Chauffeur privé", "Nettoyage domicile", "Aide administrative", "Livraison"].map((s) => (
                 <button
                   key={s}
                   onClick={onExplore}
@@ -126,11 +121,9 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
             <div className="flex items-center gap-6 pt-2 text-sm text-gray-400">
               <span className="font-semibold text-gray-700">150+</span> services
               <span className="w-px h-4 bg-gray-200" />
-              <span className="font-semibold text-gray-700">2 500+</span>{" "}
-              clients satisfaits
+              <span className="font-semibold text-gray-700">2 500+</span> clients satisfaits
               <span className="w-px h-4 bg-gray-200" />
-              <span className="font-semibold text-gray-700">4.8★</span> note
-              moyenne
+              <span className="font-semibold text-gray-700">4.8★</span> note moyenne
             </div>
           </motion.div>
 
@@ -138,11 +131,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
           <div className="relative hidden lg:block h-[480px]">
             {/* Background shapes */}
             {SHAPES.map((shape, i) => (
-              <div
-                key={i}
-                className="absolute"
-                style={{ top: shape.top, right: shape.right }}
-              >
+              <div key={i} className="absolute" style={{ top: shape.top, right: shape.right }}>
                 {shape.type === "circle" && (
                   <div
                     className={`rounded-full opacity-70 ${shape.color}`}
@@ -177,11 +166,17 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
                 style={{ top: avatar.top, right: avatar.right }}
               >
                 <div
-                  className={`w-20 h-20 rounded-full ${avatar.color} flex items-center justify-center shadow-xl border-4 border-white`}
+                  className={`w-20 h-20 rounded-full ${avatar.color} flex items-center justify-center shadow-xl border-4 border-white overflow-hidden`}
                 >
-                  <span className="text-white font-black text-lg">
-                    {avatar.initials}
-                  </span>
+                  {avatar.image ? (
+                    <img
+                      src={avatar.image}
+                      alt={avatar.label}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white font-black text-lg">{avatar.initials}</span>
+                  )}
                 </div>
                 <div className="bg-white rounded-full px-3 py-1 text-xs font-semibold text-gray-700 shadow-md border border-gray-100">
                   {avatar.label}

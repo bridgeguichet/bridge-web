@@ -6,7 +6,7 @@ import { users } from "./users";
 
 export const customPacks = pgTable("custom_packs", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
+  userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   name: varchar("name", { length: 255 }),

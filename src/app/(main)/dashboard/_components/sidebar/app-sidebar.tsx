@@ -76,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const userWithAvatar = currentUser
     ? {
         ...currentUser,
-        avatar: currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.full_name)}`,
+        avatar: currentUser.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}`,
       }
     : null;
 

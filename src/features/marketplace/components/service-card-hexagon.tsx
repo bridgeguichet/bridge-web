@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import { ZigzagPattern } from "@/components/patterns/zigzag";
 import { Button } from "@/components/ui/button";
-
 import { useCartStore } from "@/features/cart/store";
 
 import type { ServiceWithDetails } from "../types";
@@ -43,12 +42,18 @@ export function ServiceCardHexagon({ service, featured = false }: ServiceCardHex
           clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
         }}
       >
-        <div className="absolute inset-0 border-[6px] border-primary" style={{
-          clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
-        }} />
-        <div className="absolute inset-[6px] border-2 border-accent" style={{
-          clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
-        }} />
+        <div
+          className="absolute inset-0 border-[6px] border-primary"
+          style={{
+            clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+          }}
+        />
+        <div
+          className="absolute inset-[6px] border-2 border-accent"
+          style={{
+            clipPath: "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)",
+          }}
+        />
 
         <ZigzagPattern />
 
@@ -73,13 +78,9 @@ export function ServiceCardHexagon({ service, featured = false }: ServiceCardHex
             </div>
           )}
 
-          <h3 className="text-xl font-black mb-2 line-clamp-2 text-foreground">
-            {service.nameFr}
-          </h3>
+          <h3 className="text-xl font-black mb-2 line-clamp-2 text-foreground">{service.nameFr}</h3>
 
-          <p className="text-xs text-gray-600 line-clamp-2 mb-4">
-            {service.descriptionFr}
-          </p>
+          <p className="text-xs text-gray-600 line-clamp-2 mb-4">{service.descriptionFr}</p>
 
           <div className="flex items-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => (

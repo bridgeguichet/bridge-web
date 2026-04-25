@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -51,12 +51,8 @@ export function SocialProof() {
             <span className="font-bold">4.8/5 sur 2,500+ avis</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-black mb-4">
-            Ils nous font confiance
-          </h2>
-          <p className="text-xl opacity-90">
-            Découvrez ce que nos clients disent de nous
-          </p>
+          <h2 className="text-4xl md:text-5xl font-black mb-4">Ils nous font confiance</h2>
+          <p className="text-xl opacity-90">Découvrez ce que nos clients disent de nous</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -83,16 +79,11 @@ export function SocialProof() {
 
               <div className="flex gap-1 mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                  />
+                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
 
-              <p className="text-white/90 leading-relaxed">
-                {testimonial.content}
-              </p>
+              <p className="text-white/90 leading-relaxed">{testimonial.content}</p>
             </motion.div>
           ))}
         </div>
@@ -105,8 +96,7 @@ export function SocialProof() {
           className="text-center"
         >
           <p className="text-lg font-semibold">
-            🔥 <span className="text-yellow-300">47 personnes</span> ont réservé
-            un service aujourd'hui
+            🔥 <span className="text-yellow-300">47 personnes</span> ont réservé un service aujourd'hui
           </p>
         </motion.div>
       </div>

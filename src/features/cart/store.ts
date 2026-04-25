@@ -25,16 +25,14 @@ export const useCartStore = create<CartStore>()(
       items: [],
       addItem: (item) =>
         set((state) => {
-          const exists = state.items.find(
-            (i) => i.serviceId === item.serviceId && i.variantId === item.variantId
-          );
+          const exists = state.items.find((i) => i.serviceId === item.serviceId && i.variantId === item.variantId);
 
           if (exists) {
             return {
               items: state.items.map((i) =>
                 i.serviceId === item.serviceId && i.variantId === item.variantId
                   ? { ...i, quantity: i.quantity + item.quantity }
-                  : i
+                  : i,
               ),
             };
           }
@@ -50,12 +48,12 @@ export const useCartStore = create<CartStore>()(
       updateQuantity: (serviceId, quantity, variantId) =>
         set((state) => ({
           items: state.items.map((i) =>
-            i.serviceId === serviceId && i.variantId === variantId ? { ...i, quantity } : i
+            i.serviceId === serviceId && i.variantId === variantId ? { ...i, quantity } : i,
           ),
         })),
       clearCart: () => set({ items: [] }),
       getItemCount: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
     }),
-    { name: "bridge-cart" }
-  )
+    { name: "bridge-cart" },
+  ),
 );

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { desc, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -22,25 +23,19 @@ export async function GET(request: NextRequest) {
     // Enrichir avec les items
     const packsWithItems = await Promise.all(
       userPacks.map(async (pack) => {
-        const items = await db
-          .select()
-          .from(packItems)
-          .where(eq(packItems.packId, pack.id));
+        const items = await db.select().from(packItems).where(eq(packItems.packId, pack.id));
 
         return {
           ...pack,
           items,
         };
-      })
+      }),
     );
 
     return NextResponse.json(packsWithItems);
   } catch (error) {
     console.error("Error fetching packs:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la récupération des packs" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la récupération des packs" }, { status: 500 });
   }
 }
 
@@ -48,7 +43,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: request.headers });
-    
+
     // En développement, permettre la création sans auth (pour tests)
     const isDev = process.env.NODE_ENV === "development";
     const userId = session?.user.id || (isDev ? "00000000-0000-0000-0000-000000000000" : null);
@@ -78,9 +73,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ...pack, items: [] }, { status: 201 });
   } catch (error) {
     console.error("Error creating pack:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la création du pack" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la création du pack" }, { status: 500 });
   }
 }

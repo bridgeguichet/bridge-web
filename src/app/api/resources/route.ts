@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { and, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -26,7 +27,10 @@ export async function GET(request: NextRequest) {
 
     const result =
       conditions.length > 0
-        ? await db.select().from(resources).where(and(...conditions))
+        ? await db
+            .select()
+            .from(resources)
+            .where(and(...conditions))
         : await db.select().from(resources);
 
     return NextResponse.json(result);

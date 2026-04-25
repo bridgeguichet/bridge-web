@@ -1,66 +1,68 @@
-import { authClient } from "@/lib/auth/auth-client";
+import axios from "axios";
 
-import type {
-  LoginCredentials,
-  LoginResponse,
-  ProfileResponse,
-  RegisterData,
-  User,
-} from "./types";
+import type { LoginCredentials, LoginResponse, ProfileResponse, RegisterData, User } from "./types";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
-    const { data, error } = await authClient.signIn.email({
-      email: credentials.email,
-      password: credentials.password,
+    const { data } = await axios.post("/api/auth/login", credentials, {
+      withCredentials: true,
     });
 
-    if (error) {
-      throw new Error(error.message || "Erreur lors de la connexion");
+    if (data.error) {
+      throw new Error(data.error || "Erreur lors de la connexion");
     }
 
     return {
       success: true,
-      user: data?.user as User,
+      user: data.user as User,
     };
   },
 
   register: async (registerData: RegisterData): Promise<LoginResponse> => {
-    const { data, error } = await authClient.signUp.email({
-      email: registerData.email,
-      password: registerData.password,
-      name: registerData.name,
+    const { data } = await axios.post("/api/auth/register", registerData, {
+      withCredentials: true,
     });
 
-    if (error) {
-      throw new Error(error.message || "Erreur lors de l'inscription");
+    if (data.error) {
+      throw new Error(data.error || "Erreur lors de l'inscription");
     }
 
     return {
       success: true,
-      user: data?.user as User,
+      user: data.user as User,
     };
   },
 
   logout: async () => {
-    await authClient.signOut();
+    await axios.post("/api/auth/logout", {}, { withCredentials: true });
     return { success: true };
   },
 
   getProfile: async (): Promise<ProfileResponse> => {
-    const { data: session } = await authClient.getSession();
-    if (!session?.user) {
+    const { data } = await axios.get("/api/auth/profile", {
+      withCredentials: true,
+    });
+    if (!data.user) {
       throw new Error("Non authentifié");
     }
-    return { user: session.user as User };
+    return { user: data.user as User };
+  },
+
+  refresh: async (): Promise<{ success: boolean }> => {
+    const { data } = await axios.post(
+      "/api/auth/refresh",
+      {},
+      {
+        withCredentials: true,
+      },
+    );
+    return { success: data.success };
   },
 
   // Google OAuth
   signInWithGoogle: async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/dashboard",
-    });
+    // TODO: Implement Google OAuth via API routes
+    throw new Error("Google OAuth not yet implemented with API routes");
   },
 
   validateEmail: (email: string): boolean => {
@@ -68,9 +70,7 @@ export const authService = {
     return emailRegex.test(email);
   },
 
-  validatePassword: (
-    password: string,
-  ): { valid: boolean; message?: string } => {
+  validatePassword: (password: string): { valid: boolean; message?: string } => {
     if (password.length < 8) {
       return {
         valid: false,

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search, ShoppingCart, CheckCircle } from "lucide-react";
+import { CheckCircle, Search, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -10,22 +10,19 @@ const steps = [
     number: 1,
     icon: Search,
     title: "Choisissez votre service",
-    description:
-      "Parcourez notre catalogue de services vérifiés et sélectionnez celui qui vous convient",
+    description: "Parcourez notre catalogue de services vérifiés et sélectionnez celui qui vous convient",
   },
   {
     number: 2,
     icon: ShoppingCart,
     title: "Réservez en 2 clics",
-    description:
-      "Ajoutez au panier, choisissez votre mode de paiement et confirmez votre réservation",
+    description: "Ajoutez au panier, choisissez votre mode de paiement et confirmez votre réservation",
   },
   {
     number: 3,
     icon: CheckCircle,
     title: "Profitez du service",
-    description:
-      "Notre équipe s'occupe de tout. Vous recevez une confirmation et un suivi en temps réel",
+    description: "Notre équipe s'occupe de tout. Vous recevez une confirmation et un suivi en temps réel",
   },
 ];
 
@@ -44,9 +41,7 @@ export function HowItWorks({ onGetStarted }: HowItWorksProps) {
           transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-black mb-4">
-            Comment ça marche ?
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-black mb-4">Comment ça marche ?</h2>
           <p className="text-xl text-gray-600">Simple, rapide et sécurisé</p>
         </motion.div>
 
@@ -72,9 +67,7 @@ export function HowItWorks({ onGetStarted }: HowItWorksProps) {
               </div>
 
               <h3 className="text-2xl font-bold mb-3">{step.title}</h3>
-              <p className="text-gray-600 leading-relaxed">
-                {step.description}
-              </p>
+              <p className="text-gray-600 leading-relaxed">{step.description}</p>
             </motion.div>
           ))}
         </div>

@@ -26,8 +26,7 @@ export function FinalCTA({ onExplore }: FinalCTAProps) {
           </h2>
 
           <p className="text-lg mb-10 text-white/90">
-            Rejoignez plus de 2,500 clients satisfaits qui font confiance à
-            Bridge pour leurs services quotidiens
+            Rejoignez plus de 2,500 clients satisfaits qui font confiance à Bridge pour leurs services quotidiens
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -43,8 +42,7 @@ export function FinalCTA({ onExplore }: FinalCTAProps) {
           </div>
 
           <p className="mt-8 text-sm text-white/75">
-            ✨ Aucune carte bancaire requise • 🔒 Paiement 100% sécurisé • ⚡
-            Réservation instantanée
+            ✨ Aucune carte bancaire requise • 🔒 Paiement 100% sécurisé • ⚡ Réservation instantanée
           </p>
         </motion.div>
       </div>

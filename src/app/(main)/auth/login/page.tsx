@@ -13,25 +13,23 @@ export default function Login() {
   const router = useRouter();
   const { data: profile, isLoading, isError } = useProfile(false);
 
-  // useEffect(() => {
-  //   if (!isLoading && profile) {
-  //     router.push("/dashboard");
-  //   }
-  // }, [profile, isLoading, router]);
+  useEffect(() => {
+    if (!isLoading && profile) {
+      router.push("/dashboard");
+    }
+  }, [profile, isLoading, router]);
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex min-h-screen items-center justify-center">
-  //       <div className="text-muted-foreground">
-  //         Vérification de la session...
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-muted-foreground">Vérification de la session...</div>
+      </div>
+    );
+  }
 
-  // if (profile && !isError) {
-  //   return null;
-  // }
+  if (profile && !isError) {
+    return null;
+  }
 
   return (
     <>

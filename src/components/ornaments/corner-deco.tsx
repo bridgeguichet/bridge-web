@@ -16,16 +16,8 @@ export function CornerDeco({ position, className }: CornerDecoProps) {
   return (
     <div className={cn("absolute w-6 h-6", positionClasses[position], className)}>
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M0 0 L24 0 L24 4 L8 4 L8 8 L4 8 L4 24 L0 24 Z"
-          fill="currentColor"
-          className="text-accent"
-        />
-        <path
-          d="M4 4 L8 4 L8 8 L4 8 Z"
-          fill="currentColor"
-          className="text-primary"
-        />
+        <path d="M0 0 L24 0 L24 4 L8 4 L8 8 L4 8 L4 24 L0 24 Z" fill="currentColor" className="text-accent" />
+        <path d="M4 4 L8 4 L8 8 L4 8 Z" fill="currentColor" className="text-primary" />
       </svg>
     </div>
   );

@@ -13,27 +13,16 @@ import { useCartStore } from "@/features/cart/store";
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
 
-  const subtotal = items.reduce(
-    (sum, item) => sum + (100) * item.quantity,
-    0,
-  );
+  const subtotal = items.reduce((sum, item) => sum + 100 * item.quantity, 0);
   const taxes = subtotal * 0.1;
   const total = subtotal + taxes;
 
   if (items.length === 0) {
     return (
       <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-            Mon panier
-          </h1>
-          <p className="mt-2 text-lg text-gray-600">
-            Gérez vos services avant de passer commande
-          </p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mon panier</h1>
+          <p className="mt-2 text-lg text-gray-600">Gérez vos services avant de passer commande</p>
         </motion.div>
 
         <motion.div
@@ -47,7 +36,7 @@ export default function CartPage() {
             description="Explorez nos services et ajoutez-les à votre panier pour commencer."
             action={{
               label: "Explorer les services",
-              href: "/marketplace",
+              href: "/marketplace#services",
             }}
           />
         </motion.div>
@@ -64,9 +53,7 @@ export default function CartPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-            Mon panier
-          </h1>
+          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mon panier</h1>
           <p className="mt-2 text-lg text-gray-600">
             {items.length} article{items.length > 1 ? "s" : ""} dans votre panier
           </p>
@@ -91,47 +78,33 @@ export default function CartPage() {
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div className="h-24 w-24 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
-                        <span className="text-4xl">
-                          💼
-                        </span>
+                        <span className="text-4xl">💼</span>
                       </div>
 
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-gray-900">
-                          Service #{item.serviceId.slice(0, 8)}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                          Description du service
-                        </p>
+                        <h3 className="text-lg font-bold text-gray-900">Service #{item.serviceId.slice(0, 8)}</h3>
+                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">Description du service</p>
                         <div className="mt-4 flex items-center gap-4">
                           <div className="flex items-center gap-2 rounded-lg border">
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() =>
-                                updateQuantity(item.serviceId, Math.max(1, item.quantity - 1))
-                              }
+                              onClick={() => updateQuantity(item.serviceId, Math.max(1, item.quantity - 1))}
                             >
                               <Minus className="h-4 w-4" />
                             </Button>
-                            <span className="w-8 text-center font-semibold">
-                              {item.quantity}
-                            </span>
+                            <span className="w-8 text-center font-semibold">{item.quantity}</span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() =>
-                                updateQuantity(item.serviceId, item.quantity + 1)
-                              }
+                              onClick={() => updateQuantity(item.serviceId, item.quantity + 1)}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
                           </div>
-                          <span className="text-xl font-black text-primary">
-                            ${100 * item.quantity}
-                          </span>
+                          <span className="text-xl font-black text-primary">${100 * item.quantity}</span>
                         </div>
                       </div>
 
@@ -173,9 +146,7 @@ export default function CartPage() {
                 <div className="border-t pt-4">
                   <div className="flex justify-between">
                     <span className="text-lg font-bold text-gray-900">Total</span>
-                    <span className="text-2xl font-black text-primary">
-                      ${total.toFixed(2)}
-                    </span>
+                    <span className="text-2xl font-black text-primary">${total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -187,11 +158,7 @@ export default function CartPage() {
                 Passer commande
               </Button>
 
-              <Button
-                variant="outline"
-                className="mt-3 w-full"
-                asChild
-              >
+              <Button variant="outline" className="mt-3 w-full" asChild>
                 <Link href="/marketplace">Continuer mes achats</Link>
               </Button>
             </CardContent>

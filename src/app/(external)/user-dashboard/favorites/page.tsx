@@ -10,17 +10,9 @@ export default function FavoritesPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-          Mes favoris
-        </h1>
-        <p className="mt-2 text-lg text-gray-600">
-          Retrouvez vos services préférés en un clic
-        </p>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mes favoris</h1>
+        <p className="mt-2 text-lg text-gray-600">Retrouvez vos services préférés en un clic</p>
       </motion.div>
 
       <motion.div
@@ -35,7 +27,7 @@ export default function FavoritesPage() {
             description="Ajoutez des services à vos favoris pour les retrouver facilement."
             action={{
               label: "Explorer les services",
-              href: "/marketplace",
+              href: "/marketplace#services",
             }}
           />
         ) : (

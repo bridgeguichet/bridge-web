@@ -5,8 +5,8 @@ import { Loader2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import type { CategoryWithSubs } from "@/features/marketplace/types";
 import { useServices } from "@/features/marketplace/hooks";
+import type { CategoryWithSubs } from "@/features/marketplace/types";
 import { usePackBuilderStore } from "@/features/pack-builder/store";
 import type { PackItemWithDetails } from "@/features/pack-builder/types";
 
@@ -65,9 +65,7 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
     <div>
       <div className="mb-6">
         <h2 className="mb-2 font-bold text-2xl text-gray-900">{category.nameFr}</h2>
-        <p className="text-gray-600 text-sm">
-          Sélectionnez les services dont vous avez besoin dans cette catégorie
-        </p>
+        <p className="text-gray-600 text-sm">Sélectionnez les services dont vous avez besoin dans cette catégorie</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -83,12 +81,8 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
               className="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="mb-3">
-                <h3 className="mb-1 font-semibold text-gray-900 text-sm line-clamp-2">
-                  {service.nameFr}
-                </h3>
-                <p className="text-gray-500 text-xs line-clamp-2">
-                  {service.descriptionFr}
-                </p>
+                <h3 className="mb-1 font-semibold text-gray-900 text-sm line-clamp-2">{service.nameFr}</h3>
+                <p className="text-gray-500 text-xs line-clamp-2">{service.descriptionFr}</p>
               </div>
 
               <div className="flex items-end justify-between">
@@ -96,9 +90,7 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
                   <p className="text-xs text-gray-400">À partir de</p>
                   <p className="font-bold text-gray-900 text-lg">
                     ${service.basePrice}
-                    <span className="font-normal text-gray-500 text-xs">
-                      /{service.priceUnit}
-                    </span>
+                    <span className="font-normal text-gray-500 text-xs">/{service.priceUnit}</span>
                   </p>
                 </div>
 

@@ -1,6 +1,6 @@
 CREATE TABLE "addresses" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid,
+	"user_id" text,
 	"order_id" uuid,
 	"type" varchar(50) NOT NULL,
 	"street" varchar(255) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE "order_items" (
 CREATE TABLE "orders" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"order_number" varchar(50) NOT NULL,
-	"customer_id" uuid NOT NULL,
+	"customer_id" text NOT NULL,
 	"vendor_id" uuid NOT NULL,
 	"status" varchar(50) DEFAULT 'pending' NOT NULL,
 	"total_amount" numeric(10, 2) NOT NULL,
@@ -56,6 +56,30 @@ CREATE TABLE "orders" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "orders_order_number_unique" UNIQUE("order_number")
+);
+--> statement-breakpoint
+CREATE TABLE "custom_packs" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" text NOT NULL,
+	"name" varchar(255),
+	"status" varchar(50) DEFAULT 'draft' NOT NULL,
+	"total_amount" numeric(10, 2) DEFAULT '0' NOT NULL,
+	"metadata" jsonb,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "pack_items" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"pack_id" uuid NOT NULL,
+	"service_id" uuid NOT NULL,
+	"variant_id" uuid,
+	"category_id" uuid NOT NULL,
+	"quantity" integer DEFAULT 1 NOT NULL,
+	"unit_price" numeric(10, 2) NOT NULL,
+	"total_price" numeric(10, 2) NOT NULL,
+	"metadata" jsonb,
+	"added_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "payments" (
@@ -129,8 +153,8 @@ CREATE TABLE "services" (
 );
 --> statement-breakpoint
 CREATE TABLE "account" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"userId" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
 	"accountId" text NOT NULL,
 	"providerId" text NOT NULL,
 	"accessToken" text,
@@ -145,8 +169,8 @@ CREATE TABLE "account" (
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"userId" uuid NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
+	"userId" text NOT NULL,
 	"expiresAt" timestamp NOT NULL,
 	"token" text NOT NULL,
 	"ipAddress" text,
@@ -157,7 +181,7 @@ CREATE TABLE "session" (
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"emailVerified" boolean DEFAULT false NOT NULL,
 	"name" varchar(255) NOT NULL,
@@ -170,7 +194,7 @@ CREATE TABLE "user" (
 );
 --> statement-breakpoint
 CREATE TABLE "verification" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"identifier" text NOT NULL,
 	"value" text NOT NULL,
 	"expiresAt" timestamp NOT NULL,
@@ -180,7 +204,7 @@ CREATE TABLE "verification" (
 --> statement-breakpoint
 CREATE TABLE "vendors" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"userId" uuid NOT NULL,
+	"userId" text NOT NULL,
 	"companyName" varchar(255) NOT NULL,
 	"status" varchar(50) DEFAULT 'active' NOT NULL,
 	"commissionRate" numeric(5, 2) DEFAULT '0',
@@ -198,6 +222,11 @@ ALTER TABLE "order_items" ADD CONSTRAINT "order_items_service_id_services_id_fk"
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_variant_id_service_variants_id_fk" FOREIGN KEY ("variant_id") REFERENCES "public"."service_variants"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_customer_id_user_id_fk" FOREIGN KEY ("customer_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "custom_packs" ADD CONSTRAINT "custom_packs_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "pack_items" ADD CONSTRAINT "pack_items_pack_id_custom_packs_id_fk" FOREIGN KEY ("pack_id") REFERENCES "public"."custom_packs"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "pack_items" ADD CONSTRAINT "pack_items_service_id_services_id_fk" FOREIGN KEY ("service_id") REFERENCES "public"."services"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "pack_items" ADD CONSTRAINT "pack_items_variant_id_service_variants_id_fk" FOREIGN KEY ("variant_id") REFERENCES "public"."service_variants"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "pack_items" ADD CONSTRAINT "pack_items_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "payments" ADD CONSTRAINT "payments_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_assignments" ADD CONSTRAINT "order_assignments_order_item_id_order_items_id_fk" FOREIGN KEY ("order_item_id") REFERENCES "public"."order_items"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_assignments" ADD CONSTRAINT "order_assignments_resource_id_resources_id_fk" FOREIGN KEY ("resource_id") REFERENCES "public"."resources"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

@@ -49,7 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
               navbarStyle={navbar_style}
             >
               {children}
-              <Toaster richColors />
+              <Toaster richColors position="top-center" />
             </PreferencesStoreProvider>
           </I18nProvider>
         </QueryProvider>

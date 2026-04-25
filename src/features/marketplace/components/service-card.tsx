@@ -1,16 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import { useState } from "react";
+
+import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
 import { Heart, Star, Video } from "lucide-react";
 import { toast } from "sonner";
 
-import { cn } from "@/lib/utils";
-
 import { useCartStore } from "@/features/cart/store";
+import { cn } from "@/lib/utils";
 
 import type { ServiceWithDetails } from "../types";
 
@@ -63,19 +62,9 @@ const BADGES = [
   },
 ];
 
-const AVATAR_COLORS = [
-  "bg-violet-500",
-  "bg-rose-400",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-sky-500",
-];
+const AVATAR_COLORS = ["bg-violet-500", "bg-rose-400", "bg-emerald-500", "bg-amber-500", "bg-sky-500"];
 
-export function ServiceCard({
-  service,
-  featured = false,
-  badgeIndex = 0,
-}: ServiceCardProps) {
+export function ServiceCard({ service, featured = false, badgeIndex = 0 }: ServiceCardProps) {
   const router = useRouter();
   const addItem = useCartStore((state) => state.addItem);
   const [liked, setLiked] = useState(false);
@@ -120,12 +109,7 @@ export function ServiceCard({
           }}
           aria-label="Favori"
         >
-          <Heart
-            className={cn(
-              "w-4 h-4 transition-colors",
-              liked ? "fill-rose-500 text-rose-500" : "text-gray-400",
-            )}
-          />
+          <Heart className={cn("w-4 h-4 transition-colors", liked ? "fill-rose-500 text-rose-500" : "text-gray-400")} />
         </button>
       </div>
 
@@ -135,10 +119,7 @@ export function ServiceCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div
-              className={cn(
-                "w-9 h-9 rounded-full flex items-center justify-center shadow-sm shrink-0",
-                avatarColor,
-              )}
+              className={cn("w-9 h-9 rounded-full flex items-center justify-center shadow-sm shrink-0", avatarColor)}
             >
               <span className="text-white font-bold text-xs">{initials}</span>
             </div>
@@ -163,9 +144,7 @@ export function ServiceCard({
         </div>
 
         {/* Description */}
-        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-          {service.descriptionFr}
-        </p>
+        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">{service.descriptionFr}</p>
 
         {/* Stars */}
         <div className="flex items-center gap-0.5">
@@ -185,9 +164,7 @@ export function ServiceCard({
         <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
           <div className="flex items-baseline gap-1">
             <span className="text-xs text-gray-400">Dès</span>
-            <span className="text-lg font-black text-gray-900">
-              ${service.basePrice}
-            </span>
+            <span className="text-lg font-black text-gray-900">${service.basePrice}</span>
             <span className="text-xs text-gray-400">/{service.priceUnit}</span>
           </div>
           <button

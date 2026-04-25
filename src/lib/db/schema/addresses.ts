@@ -5,7 +5,7 @@ import { users } from "./users";
 
 export const addresses = pgTable("addresses", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
   orderId: uuid("order_id").references(() => orders.id, { onDelete: "cascade" }),
   type: varchar("type", { length: 50 }).notNull(), // billing, delivery, pickup
   street: varchar("street", { length: 255 }).notNull(),

@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
@@ -6,10 +7,7 @@ import { db } from "@/lib/db";
 import { customPacks, orderItems, orders, packItems } from "@/lib/db/schema";
 
 // POST /api/packs/[id]/finalize - Finaliser le pack et créer une commande
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: packId } = await params;
     const session = await auth.api.getSession({ headers: request.headers });
@@ -32,24 +30,15 @@ export async function POST(
     const items = await db.select().from(packItems).where(eq(packItems.packId, packId));
 
     if (items.length === 0) {
-      return NextResponse.json(
-        { error: "Le pack doit contenir au moins un service" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Le pack doit contenir au moins un service" }, { status: 400 });
     }
 
     // Récupérer le premier service pour obtenir le vendorId
     const { services } = await import("@/lib/db/schema");
-    const [firstService] = await db
-      .select()
-      .from(services)
-      .where(eq(services.id, items[0].serviceId));
+    const [firstService] = await db.select().from(services).where(eq(services.id, items[0].serviceId));
 
     if (!firstService?.vendorId) {
-      return NextResponse.json(
-        { error: "Service sans vendeur associé" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Service sans vendeur associé" }, { status: 400 });
     }
 
     // Générer numéro de commande
@@ -80,7 +69,7 @@ export async function POST(
         unitPrice: item.unitPrice,
         totalPrice: item.totalPrice,
         metadata: item.metadata,
-      }))
+      })),
     );
 
     // Mettre à jour le statut du pack
@@ -95,9 +84,6 @@ export async function POST(
     return NextResponse.json({ orderId: order.id }, { status: 201 });
   } catch (error) {
     console.error("Error finalizing pack:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la finalisation du pack" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Erreur lors de la finalisation du pack" }, { status: 500 });
   }
 }

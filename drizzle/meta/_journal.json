@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1776692130013,
-      "tag": "0000_tense_shatterstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1777025590763,
-      "tag": "0001_amusing_obadiah_stane",
+      "when": 1777090482655,
+      "tag": "0000_sudden_cannonball",
       "breakpoints": true
     }
   ]

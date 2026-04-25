@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";

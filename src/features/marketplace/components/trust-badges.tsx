@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, CheckCircle, Headphones, Award } from "lucide-react";
+import { Award, CheckCircle, Headphones, Shield } from "lucide-react";
 
 const guarantees = [
   {
@@ -56,9 +56,7 @@ export function TrustBadges() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-center"
         >
-          <p className="text-sm text-gray-500 mb-4">
-            Moyens de paiement acceptés
-          </p>
+          <p className="text-sm text-gray-500 mb-4">Moyens de paiement acceptés</p>
           <div className="flex flex-wrap justify-center gap-6 items-center">
             <div className="px-6 py-3 bg-white rounded-lg shadow-sm border border-gray-200 font-semibold text-gray-700">
               💵 Espèces

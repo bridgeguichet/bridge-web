@@ -7,7 +7,6 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-
 import { useCartStore } from "@/features/cart/store";
 
 import type { ServiceWithDetails } from "../types";
@@ -41,9 +40,12 @@ export function ServiceCardOctagon({ service, featured = false }: ServiceCardOct
           clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
         }}
       >
-        <div className="absolute inset-0 border-4 border-accent" style={{
-          clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
-        }} />
+        <div
+          className="absolute inset-0 border-4 border-accent"
+          style={{
+            clipPath: "polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)",
+          }}
+        />
 
         {featured && (
           <div className="absolute top-8 left-8 w-16 h-16 bg-accent rounded-full flex items-center justify-center z-10 shadow-lg">
@@ -66,13 +68,9 @@ export function ServiceCardOctagon({ service, featured = false }: ServiceCardOct
             </div>
           )}
 
-          <h3 className="text-2xl font-black mb-3 line-clamp-2 text-foreground">
-            {service.nameFr}
-          </h3>
+          <h3 className="text-2xl font-black mb-3 line-clamp-2 text-foreground">{service.nameFr}</h3>
 
-          <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-            {service.descriptionFr}
-          </p>
+          <p className="text-sm text-gray-600 line-clamp-2 mb-4">{service.descriptionFr}</p>
 
           <div className="flex items-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => (

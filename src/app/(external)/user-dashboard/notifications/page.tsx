@@ -10,17 +10,9 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-          Notifications
-        </h1>
-        <p className="mt-2 text-lg text-gray-600">
-          Restez informé de l'activité de votre compte
-        </p>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Notifications</h1>
+        <p className="mt-2 text-lg text-gray-600">Restez informé de l'activité de votre compte</p>
       </motion.div>
 
       <motion.div
@@ -35,9 +27,7 @@ export default function NotificationsPage() {
             description="Vous n'avez pas de nouvelles notifications pour le moment."
           />
         ) : (
-          <div className="space-y-4">
-            {/* Notifications list will be added here */}
-          </div>
+          <div className="space-y-4">{/* Notifications list will be added here */}</div>
         )}
       </motion.div>
     </div>
