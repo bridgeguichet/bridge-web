@@ -70,7 +70,11 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const refreshResponse = await axios.post("/api/auth/refresh", {}, { withCredentials: true });
+        const refreshResponse = await axios.post(
+          "/api/auth/refresh",
+          {},
+          { withCredentials: true },
+        );
 
         if (refreshResponse.data?.success) {
           processQueue(null);
@@ -81,15 +85,20 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         isRefreshing = false;
 
-        if (axios.isAxiosError(refreshError) && refreshError.response?.status === 401) {
+        if (
+          axios.isAxiosError(refreshError) &&
+          refreshError.response?.status === 401
+        ) {
           isSessionExpired = true;
           const sessionError = new Error("Session expirée");
           processQueue(sessionError);
 
           if (typeof window !== "undefined") {
-            await axios.post("/api/auth/logout", {}, { withCredentials: true }).catch(() => {
-              // Ignore logout errors - session is already expired
-            });
+            await axios
+              .post("/api/auth/logout", {}, { withCredentials: true })
+              .catch(() => {
+                // Ignore logout errors - session is already expired
+              });
             window.location.href = "/auth/login";
           }
           return Promise.reject(sessionError);

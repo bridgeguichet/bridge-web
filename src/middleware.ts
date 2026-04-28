@@ -49,25 +49,25 @@ export async function middleware(request: NextRequest) {
   //   }
   // }
 
-  if (
-    !accessToken &&
-    !refreshToken &&
-    request.nextUrl.pathname.startsWith("/user-dashboard")
-  ) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
+  // if (
+  //   !accessToken &&
+  //   !refreshToken &&
+  //   request.nextUrl.pathname.startsWith("/user-dashboard")
+  // ) {
+  //   return NextResponse.redirect(new URL("/auth/login", request.url));
+  // }
 
-  if (
-    !accessToken &&
-    !refreshToken &&
-    request.nextUrl.pathname.startsWith("/dashboard")
-  ) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
-  }
+  // if (
+  //   !accessToken &&
+  //   !refreshToken &&
+  //   request.nextUrl.pathname.startsWith("/dashboard")
+  // ) {
+  //   return NextResponse.redirect(new URL("/auth/login", request.url));
+  // }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/user-dashboard/:path*"],
+  matcher: ["/dashboard/:path*"],
 };
