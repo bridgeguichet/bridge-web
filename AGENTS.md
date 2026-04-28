@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-Bridge is a Next.js 16 dashboard application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French. It connects to a Django REST backend via JWT authentication.
+Bridge is a Next.js 16 dashboard application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French.
 
 ## Commands
 

@@ -179,7 +179,7 @@ export default function CartPage() {
                     <div className="flex items-start gap-4">
                       {/* Icon */}
                       <div
-                        className={`h-24 w-24 shrink-0 rounded-lg bg-gradient-to-br ${previewGradient} flex items-center justify-center`}
+                        className={`h-24 w-24 shrink-0 rounded-lg bg-linear-to-br ${previewGradient} flex items-center justify-center`}
                       >
                         <IconComponent className="h-10 w-10 text-white" />
                       </div>

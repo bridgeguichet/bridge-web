@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Bell, LogOut, Menu, Search, Settings, User, X } from "lucide-react";
+import { Bell, LogOut, Menu, Search, Settings, User, UserCircle, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -37,8 +37,10 @@ export function UserHeader({ onMenuToggle }: UserHeaderProps) {
     router.push("/login");
   };
 
-  const userAvatar =
-    currentUser?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name || "User")}`;
+  const isGuest = !currentUser;
+  const userAvatar = isGuest
+    ? undefined
+    : currentUser?.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.name)}`;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-md">
@@ -80,49 +82,61 @@ export function UserHeader({ onMenuToggle }: UserHeaderProps) {
           </Button>
 
           {/* User Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="relative h-10 w-10 overflow-hidden rounded-full p-0 ring-2 ring-transparent transition-all hover:ring-primary/20"
-              >
-                <img
-                  src={userAvatar}
-                  alt={currentUser?.name || "User"}
-                  className="h-full w-full rounded-full object-cover"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-semibold leading-none">{currentUser?.name}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{currentUser?.email}</p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/user-dashboard/profile" className="cursor-pointer">
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profil</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/user-dashboard/profile" className="cursor-pointer">
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Paramètres</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={handleLogout}
-                className="cursor-pointer text-destructive focus:text-destructive"
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Déconnexion</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {isGuest ? (
+            <Button variant="ghost" size="icon" asChild>
+              <Link href="/auth/login">
+                <UserCircle className="h-6 w-6" />
+              </Link>
+            </Button>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="relative h-10 w-10 overflow-hidden rounded-full p-0 ring-2 ring-transparent transition-all hover:ring-primary/20"
+                >
+                  {userAvatar ? (
+                    <img
+                      src={userAvatar}
+                      alt={currentUser?.name || "User"}
+                      className="h-full w-full rounded-full object-cover"
+                    />
+                  ) : (
+                    <UserCircle className="h-6 w-6" />
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-semibold leading-none">{currentUser?.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{currentUser?.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/user-dashboard/profile" className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profil</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/user-dashboard/profile" className="cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Paramètres</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Déconnexion</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 

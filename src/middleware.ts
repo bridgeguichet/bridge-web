@@ -49,6 +49,7 @@ export async function middleware(request: NextRequest) {
   //   }
   // }
 
+  // Auth check disabled for user-dashboard
   // if (
   //   !accessToken &&
   //   !refreshToken &&
