@@ -1,38 +1,37 @@
-# Guide de Gestion du Refresh Token
+# Guide de Gestion des Sessions avec Better Auth
 
-Documentation complète sur les 3 approches pour gérer le refresh token dans l'architecture Next.js + Django.
+Documentation complète sur la gestion des sessions avec Better Auth dans l'architecture Next.js full-stack avec Drizzle ORM.
 
-## 🔄 Flux de Refresh Token
+## 🔄 Flux de Session Better Auth
 
 ```
-Access Token Expiré (401)
+Session Expirée ou Invalide
          ↓
     Détection
          ↓
-   Refresh Token → Django
+   Better Auth → Vérification
          ↓
-  Nouveau Access Token
+  Session Régénérée (si valide)
          ↓
-   Set Cookie HttpOnly
+   Cookie HttpOnly Mis à Jour
          ↓
   Rejouer la requête
 ```
 
-## 📋 3 Approches Implémentées
+## 📋 Architecture Better Auth
 
-### Approche 1 : Middleware Next.js (Recommandé pour les pages)
+### Approche 1 : Middleware Next.js (Protection des routes)
 
-**Quand l'utiliser :** Pour protéger les pages et rafraîchir avant le chargement
+**Quand l'utiliser :** Pour protéger les pages nécessitant une authentification
 
 **Fichier :** `src/middleware.ts`
 
 **Fonctionnement :**
 
-1. Intercepte toutes les requêtes vers `/dashboard/*` et `/api/*`
-2. Vérifie si `access_token` existe
-3. Si absent mais `refresh_token` présent → appelle Django pour refresh
-4. Set le nouveau `access_token` en cookie
-5. Continue la navigation
+1. Intercepte les requêtes vers `/dashboard/*`
+2. Vérifie la validité de la session via Better Auth
+3. Redirige vers `/auth/login` si non authentifié
+4. Continue la navigation si session valide
 
 **Avantages :**
 
@@ -54,19 +53,19 @@ export const config = {
 };
 ```
 
-### Approche 2 : Intercepteur Axios (Recommandé pour les API calls)
+### Approche 2 : Client Better Auth (Recommandé pour les API calls)
 
-**Quand l'utiliser :** Pour les requêtes API directes vers Django
+**Quand l'utiliser :** Pour les requêtes API avec authentification
 
-**Fichier :** `src/lib/axios/axios-instance.ts`
+**Fichier :** `src/lib/auth-client.ts`
 
 **Fonctionnement :**
 
-1. Détecte une erreur 401 sur une requête API
-2. Appelle `/api/auth/refresh` (Next.js API route)
-3. Next.js appelle Django et set le nouveau cookie
-4. Rejoue automatiquement la requête originale
-5. Queue les requêtes simultanées pendant le refresh
+1. Le client Better Auth gère automatiquement les cookies de session
+2. Les requêtes incluent automatiquement le token de session
+3. Better Auth gère le refresh automatique côté serveur
+4. Rejoue automatiquement les requêtes après refresh
+5. Queue intelligente pour requêtes simultanées
 
 **Avantages :**
 
@@ -77,31 +76,30 @@ export const config = {
 
 **Inconvénients :**
 
-- ❌ Nécessite un appel supplémentaire via Next.js API route
+- ❌ Dépendance au package `@better-auth/client`
 
 **Code :**
 
 ```typescript
 // Automatique - aucune configuration nécessaire
-import { axiosInstance } from "@/lib/axios";
+import { authClient } from "@/lib/auth-client";
 
-const { data } = await axiosInstance.get("/api/users/");
-// Si 401, refresh automatique et retry
+const { data } = await authClient.getSession();
+// Session gérée automatiquement par Better Auth
 ```
 
-### Approche 3 : API Route Next.js (Manuel)
+### Approche 3 : API Better Auth (Configuration)
 
-**Quand l'utiliser :** Pour un contrôle manuel du refresh
+**Quand l'utiliser :** Configuration de Better Auth avec Drizzle ORM
 
-**Fichier :** `src/app/api/auth/refresh/route.ts`
+**Fichier :** `src/lib/auth.ts`
 
 **Fonctionnement :**
 
-1. Endpoint `/api/auth/refresh` disponible
-2. Lit le `refresh_token` depuis les cookies
-3. Appelle Django pour obtenir un nouveau `access_token`
-4. Set le nouveau token en cookie HttpOnly
-5. Retourne success/error
+1. Better Auth configuré avec le adapter Drizzle
+2. Gestion automatique des sessions avec rotation
+3. Cookies HttpOnly sécurisés
+4. Base de données PostgreSQL via Drizzle ORM
 
 **Avantages :**
 
@@ -113,253 +111,298 @@ const { data } = await axiosInstance.get("/api/users/");
 - ❌ Nécessite un appel explicite
 - ❌ Plus de code dans les composants
 
-**Utilisation manuelle :**
+**Configuration Better Auth :**
 
 ```typescript
-const refreshToken = async () => {
-  try {
-    const response = await fetch("/api/auth/refresh", {
-      method: "POST",
-      credentials: "include",
-    });
+// lib/auth.ts
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "@/lib/db";
 
-    if (response.ok) {
-      console.log("Token refreshed");
-    }
-  } catch (error) {
-    console.error("Refresh failed");
-  }
-};
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+  }),
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 jours
+    updateAge: 60 * 60 * 24, // 1 jour
+  },
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    httpOnly: true,
+  },
+});
 ```
 
 ## 🎯 Quelle Approche Choisir ?
 
-### Recommandation : Combiner Middleware + Axios Interceptor
+### Recommandation : Better Auth + Middleware Next.js
 
 ```typescript
-// ✅ Middleware pour les pages
-// src/middleware.ts - Déjà configuré
+// ✅ Middleware pour la protection des routes
+// src/middleware.ts - Vérifie la session
 
-// ✅ Axios Interceptor pour les API calls
-// src/lib/axios/axios-instance.ts - Déjà configuré
+// ✅ Better Auth Client pour les API calls
+// src/lib/auth-client.ts - Gère les sessions automatiquement
 ```
 
 **Pourquoi cette combinaison ?**
 
-- Le middleware protège la navigation et refresh avant le chargement
-- L'intercepteur gère les requêtes API pendant l'utilisation
-- Couverture complète sans code supplémentaire
+- Better Auth gère toute la logique d'authentification
+- Le middleware protège les routes côté serveur
+- Couverture complète sans gestion manuelle des tokens
 
-## 🔧 Configuration Django
+## 🔧 Configuration Better Auth avec Drizzle ORM
 
-Django doit avoir un endpoint de refresh :
+Better Auth est configuré avec l'adapter Drizzle pour PostgreSQL :
 
-```python
-# views.py
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def refresh_token_view(request):
-    refresh_token = request.data.get('refresh_token')
+```typescript
+// lib/auth.ts
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "./db";
 
-    if not refresh_token:
-        return Response(
-            {'error': 'Refresh token requis'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+export const auth = betterAuth({
+  database: drizzleAdapter(db, {
+    provider: "pg",
+  }),
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
+});
 
-    try:
-        refresh = RefreshToken(refresh_token)
-        return Response({
-            'access_token': str(refresh.access_token),
-        })
-    except Exception:
-        return Response(
-            {'error': 'Token invalide ou expiré'},
-            status=status.HTTP_401_UNAUTHORIZED
-        )
+// lib/auth-client.ts
+import { createAuthClient } from "better-auth/react";
+
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_APP_URL,
+});
 ```
 
 ## 📊 Diagramme de Séquence
 
-### Scénario : Requête API avec token expiré
+### Scénario : Requête API avec Better Auth
 
 ```
-Client                Next.js              Django
+Client                Next.js              Better Auth
   │                      │                    │
   │──GET /api/users/────>│                    │
-  │                      │──GET /api/users/──>│
-  │                      │<──401 Unauthorized─│
+  │                      │──Vérifier session──>│
+  │                      │<──Session OK───────│
   │                      │                    │
-  │<─────401─────────────│                    │
-  │                      │                    │
-  │──POST /api/refresh──>│                    │
-  │                      │──POST /refresh/───>│
-  │                      │<──access_token─────│
-  │                      │ (set cookie)       │
+  │                      │──Query Drizzle────>│
+  │                      │<──Résultat─────────│
   │<─────200─────────────│                    │
+
+### Scénario : Session expirée
+
+```
+Client                Next.js              Better Auth
   │                      │                    │
   │──GET /api/users/────>│                    │
-  │                      │──GET /api/users/──>│
-  │                      │    (new token)     │
-  │                      │<──200 OK───────────│
-  │<─────200─────────────│                    │
+  │                      │──Vérifier session──>│
+  │                      │<──Session expirée──│
+  │                      │                    │
+  │──Redirection login───│                    │
+  │<─────302─────────────│                    │
 ```
 
 ## 🛡️ Gestion des Erreurs
 
-### Token expiré définitivement
+### Session non valide
 
 ```typescript
-// axios-instance.ts
-if (error.response?.status === 401 && !originalRequest._retry) {
-  try {
-    await fetch("/api/auth/refresh", {
-      method: "POST",
-      credentials: "include",
-    });
-    return axiosInstance(originalRequest);
-  } catch (refreshError) {
-    // Refresh échoué → Redirection login
+// hooks/use-session.ts
+import { authClient } from "@/lib/auth-client";
+
+export function useSession() {
+  const { data: session, isPending, error } = authClient.useSession();
+  
+  if (error) {
+    // Session invalide → Redirection login
     window.location.href = "/auth/login";
   }
+  
+  return { session, isPending };
 }
 ```
 
-### Requêtes simultanées pendant refresh
+### Protection des routes API
 
 ```typescript
-// Queue système pour éviter multiples refresh
-let isRefreshing = false;
-let failedQueue = [];
+// app/api/protected/route.ts
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-if (isRefreshing) {
-  // Mettre en queue
-  return new Promise((resolve, reject) => {
-    failedQueue.push({ resolve, reject });
-  }).then(() => axiosInstance(originalRequest));
+export async function GET() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  
+  if (!session) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  
+  // Accès autorisé
+  return Response.json({ data: "Protected data" });
 }
 ```
 
 ## 🧪 Tests
 
-### Tester le refresh manuellement
+### Tester l'authentification Better Auth
 
 ```bash
-# 1. Login
-curl -X POST http://localhost:3000/api/auth/login \
+# 1. Inscription
+curl -X POST http://localhost:3000/api/auth/sign-up/email \
   -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"pass"}' \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123",
+    "name": "Test User"
+  }' \
   -c cookies.txt
 
-# 2. Attendre expiration access token (15 min)
+# 2. Connexion
+curl -X POST http://localhost:3000/api/auth/sign-in/email \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123"
+  }' \
+  -c cookies.txt
 
-# 3. Faire une requête (devrait auto-refresh)
-curl http://localhost:8000/api/users/ \
-  -b cookies.txt \
-  -v
+# 3. Vérifier la session
+curl http://localhost:3000/api/auth/get-session \
+  -b cookies.txt
 
-# 4. Vérifier le refresh manuel
-curl -X POST http://localhost:3000/api/auth/refresh \
+# 4. Déconnexion
+curl -X POST http://localhost:3000/api/auth/sign-out \
   -b cookies.txt \
   -c cookies.txt
 ```
 
-### Simuler un token expiré
+### Simuler une session expirée
 
 ```typescript
-// Pour tester en dev, réduire la durée
-cookieStore.set("access_token", token, {
-  maxAge: 10, // 10 secondes au lieu de 15 min
-});
+// En dev, réduire la durée de session dans lib/auth.ts
+session: {
+  expiresIn: 60 * 10, // 10 secondes pour tester
+  updateAge: 60 * 5,
+}
 ```
 
 ## 📝 Logs de Debug
 
-Ajouter des logs pour suivre le refresh :
+Ajouter des logs pour suivre les sessions :
 
 ```typescript
-// axios-instance.ts
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      console.log("🔄 Token expiré, tentative de refresh...");
+// lib/auth.ts avec logs
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
-      try {
-        await fetch("/api/auth/refresh", {
-          method: "POST",
-          credentials: "include",
-        });
-        console.log("✅ Token refreshed avec succès");
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        console.error("❌ Refresh échoué, redirection login");
-        window.location.href = "/auth/login";
-      }
-    }
-  }
-);
+export const auth = betterAuth({
+  database: drizzleAdapter(db, { provider: "pg" }),
+  hooks: {
+    before: async (ctx) => {
+      console.log("� Auth request:", ctx.path);
+    },
+    after: async (ctx) => {
+      console.log("✅ Auth success:", ctx.path);
+    },
+  },
+  logger: {
+    verboseLogging: process.env.NODE_ENV === "development",
+  },
+});
 ```
 
 ## ⚡ Optimisations
 
-### Refresh proactif (avant expiration)
+### Session prolongée pour utilisateurs actifs
 
 ```typescript
-// Optionnel : Refresh 1 min avant expiration
-const REFRESH_BEFORE_EXPIRY = 60 * 1000; // 1 minute
-
-setInterval(async () => {
-  await fetch("/api/auth/refresh", {
-    method: "POST",
-    credentials: "include",
-  });
-}, 15 * 60 * 1000 - REFRESH_BEFORE_EXPIRY); // 14 min
+// lib/auth.ts
+export const auth = betterAuth({
+  database: drizzleAdapter(db, { provider: "pg" }),
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 jours
+    updateAge: 60 * 60 * 24, // Mise à jour après 1 jour
+    // La session est automatiquement prolongée si l'utilisateur est actif
+  },
+});
 ```
 
-### Cache du refresh
+### Cache des sessions côté client
 
 ```typescript
-// Éviter refresh si déjà fait récemment
-let lastRefresh = 0;
-const REFRESH_COOLDOWN = 5000; // 5 secondes
+// React Query pour cacher la session
+import { useQuery } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 
-if (Date.now() - lastRefresh < REFRESH_COOLDOWN) {
-  return axiosInstance(originalRequest);
+export function useCachedSession() {
+  return useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const { data } = await authClient.getSession();
+      return data;
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
 }
-lastRefresh = Date.now();
 ```
 
 ## 🔐 Sécurité
 
 ### Points de vigilance
 
-- ✅ Refresh token en cookie HttpOnly (non accessible JS)
-- ✅ Access token en cookie HttpOnly (non accessible JS)
-- ✅ `SameSite=lax` pour protection CSRF
+- ✅ Session ID en cookie HttpOnly (non accessible JS)
+- ✅ Cookie `SameSite=lax` pour protection CSRF
 - ✅ `Secure=true` en production (HTTPS)
-- ✅ Durée courte access token (15 min)
-- ✅ Durée longue refresh token (7 jours)
-- ✅ Blacklist refresh token côté Django après logout
+- ✅ Durée de session configurable (7 jours par défaut)
+- ✅ Rotation automatique des session tokens par Better Auth
+- ✅ Invalidation des sessions côté serveur après logout
+- ✅ Protection brute-force avec rate limiting
 
-### Rotation des refresh tokens (optionnel)
+### Configuration de sécurité
 
-```python
-# Django settings.py
-SIMPLE_JWT = {
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-}
+```typescript
+// lib/auth.ts
+export const auth = betterAuth({
+  database: drizzleAdapter(db, { provider: "pg" }),
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 jours
+    updateAge: 60 * 60 * 24, // 1 jour
+  },
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7, // 7 jours
+  },
+  rateLimit: {
+    window: 10, // 10 secondes
+    max: 5, // 5 tentatives
+  },
+});
 ```
-
-Avec rotation, chaque refresh génère un nouveau refresh token.
 
 ## 📚 Résumé
 
-| Méthode               | Utilisation      | Automatique | Recommandé      |
-| --------------------- | ---------------- | ----------- | --------------- |
-| **Middleware**        | Navigation pages | ✅          | ✅ Pages        |
-| **Axios Interceptor** | Requêtes API     | ✅          | ✅ API          |
-| **API Route Manuel**  | Contrôle manuel  | ❌          | ⚠️ Cas spéciaux |
+| Méthode                  | Utilisation      | Automatique | Recommandé      |
+| ------------------------ | ---------------- | ----------- | --------------- |
+| **Better Auth Client**   | Auth & Sessions  | ✅          | ✅ Tous cas     |
+| **Middleware Next.js**   | Protection routes| ✅          | ✅ Pages        |
+| **API getSession**       | Routes protégées | ✅          | ✅ API Routes   |
 
-**Configuration actuelle :** Middleware + Axios Interceptor = Couverture complète automatique 🎯
+**Stack actuelle :** Better Auth + Drizzle ORM + Next.js = Full-stack authentification 🎯
+
+## 📖 Ressources
+
+- [Documentation Better Auth](https://www.better-auth.com/docs)
+- [Adapter Drizzle](https://www.better-auth.com/docs/adapters/drizzle)
+- [Configuration Next.js](https://www.better-auth.com/docs/integrations/next-js)

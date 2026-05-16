@@ -1,26 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, Search, ShoppingCart } from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import {
+  CheckmarkCircle01Icon,
+  Search01Icon,
+  ShoppingCart01Icon,
+} from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 
-const steps = [
+const steps: { number: number; icon: IconSvgElement; title: string; description: string }[] = [
   {
     number: 1,
-    icon: Search,
+    icon: Search01Icon,
     title: "Choisissez votre service",
     description: "Parcourez notre catalogue de services vérifiés et sélectionnez celui qui vous convient",
   },
   {
     number: 2,
-    icon: ShoppingCart,
+    icon: ShoppingCart01Icon,
     title: "Réservez en 2 clics",
     description: "Ajoutez au panier, choisissez votre mode de paiement et confirmez votre réservation",
   },
   {
     number: 3,
-    icon: CheckCircle,
+    icon: CheckmarkCircle01Icon,
     title: "Profitez du service",
     description: "Notre équipe s'occupe de tout. Vous recevez une confirmation et un suivi en temps réel",
   },
@@ -59,7 +64,7 @@ export function HowItWorks({ onGetStarted }: HowItWorksProps) {
             >
               <div className="relative inline-block mb-6">
                 <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center shadow-xl">
-                  <step.icon className="w-12 h-12 text-white" />
+                  <HugeiconsIcon icon={step.icon} size={48} color="white" />
                 </div>
                 <div className="absolute -top-2 -right-2 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-black text-lg shadow-lg">
                   {step.number}

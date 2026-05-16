@@ -42,7 +42,7 @@
   },
   "userMenu": {
     "account": "Account",
-    "billing": "Billing",
+    "billing": "Transaction",
     "notifications": "Notifications",
     "logOut": "Log out"
   },
@@ -2016,12 +2016,130 @@
   "monpackSection": {
     "badge": "New",
     "title": "Create Your Custom Pack",
-    "description": "Optimize your budget with a personalized pack. Choose your services category by category and view your invoice in real time.",
+    "description": "A tool designed to help you make the best decision for your budget.",
     "features": {
       "guided": "Guided category journey",
       "realtime": "Real-time invoice",
       "autosave": "Auto-save"
     },
+    "steps": {
+      "step1": "Answer a few questions",
+      "step2": "Choose your services",
+      "step3": "View your invoice in real time",
+      "step4": "Chat with an expert"
+    },
+    "badge2": "Free • No commitment • Instant results",
     "cta": "Start my customization"
+  },
+  "modeSelection": {
+    "title": "How would you like to customize your pack?",
+    "description": "Choose the mode that best fits your situation for a tailored experience.",
+    "continue": "Continue",
+    "priced": {
+      "title": "With displayed prices",
+      "description": "View the prices of each service and pay directly online.",
+      "feature1": "Transparent pricing",
+      "feature2": "Immediate payment",
+      "feature3": "Instant access to services"
+    },
+    "budget": {
+      "title": "Custom budget",
+      "description": "Select your services, indicate your budget and a counselor will assist you.",
+      "feature1": "Custom quote",
+      "feature2": "Counselor support",
+      "feature3": "Solution adapted to your budget",
+      "quotePrice": "Quote on request"
+    }
+  },
+  "packSummary": {
+    "budgetMode": {
+      "title": "Custom quote",
+      "description": "A counselor will contact you to provide a quote tailored to your budget."
+    }
+  },
+  "packNavigation": {
+    "errorNoServices": "Please select at least one service to finalize your pack"
+  },
+  "budgetPage": {
+    "title": "Set your budget",
+    "description": "Indicate the amount you wish to allocate to your pack. A counselor will propose a tailored solution.",
+    "selectedServices": "Selected services",
+    "servicesPlural": "services selected",
+    "servicesSingular": "service selected",
+    "budgetInput": {
+      "title": "Your available budget",
+      "description": "This amount will allow us to offer you a personalized proposal during your appointment.",
+      "label": "Budget (in USD)",
+      "hint": "Indicative amount - adjustable during the appointment"
+    },
+    "info": {
+      "title": "Next step:",
+      "description": "After setting your budget, you will schedule an appointment with a Bridge counselor who will propose a tailored solution."
+    },
+    "continue": "Schedule appointment",
+    "steps": {
+      "services": "Services",
+      "budget": "Budget",
+      "appointment": "Appointment"
+    }
+  },
+  "conseillerPage": {
+    "title": "Would you like personalized support?",
+    "description": "A Bridge counselor can guide you through the process and answer all your questions.",
+    "continueToPayment": "Continue to payment",
+    "steps": {
+      "services": "Services",
+      "budget": "Budget",
+      "counselor": "Counselor",
+      "payment": "Payment",
+      "confirmation": "Confirmation"
+    },
+    "yesOption": {
+      "title": "Yes, I want a counselor",
+      "description": "Book a slot with a Bridge expert for personalized support.",
+      "feature1": "Full support from A to Z",
+      "feature2": "Answers to your questions",
+      "feature3": "Follow-up on your file"
+    },
+    "noOption": {
+      "title": "No, I'll continue alone",
+      "description": "Go directly to payment and manage your pack independently.",
+      "feature1": "Immediate access to services",
+      "feature2": "Personal dashboard",
+      "feature3": "Chat support available"
+    },
+    "budgetMode": {
+      "title": "Schedule an appointment with a counselor",
+      "description": "In custom budget mode, an appointment with a counselor is required to finalize your quote.",
+      "yourBudget": "Your budget:",
+      "continue": "Confirm and finish"
+    }
+  },
+  "confirmationPage": {
+    "title": "Request registered!",
+    "description": "Your custom pack request has been received. A counselor will contact you to finalize your quote.",
+    "appointment": {
+      "title": "Your appointment",
+      "counselor": "Bridge Counselor",
+      "counselorDesc": "Personalized support",
+      "date": "Date",
+      "time": "Time slot"
+    },
+    "budget": {
+      "title": "Indicated budget",
+      "yourBudget": "Your budget"
+    },
+    "services": {
+      "title": "Requested services",
+      "plural": "services requested",
+      "singular": "service requested"
+    },
+    "nextSteps": {
+      "title": "Next steps",
+      "step1": "You will receive a confirmation email",
+      "step2": "A counselor will contact you before the appointment",
+      "step3": "During the appointment, you will receive a personalized quote"
+    },
+    "returnHome": "Return to home"
   }
 }

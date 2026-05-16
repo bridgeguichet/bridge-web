@@ -1,6 +1,6 @@
 # Feature Auth - Documentation
 
-Structure organisée pour l'authentification avec services, hooks React Query et types.
+Structure organisée pour l'authentification avec Better Auth, hooks React Query et types.
 
 ## 📁 Structure
 
@@ -17,16 +17,20 @@ src/features/auth/
 
 ### Méthodes disponibles
 
+Les services utilisent le client Better Auth pour l'authentification.
+
 #### `authService.login(credentials)`
 
-Connexion utilisateur via Next.js API route.
+Connexion utilisateur via Better Auth.
 
 ```typescript
-const result = await authService.login({
+import { authClient } from "@/lib/auth-client";
+
+const result = await authClient.signIn.email({
   email: "user@example.com",
   password: "password123",
 });
-// Returns: { success: true, user: { id, email, name } }
+// Returns: { data: { user, session }, error: null }
 ```
 
 #### `authService.logout()`
@@ -34,17 +38,17 @@ const result = await authService.login({
 Déconnexion utilisateur.
 
 ```typescript
-await authService.logout();
-// Returns: { success: true }
+await authClient.signOut();
+// Returns: { data: null, error: null }
 ```
 
-#### `authService.refresh()`
+#### `authService.getSession()`
 
-Rafraîchir le token d'accès.
+Récupérer la session active.
 
 ```typescript
-await authService.refresh();
-// Returns: { success: true }
+const { data: session } = await authClient.getSession();
+// Returns: { user, session } ou null si non connecté
 ```
 
 #### `authService.validateEmail(email)`
@@ -69,14 +73,14 @@ const result = authService.validatePassword("pass");
 
 ### `useLogin()`
 
-Hook pour gérer la connexion avec React Query.
+Hook pour gérer la connexion avec Better Auth.
 
 **Fonctionnalités :**
 
-- ✅ Mutation React Query
+- ✅ Utilise Better Auth client
 - ✅ Toast de succès/erreur automatique
 - ✅ Redirection vers `/dashboard` après connexion
-- ✅ Cache utilisateur dans React Query
+- ✅ Gestion automatique des sessions
 
 **Exemple :**
 
@@ -327,39 +331,40 @@ if (!passwordValidation.valid) {
 }
 ```
 
-## 🔄 Intégration avec React Query
+## 🔄 Intégration avec Better Auth
 
-Les hooks utilisent React Query pour :
+Better Auth gère automatiquement :
 
-- **Cache** : Données utilisateur en cache
-- **Loading states** : `isPending`, `isError`, `isSuccess`
-- **Optimistic updates** : Mise à jour UI avant réponse serveur
-- **Error handling** : Gestion automatique des erreurs
-- **Retry logic** : Réessais automatiques si échec
+- **Sessions** : Stockage en base de données avec rotation
+- **Cookies** : HttpOnly, secure, sameSite
+- **État utilisateur** : Accessible via `authClient.useSession()`
+- **OAuth** : Google OAuth intégré
 
 ### Accéder aux données utilisateur
 
 ```typescript
-import { useQueryClient } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 
 function MyComponent() {
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData(["user"]);
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
 
+  if (isPending) return <div>Chargement...</div>;
+  
   return <div>Bonjour {user?.name}</div>;
 }
 ```
 
 ## 🔐 Sécurité
 
-- ✅ Tokens en cookies HttpOnly (jamais exposés à JS)
-- ✅ Validation côté client ET serveur
+- ✅ Sessions en cookies HttpOnly (jamais exposés à JS)
+- ✅ Validation côté client ET serveur par Better Auth
 - ✅ Gestion automatique des erreurs
-- ✅ Refresh token automatique (middleware + axios)
-- ✅ Clear du cache à la déconnexion
+- ✅ Rotation automatique des session tokens
+- ✅ Protection CSRF avec SameSite cookies
+- ✅ Rate limiting intégré
 
 ## 📚 Ressources
 
-- [React Query Documentation](https://tanstack.com/query/latest)
-- [Guide d'authentification complet](../../../docs/authentication-guide.md)
-- [Guide refresh token](../../../docs/refresh-token-guide.md)
+- [Documentation Better Auth](https://www.better-auth.com/docs)
+- [Guide des sessions](../../../docs/refresh-token-guide.md)

@@ -1,26 +1,32 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Award, CheckCircle, Headphones, Shield } from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import {
+  Award01Icon,
+  CheckmarkCircle01Icon,
+  HeadphonesIcon,
+  Shield01Icon,
+} from "@hugeicons/core-free-icons";
 
-const guarantees = [
+const guarantees: { icon: IconSvgElement; title: string; description: string }[] = [
   {
-    icon: Shield,
+    icon: Shield01Icon,
     title: "Paiement sécurisé",
     description: "Transactions cryptées SSL et protection des données",
   },
   {
-    icon: CheckCircle,
+    icon: CheckmarkCircle01Icon,
     title: "Services vérifiés",
     description: "Tous nos prestataires sont contrôlés et certifiés",
   },
   {
-    icon: Award,
+    icon: Award01Icon,
     title: "Satisfaction garantie",
     description: "Remboursement si le service ne correspond pas",
   },
   {
-    icon: Headphones,
+    icon: HeadphonesIcon,
     title: "Support 24/7",
     description: "Notre équipe est disponible à tout moment",
   },
@@ -41,7 +47,7 @@ export function TrustBadges() {
               className="text-center"
             >
               <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <guarantee.icon className="w-8 h-8 text-white" />
+                <HugeiconsIcon icon={guarantee.icon} size={32} color="white" />
               </div>
               <h3 className="text-lg font-bold mb-2">{guarantee.title}</h3>
               <p className="text-sm text-gray-600">{guarantee.description}</p>

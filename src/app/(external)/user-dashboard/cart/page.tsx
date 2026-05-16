@@ -3,35 +3,34 @@
 import Link from "next/link";
 
 import { motion } from "framer-motion";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  Briefcase,
-  Car,
-  CreditCard,
-  Home,
-  Minus,
-  Package,
-  Plus,
-  ShoppingBag,
-  ShoppingCart,
-  Trash2,
-  Users,
-  X,
-} from "lucide-react";
+  Briefcase01Icon,
+  Car01Icon,
+  Home01Icon,
+  Remove01Icon,
+  Package01Icon,
+  Add01Icon,
+  ShoppingCart01Icon,
+  Delete01Icon,
+  UserGroupIcon,
+  Cancel01Icon,
+} from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { EmptyState } from "@/external-components/user-dashboard/empty-state";
+import { EmptyState } from "@/components/user-dashboard/empty-state";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
 
-const PREVIEW_ICONS: Record<string, React.ElementType> = {
-  briefcase: Briefcase,
-  car: Car,
-  home: Home,
-  package: Package,
-  users: Users,
+const PREVIEW_ICONS: Record<string, IconSvgElement> = {
+  briefcase: Briefcase01Icon,
+  car: Car01Icon,
+  home: Home01Icon,
+  package: Package01Icon,
+  users: UserGroupIcon,
 };
 
 const PREVIEW_COLORS: Record<string, string> = {
@@ -46,14 +45,6 @@ export default function CartPage() {
   const router = useRouter();
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { data: services, isLoading } = useServices();
-
-  const PREVIEW_ICONS: Record<string, React.ElementType> = {
-    briefcase: Briefcase,
-    car: Car,
-    home: Home,
-    package: Package,
-    users: Users,
-  };
 
   const PREVIEW_COLORS: Record<string, string> = {
     briefcase: "from-blue-400 to-indigo-500",
@@ -92,7 +83,7 @@ export default function CartPage() {
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <ShoppingCart className="w-6 h-6 text-primary" />
+              <HugeiconsIcon icon={ShoppingCart01Icon} size={24} color="currentColor" className="text-primary" />
             </div>
             <div>
               <h1 className="text-3xl font-black text-gray-900">Mon panier</h1>
@@ -109,7 +100,7 @@ export default function CartPage() {
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <EmptyState
-            icon={ShoppingBag}
+            icon={ShoppingCart01Icon}
             title="Votre panier est vide"
             description="Explorez nos services et ajoutez-les à votre panier pour commencer."
             action={{
@@ -145,7 +136,7 @@ export default function CartPage() {
           onClick={clearCart}
           className="text-red-600 hover:text-red-700 hover:bg-red-50"
         >
-          <Trash2 className="mr-2 h-4 w-4" />
+          <HugeiconsIcon icon={Delete01Icon} size={16} color="currentColor" className="mr-2" />
           Vider le panier
         </Button>
       </motion.div>
@@ -157,7 +148,7 @@ export default function CartPage() {
             const icon = item.service?.category?.icon || "briefcase";
             const previewGradient =
               PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-500";
-            const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase;
+            const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase01Icon;  // IconSvgElement
             const displayName = item.variant
               ? `${item.service?.nameFr} - ${item.variant.nameFr}`
               : item.service?.nameFr ||
@@ -181,7 +172,7 @@ export default function CartPage() {
                       <div
                         className={`h-24 w-24 shrink-0 rounded-lg bg-linear-to-br ${previewGradient} flex items-center justify-center`}
                       >
-                        <IconComponent className="h-10 w-10 text-white" />
+                        <HugeiconsIcon icon={IconComponent} size={40} color="white" />
                       </div>
 
                       <div className="flex-1 min-w-0">
@@ -213,7 +204,7 @@ export default function CartPage() {
                                 )
                               }
                             >
-                              <Minus className="h-4 w-4" />
+                              <HugeiconsIcon icon={Remove01Icon} size={16} color="currentColor" />
                             </Button>
                             <span className="w-8 text-center font-semibold">
                               {item.quantity}
@@ -229,7 +220,7 @@ export default function CartPage() {
                                 )
                               }
                             >
-                              <Plus className="h-4 w-4" />
+                              <HugeiconsIcon icon={Add01Icon} size={16} color="currentColor" />
                             </Button>
                           </div>
 
@@ -238,72 +229,6 @@ export default function CartPage() {
                             ${itemTotal.toFixed(2)}
                           </span>
                         </div>
-
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-bold text-gray-900 truncate">
-                            {displayName}
-                          </h3>
-                          <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                            {item.service?.descriptionFr || ""}
-                          </p>
-
-                          {/* Variant badge */}
-                          {item.variant && (
-                            <span className="mt-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
-                              Variante sélectionnée
-                            </span>
-                          )}
-
-                          <div className="mt-4 flex items-center gap-4">
-                            {/* Quantity controls */}
-                            <div className="flex items-center gap-2 rounded-lg border">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8"
-                                onClick={() =>
-                                  updateQuantity(
-                                    item.serviceId,
-                                    Math.max(1, item.quantity - 1),
-                                  )
-                                }
-                              >
-                                <Minus className="h-4 w-4" />
-                              </Button>
-                              <span className="w-8 text-center font-semibold">
-                                {item.quantity}
-                              </span>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8"
-                                onClick={() =>
-                                  updateQuantity(
-                                    item.serviceId,
-                                    item.quantity + 1,
-                                  )
-                                }
-                              >
-                                <Plus className="h-4 w-4" />
-                              </Button>
-                            </div>
-
-                            {/* Price */}
-                            <span className="text-xl font-black text-primary">
-                              ${itemTotal.toFixed(2)}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Remove button */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeItem(item.serviceId)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 shrink-0"
-                        >
-                          <X className="h-5 w-5" />
-                        </Button>
                       </div>
 
                       {/* Remove button */}
@@ -313,7 +238,7 @@ export default function CartPage() {
                         onClick={() => removeItem(item.serviceId)}
                         className="text-red-600 hover:text-red-700 hover:bg-red-50 shrink-0"
                       >
-                        <X className="h-5 w-5" />
+                        <HugeiconsIcon icon={Cancel01Icon} size={20} color="currentColor" />
                       </Button>
                     </div>
                   </CardContent>

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, like } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
@@ -13,10 +13,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
     }
 
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get("type");
+
+    const conditions = [eq(orders.customerId, session.user.id)];
+    if (type === "pack") {
+      conditions.push(like(orders.orderNumber, "PACK-%"));
+    } else if (type === "single") {
+      conditions.push(like(orders.orderNumber, "ORD-%"));
+    }
+
     const userOrders = await db
       .select()
       .from(orders)
-      .where(eq(orders.customerId, session.user.id))
+      .where(conditions.length > 1 ? and(...conditions) : conditions[0])
       .orderBy(desc(orders.createdAt));
 
     return NextResponse.json(userOrders);

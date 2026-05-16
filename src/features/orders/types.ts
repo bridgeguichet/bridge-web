@@ -4,6 +4,7 @@ export interface OrderFilters {
   status?: string;
   customerId?: string;
   vendorId?: string;
+  type?: "pack" | "single";
   [key: string]: string | undefined;
 }
 

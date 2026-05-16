@@ -11,9 +11,13 @@ import { Input } from "@/components/ui/input";
 import { useLogin } from "@/features/auth";
 import { useTranslation } from "@/lib/i18n/use-translation";
 
-export function LoginForm() {
+interface LoginFormProps {
+  callbackUrl?: string | null;
+}
+
+export function LoginForm({ callbackUrl }: LoginFormProps) {
   const { t } = useTranslation();
-  const loginMutation = useLogin();
+  const loginMutation = useLogin(callbackUrl);
 
   const FormSchema = z.object({
     email: z.string().email({ message: t("auth.invalidEmail") }),

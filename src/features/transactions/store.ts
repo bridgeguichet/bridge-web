@@ -7,6 +7,8 @@ import type { CreateTransactionRequest, Transaction, TransactionStatus } from ".
 
 interface TransactionsStore {
   transactions: Transaction[];
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
   addTransaction: (transaction: CreateTransactionRequest) => Transaction;
   updateTransactionStatus: (id: string, status: TransactionStatus) => void;
   getTransactionById: (id: string) => Transaction | undefined;
@@ -23,6 +25,14 @@ export const useTransactionsStore = create<TransactionsStore>()(
   persist(
     (set, get) => ({
       transactions: [],
+      userId: null,
+
+      setUserId: (userId) => {
+        const currentUserId = get().userId;
+        if (currentUserId !== userId) {
+          set({ userId, transactions: [] });
+        }
+      },
 
       addTransaction: (request) => {
         const now = new Date().toISOString();

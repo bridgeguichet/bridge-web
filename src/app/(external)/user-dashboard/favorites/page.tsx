@@ -1,28 +1,52 @@
 "use client";
 
+import { FavouriteIcon } from "@hugeicons/core-free-icons";
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
 
-import { EmptyState } from "@/external-components/user-dashboard/empty-state";
+import { EmptyState } from "@/components/user-dashboard/empty-state";
+import { ServiceCard } from "@/features/marketplace/components/service-card";
+import { useServices } from "@/features/marketplace/hooks";
+import { useFavoritesStore } from "@/features/marketplace/store";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 
 export default function FavoritesPage() {
-  const favorites = [];
+  const favoriteIds = useFavoritesStore((state) => state.ids);
+  const { data: services, isLoading } = useServices();
+
+  const favoriteServices = services?.filter((service) => favoriteIds.includes(service.id)) ?? [];
 
   return (
     <div className="space-y-6">
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mes favoris</h1>
-        <p className="mt-2 text-lg text-gray-600">Retrouvez vos services préférés en un clic</p>
-      </motion.div>
+      <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <HugeiconsIcon icon={FavouriteIcon} size={24} color="currentColor" className="text-primary" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-black text-gray-900">Mes favoris</h1>
+              <p className="text-muted-foreground">
+                Retrouvez vos services préférés en un clic
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        {favorites.length === 0 ? (
+        {isLoading ? (
+          <div className="flex h-56 items-center justify-center">
+            <div className="text-muted-foreground">Chargement...</div>
+          </div>
+        ) : favoriteServices.length === 0 ? (
           <EmptyState
-            icon={Heart}
+            icon={FavouriteIcon}
             title="Aucun favori"
             description="Ajoutez des services à vos favoris pour les retrouver facilement."
             action={{
@@ -31,8 +55,10 @@ export default function FavoritesPage() {
             }}
           />
         ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Favorites grid will be added here */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {favoriteServices.map((service, i) => (
+              <ServiceCard key={service.id} service={service} badgeIndex={i} />
+            ))}
           </div>
         )}
       </motion.div>

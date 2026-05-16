@@ -3,7 +3,8 @@
 import { useState } from "react";
 
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Search01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 
@@ -100,7 +101,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
                 type="submit"
                 className="m-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-5 h-10"
               >
-                <Search className="w-4 h-4" />
+                <HugeiconsIcon icon={Search01Icon} size={20} color="currentColor" />
               </Button>
             </form>
 

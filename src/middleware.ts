@@ -2,73 +2,43 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  const accessToken = request.cookies.get("access_token");
-  const refreshToken = request.cookies.get("refresh_token");
+  const { pathname } = request.nextUrl;
 
-  // if (!accessToken && refreshToken) {
-  //   try {
-  //     const baseUrl = request.nextUrl.origin;
-  //     const response = await fetch(`${baseUrl}/api/auth/refresh`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Cookie: `refresh_token=${refreshToken.value}`,
-  //       },
-  //       credentials: "include",
-  //     });
+  const isUserDashboardRoute = pathname.startsWith("/user-dashboard");
+  const isDashboardRoute = pathname.startsWith("/dashboard");
 
-  //     if (!response.ok) {
-  //       throw new Error("Refresh failed");
-  //     }
+  if (!isUserDashboardRoute && !isDashboardRoute) {
+    return NextResponse.next();
+  }
 
-  //     const contentType = response.headers.get("content-type");
-  //     if (!contentType || !contentType.includes("application/json")) {
-  //       throw new Error("Invalid response from refresh endpoint");
-  //     }
+  // Check session via internal API to avoid Edge Runtime DB issues
+  const sessionResponse = await fetch(new URL("/api/auth/get-session", request.url), {
+    headers: {
+      cookie: request.headers.get("cookie") || "",
+    },
+  });
 
-  //     const data = await response.json();
-  //     const res = NextResponse.next();
+  const session = sessionResponse.ok ? await sessionResponse.json() : null;
+  const user = session?.user;
 
-  //     if (data.access_token) {
-  //       res.cookies.set("access_token", data.access_token, {
-  //         httpOnly: true,
-  //         secure: process.env.NODE_ENV === "production",
-  //         sameSite: "lax",
-  //         maxAge: 60 * 15,
-  //         path: "/",
-  //       });
-  //     }
+  if (!user) {
+    const callbackUrl = encodeURIComponent(pathname);
+    return NextResponse.redirect(new URL(`/auth/login?callbackUrl=${callbackUrl}`, request.url));
+  }
 
-  //     return res;
-  //   } catch (error) {
-  //     console.error("Middleware refresh error:", error);
-  //     const res = NextResponse.redirect(new URL("/auth/login", request.url));
-  //     res.cookies.delete("access_token");
-  //     res.cookies.delete("refresh_token");
-  //     return res;
-  //   }
-  // }
+  // user-dashboard is only for customers
+  if (isUserDashboardRoute && user.role !== "customer") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
-  // Auth check disabled for user-dashboard
-  // if (
-  //   !accessToken &&
-  //   !refreshToken &&
-  //   request.nextUrl.pathname.startsWith("/user-dashboard")
-  // ) {
-  //   return NextResponse.redirect(new URL("/auth/login", request.url));
-  // }
-
-  // if (
-  //   !accessToken &&
-  //   !refreshToken &&
-  //   request.nextUrl.pathname.startsWith("/dashboard")
-  // ) {
-  //   return NextResponse.redirect(new URL("/auth/login", request.url));
-  // }
+  // dashboard is for admins/vendors only
+  if (isDashboardRoute && user.role === "customer") {
+    return NextResponse.redirect(new URL("/user-dashboard", request.url));
+  }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/user-dashboard/:path*"],
 };

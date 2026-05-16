@@ -3,7 +3,16 @@
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Bell, Briefcase, Car, Home, Star, TrendingUp, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Notification01Icon,
+  Briefcase01Icon,
+  Car01Icon,
+  Home01Icon,
+  StarIcon,
+  TrendingUpDownIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 
 import { ChevronPattern } from "@/components/patterns/chevron";
@@ -45,7 +54,7 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
 
         {featured && (
           <div className="absolute top-0 right-12 bg-accent text-primary px-6 py-2 font-bold text-xs shadow-lg transform rotate-12 origin-top-right">
-            <TrendingUp className="w-3 h-3 inline mr-1" />
+            <HugeiconsIcon icon={TrendingUpDownIcon} size={12} color="currentColor" className="inline mr-1" />
             POPULAIRE
           </div>
         )}
@@ -53,11 +62,11 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
         <div className="relative h-full flex flex-col p-8">
           <div className="flex items-start justify-between mb-4">
             <div>
-              {service.category?.icon === "car" && <Car className="w-14 h-14 text-white/90" />}
-              {service.category?.icon === "home" && <Home className="w-14 h-14 text-white/90" />}
-              {service.category?.icon === "users" && <Users className="w-14 h-14 text-white/90" />}
-              {service.category?.icon === "briefcase" && <Briefcase className="w-14 h-14 text-white/90" />}
-              {service.category?.icon === "bell" && <Bell className="w-14 h-14 text-white/90" />}
+              {service.category?.icon === "car" && <HugeiconsIcon icon={Car01Icon} size={56} color="rgba(255,255,255,0.9)" />}
+              {service.category?.icon === "home" && <HugeiconsIcon icon={Home01Icon} size={56} color="rgba(255,255,255,0.9)" />}
+              {service.category?.icon === "users" && <HugeiconsIcon icon={UserGroupIcon} size={56} color="rgba(255,255,255,0.9)" />}
+              {service.category?.icon === "briefcase" && <HugeiconsIcon icon={Briefcase01Icon} size={56} color="rgba(255,255,255,0.9)" />}
+              {service.category?.icon === "bell" && <HugeiconsIcon icon={Notification01Icon} size={56} color="rgba(255,255,255,0.9)" />}
             </div>
 
             {service.category && (
@@ -73,7 +82,7 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
 
           <div className="flex items-center gap-1 mb-6">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <HugeiconsIcon key={i} icon={StarIcon} size={16} color="rgb(250,204,21)" />
             ))}
             <span className="text-xs ml-2">(4.8)</span>
           </div>

@@ -21,8 +21,8 @@ Node >= 20.9.0 is required.
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_API_URL` — public-facing API base URL for client-side requests (default: `http://localhost:8000`)
-- `API_URL` — server-side API base URL used by Next.js API routes (default: `http://localhost:8000`)
+- `NEXT_PUBLIC_API_URL` — public-facing API base URL for client-side requests (default: `http://localhost:3000`)
+- `DATABASE_URL` — PostgreSQL connection string for Drizzle ORM
 
 ## Architecture
 
@@ -31,7 +31,7 @@ Node >= 20.9.0 is required.
 - `src/app/(main)/dashboard/` — authenticated dashboard pages (default, CRM, finance, users)
 - `src/app/(main)/auth/` — login/register pages
 - `src/app/(external)/` — public-facing landing page
-- `src/app/api/auth/` — Next.js API route handlers that proxy auth requests to the Django backend and manage httpOnly cookies (login, logout, refresh, token)
+- `src/app/api/auth/[...all]/` — Better Auth API route handler (login, logout, register, OAuth, session management)
 
 ### Feature Modules (`src/features/`)
 
@@ -47,11 +47,12 @@ When adding a new feature, follow this pattern. Import features via their barrel
 
 ### Authentication Flow
 
-Auth uses a BFF (Backend-For-Frontend) pattern:
-1. Next.js API routes (`src/app/api/auth/`) proxy to the Django backend and store JWT tokens as httpOnly cookies.
-2. The axios instance (`src/lib/axios/`) retrieves the access token via `/api/auth/token` on each request and automatically handles 401 refresh logic.
-3. Client-side auth state is managed in a Zustand store (`src/features/auth/store.ts`).
-4. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes (auth enforcement is currently commented out).
+Auth uses Better Auth with Drizzle ORM:
+1. Better Auth handles all authentication via `/api/auth/*` routes (sign-in, sign-up, OAuth, session management).
+2. Sessions are stored in PostgreSQL via Drizzle ORM with automatic rotation.
+3. The auth client (`src/lib/auth-client.ts`) provides type-safe auth methods for React components.
+4. Server-side auth checks use `auth.api.getSession()` in API routes and server components.
+5. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes (auth enforcement is currently commented out).
 
 ### State Management
 

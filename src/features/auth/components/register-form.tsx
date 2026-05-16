@@ -10,9 +10,13 @@ import { Input } from "@/components/ui/input";
 import { useRegister } from "@/features/auth";
 import { useTranslation } from "@/lib/i18n/use-translation";
 
-export function RegisterForm() {
+interface RegisterFormProps {
+  callbackUrl?: string | null;
+}
+
+export function RegisterForm({ callbackUrl }: RegisterFormProps) {
   const { t } = useTranslation();
-  const registerMutation = useRegister();
+  const registerMutation = useRegister(callbackUrl);
 
   const FormSchema = z
     .object({

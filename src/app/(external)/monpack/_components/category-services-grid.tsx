@@ -9,6 +9,7 @@ import { useServices } from "@/features/marketplace/hooks";
 import type { CategoryWithSubs } from "@/features/marketplace/types";
 import { usePackBuilderStore } from "@/features/pack-builder/store";
 import type { PackItemWithDetails } from "@/features/pack-builder/types";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface CategoryServicesGridProps {
   category: CategoryWithSubs;
@@ -16,9 +17,13 @@ interface CategoryServicesGridProps {
 }
 
 export function CategoryServicesGrid({ category, packId }: CategoryServicesGridProps) {
+  const { t } = useTranslation();
   const { data: services, isLoading } = useServices({ categoryId: category.id });
   const items = usePackBuilderStore((state) => state.items);
   const addItem = usePackBuilderStore((state) => state.addItem);
+  const pricingMode = usePackBuilderStore((state) => state.pricingMode);
+
+  const isBudgetMode = pricingMode === "budget";
 
   const handleAddService = (service: any) => {
     // Créer un item local (pas d'appel API)
@@ -87,11 +92,17 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
 
               <div className="flex items-end justify-between">
                 <div>
-                  <p className="text-xs text-gray-400">À partir de</p>
-                  <p className="font-bold text-gray-900 text-lg">
-                    ${service.basePrice}
-                    <span className="font-normal text-gray-500 text-xs">/{service.priceUnit}</span>
-                  </p>
+                  {isBudgetMode ? (
+                    <p className="font-semibold text-amber-600 text-sm">{t("modeSelection.budget.quotePrice")}</p>
+                  ) : (
+                    <>
+                      <p className="text-xs text-gray-400">À partir de</p>
+                      <p className="font-bold text-gray-900 text-lg">
+                        ${service.basePrice}
+                        <span className="font-normal text-gray-500 text-xs">/{service.priceUnit}</span>
+                      </p>
+                    </>
+                  )}
                 </div>
 
                 <Button

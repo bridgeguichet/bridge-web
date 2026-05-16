@@ -27,9 +27,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuthRedirect, useSession } from "@/features/auth/hooks";
 import { useCartStore } from "@/features/cart/store";
 import { ServiceCard } from "@/features/marketplace/components/service-card";
 import { useService, useServices } from "@/features/marketplace/hooks";
+import { useFavoritesStore } from "@/features/marketplace/store";
 import type { ServiceWithDetails } from "@/features/marketplace/types";
 import type { ServiceVariant } from "@/lib/db/schema/services";
 import { cn } from "@/lib/utils";
@@ -42,10 +44,7 @@ const PREVIEW_COLORS: Record<string, string> = {
   bell: "from-sky-500 to-sky-700",
 };
 
-const PREVIEW_ICONS: Record<
-  string,
-  React.ComponentType<{ className?: string }>
-> = {
+const PREVIEW_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   car: Car,
   home: Home,
   users: Users,
@@ -53,13 +52,7 @@ const PREVIEW_ICONS: Record<
   bell: Bell,
 };
 
-const AVATAR_COLORS = [
-  "bg-violet-500",
-  "bg-rose-400",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-sky-500",
-];
+const AVATAR_COLORS = ["bg-violet-500", "bg-rose-400", "bg-emerald-500", "bg-amber-500", "bg-sky-500"];
 
 export default function ServiceDetailPage() {
   const params = useParams();
@@ -71,19 +64,30 @@ export default function ServiceDetailPage() {
   const addItem = useCartStore((state) => state.addItem);
 
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
+  const { isAuthenticated } = useSession();
+  const { redirectToLogin } = useAuthRedirect();
+  const toggle = useFavoritesStore((state) => state.toggle);
+  const liked = useFavoritesStore((state) => state.isLiked(serviceId));
+
+  const handleToggleFavorite = () => {
+    if (!isAuthenticated) {
+      redirectToLogin(`/marketplace/services/${serviceId}`);
+      return;
+    }
+    toggle(serviceId);
+  };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto px-6 py-8">
-          <div className="h-8 w-48 bg-gray-200 rounded animate-pulse mb-8" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="h-96 bg-gray-200 rounded-2xl animate-pulse" />
-              <div className="h-48 bg-gray-200 rounded-xl animate-pulse" />
+          <div className="mb-8 h-8 w-48 animate-pulse rounded bg-gray-200" />
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="space-y-6 lg:col-span-2">
+              <div className="h-96 animate-pulse rounded-2xl bg-gray-200" />
+              <div className="h-48 animate-pulse rounded-xl bg-gray-200" />
             </div>
-            <div className="h-96 bg-gray-200 rounded-2xl animate-pulse" />
+            <div className="h-96 animate-pulse rounded-2xl bg-gray-200" />
           </div>
         </div>
       </div>
@@ -92,12 +96,10 @@ export default function ServiceDetailPage() {
 
   if (!service) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <p className="text-muted-foreground mb-4">Service non trouvé</p>
-          <Button onClick={() => router.push("/")}>
-            Retour à l&apos;accueil
-          </Button>
+          <p className="mb-4 text-muted-foreground">Service non trouvé</p>
+          <Button onClick={() => router.push("/")}>Retour à l&apos;accueil</Button>
         </div>
       </div>
     );
@@ -107,20 +109,14 @@ export default function ServiceDetailPage() {
   const previewGradient = PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-600";
   const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase;
   const initials = service.nameFr.slice(0, 2).toUpperCase();
-  const avatarColor =
-    AVATAR_COLORS[service.id.charCodeAt(0) % AVATAR_COLORS.length];
+  const avatarColor = AVATAR_COLORS[service.id.charCodeAt(0) % AVATAR_COLORS.length];
 
   const variants = service.variants;
-  const selectedVariantData = variants?.find(
-    (v: ServiceVariant) => v.id === selectedVariant,
-  );
+  const selectedVariantData = variants?.find((v: ServiceVariant) => v.id === selectedVariant);
   const displayPrice = selectedVariantData?.priceModifier || service.basePrice;
 
   const similarServices = allServices
-    ?.filter(
-      (s: ServiceWithDetails) =>
-        s.id !== service.id && s.categoryId === service.categoryId,
-    )
+    ?.filter((s: ServiceWithDetails) => s.id !== service.id && s.categoryId === service.categoryId)
     .slice(0, 4);
 
   const handleAddToCart = () => {
@@ -135,67 +131,51 @@ export default function ServiceDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <div className="bg-white sticky top-0 z-50">
+      <div className="sticky top-0 z-50 bg-white">
         <div className="container mx-auto px-6 py-4">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => router.back()}
-            className="gap-2 bg-transparent hover:text-primary hover:bg-transparent"
+            className="gap-2 bg-transparent hover:bg-transparent hover:text-primary"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="h-4 w-4" />
             Retour
           </Button>
         </div>
       </div>
 
       <div className="container mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Left column - Main content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6 lg:col-span-2">
             {/* Hero image */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative h-96 rounded-2xl overflow-hidden"
+              className="relative h-96 overflow-hidden rounded-2xl"
             >
-              <div
-                className={cn(
-                  "absolute inset-0 bg-linear-to-br",
-                  previewGradient,
-                )}
-              >
+              <div className={cn("absolute inset-0 bg-linear-to-br", previewGradient)}>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <IconComponent className="w-32 h-32 text-white/30" />
+                  <IconComponent className="h-32 w-32 text-white/30" />
                 </div>
               </div>
               <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <div className="flex items-center gap-3 mb-3">
-                  <Badge
-                    variant="secondary"
-                    className="bg-white/90 text-gray-900"
-                  >
+              <div className="absolute right-0 bottom-0 left-0 p-8">
+                <div className="mb-3 flex items-center gap-3">
+                  <Badge variant="secondary" className="bg-white/90 text-gray-900">
                     {service.category?.nameFr}
                   </Badge>
-                  <Badge
-                    variant="secondary"
-                    className="bg-white/90 text-gray-900 flex items-center gap-1"
-                  >
-                    <Video className="w-3 h-3" />
+                  <Badge variant="secondary" className="flex items-center gap-1 bg-white/90 text-gray-900">
+                    <Video className="h-3 w-3" />
                     Consultation vidéo
                   </Badge>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-black text-white mb-2">
-                  {service.nameFr}
-                </h1>
+                <h1 className="mb-2 font-black text-3xl text-white md:text-4xl">{service.nameFr}</h1>
                 <div className="flex items-center gap-4 text-white/80">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                      />
+                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     ))}
                     <span className="ml-1 text-sm">(4.8)</span>
                   </div>
@@ -209,42 +189,30 @@ export default function ServiceDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-xl p-6 shadow-sm"
+              className="rounded-xl bg-white p-6 shadow-sm"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div
-                    className={cn(
-                      "w-16 h-16 rounded-full flex items-center justify-center",
-                      avatarColor,
-                    )}
-                  >
-                    <span className="text-white font-bold text-xl">
-                      {initials}
-                    </span>
+                  <div className={cn("flex h-16 w-16 items-center justify-center rounded-full", avatarColor)}>
+                    <span className="font-bold text-white text-xl">{initials}</span>
                   </div>
                   <div>
                     <h3 className="font-bold text-lg">Prestataire Bridge</h3>
-                    <p className="text-gray-500 text-sm">
-                      Expert certifié en services
-                    </p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge
-                        variant="outline"
-                        className="text-xs flex items-center gap-1"
-                      >
-                        <Shield className="w-3 h-3" />
+                    <p className="text-gray-500 text-sm">Expert certifié en services</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                        <Shield className="h-3 w-3" />
                         Vérifié
                       </Badge>
                       <Badge variant="outline" className="text-xs">
-                        <Clock className="w-3 h-3 inline mr-1" />
+                        <Clock className="mr-1 inline h-3 w-3" />
                         Réponse rapide
                       </Badge>
                     </div>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="gap-2">
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="h-4 w-4" />
                   Contacter
                 </Button>
               </div>
@@ -255,156 +223,127 @@ export default function ServiceDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-xl shadow-sm"
+              className="rounded-xl bg-white shadow-sm"
             >
               <Tabs defaultValue="description" className="w-full">
-                <TabsList className="w-full justify-start rounded-t-xl rounded-b-none border-b bg-transparent p-0 h-auto">
+                <TabsList className="h-auto w-full justify-start rounded-t-xl rounded-b-none border-b bg-transparent p-0">
                   <TabsTrigger
                     value="description"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-4 px-6"
+                    className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Description
                   </TabsTrigger>
                   <TabsTrigger
                     value="variants"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-4 px-6"
+                    className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Options & Tarifs
                   </TabsTrigger>
                   <TabsTrigger
                     value="specs"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-4 px-6"
+                    className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Spécifications
                   </TabsTrigger>
                   <TabsTrigger
                     value="reviews"
-                    className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-4 px-6"
+                    className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
                   >
                     Avis (128)
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="description" className="p-6 mt-0">
+                <TabsContent value="description" className="mt-0 p-6">
                   <div className="prose max-w-none">
-                    <p className="text-gray-700 leading-relaxed">
-                      {service.descriptionFr}
-                    </p>
+                    <p className="text-gray-700 leading-relaxed">{service.descriptionFr}</p>
 
-                    <h4 className="font-bold text-lg mt-6 mb-3">
-                      Ce qui est inclus
-                    </h4>
+                    <h4 className="mt-6 mb-3 font-bold text-lg">Ce qui est inclus</h4>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <Check className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                        <span className="text-gray-700">
-                          Service professionnel de haute qualité
-                        </span>
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                        <span className="text-gray-700">Service professionnel de haute qualité</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <Check className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                        <span className="text-gray-700">
-                          Consultation vidéo gratuite avant le service
-                        </span>
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                        <span className="text-gray-700">Consultation vidéo gratuite avant le service</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <Check className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                        <span className="text-gray-700">
-                          Support client 24/7
-                        </span>
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                        <span className="text-gray-700">Support client 24/7</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <Check className="w-5 h-5 text-emerald-500 mt-0.5 shrink-0" />
-                        <span className="text-gray-700">
-                          Garantie satisfaction ou remboursement
-                        </span>
+                        <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
+                        <span className="text-gray-700">Garantie satisfaction ou remboursement</span>
                       </li>
                     </ul>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="variants" className="p-6 mt-0">
+                <TabsContent value="variants" className="mt-0 p-6">
                   <div className="space-y-4">
-                    <h4 className="font-bold text-lg">
-                      Choisissez votre option
-                    </h4>
+                    <h4 className="font-bold text-lg">Choisissez votre option</h4>
                     {variants && variants.length > 0 ? (
                       variants.map((variant: ServiceVariant) => {
-                        const metadata = variant.metadata as Record<
-                          string,
-                          unknown
-                        > | null;
+                        const metadata = variant.metadata as Record<string, unknown> | null;
                         return (
                           <div
                             key={variant.id}
                             onClick={() => setSelectedVariant(variant.id)}
                             className={cn(
-                              "border rounded-xl p-4 cursor-pointer transition-all",
-                              selectedVariant === variant.id
-                                ? "border-primary bg-primary/5"
-                                : "hover:border-gray-300",
+                              "cursor-pointer rounded-xl border p-4 transition-all",
+                              selectedVariant === variant.id ? "border-primary bg-primary/5" : "hover:border-gray-300",
                             )}
                           >
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
                                 <div
                                   className={cn(
-                                    "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                                    selectedVariant === variant.id
-                                      ? "border-primary"
-                                      : "border-gray-300",
+                                    "flex h-5 w-5 items-center justify-center rounded-full border-2",
+                                    selectedVariant === variant.id ? "border-primary" : "border-gray-300",
                                   )}
                                 >
                                   {selectedVariant === variant.id && (
-                                    <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                                    <div className="h-2.5 w-2.5 rounded-full bg-primary" />
                                   )}
                                 </div>
                                 <div>
-                                  <p className="font-semibold">
-                                    {variant.nameFr}
-                                  </p>
+                                  <p className="font-semibold">{variant.nameFr}</p>
                                   {/* Metadata badges */}
                                   {metadata && (
-                                    <div className="flex flex-wrap gap-2 mt-2 text-xs text-muted-foreground">
+                                    <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground text-xs">
                                       {Boolean(metadata.capacity) && (
                                         <span className="flex items-center gap-1">
-                                          <Users className="w-3 h-3" />
+                                          <Users className="h-3 w-3" />
                                           {`${metadata.capacity}`} places
                                         </span>
                                       )}
                                       {Boolean(metadata.luggage) && (
                                         <span className="flex items-center gap-1">
-                                          <Briefcase className="w-3 h-3" />
+                                          <Briefcase className="h-3 w-3" />
                                           {`${metadata.luggage}`} bagages
                                         </span>
                                       )}
                                       {Boolean(metadata.bedrooms) && (
                                         <span className="flex items-center gap-1">
-                                          <Home className="w-3 h-3" />
+                                          <Home className="h-3 w-3" />
                                           {`${metadata.bedrooms}`} ch.
                                         </span>
                                       )}
                                       {Boolean(metadata.bathrooms) && (
                                         <span className="flex items-center gap-1">
-                                          <span className="w-3 h-3 flex items-center justify-center">
-                                            🚿
-                                          </span>
+                                          <span className="flex h-3 w-3 items-center justify-center">🚿</span>
                                           {`${metadata.bathrooms}`} sdb.
                                         </span>
                                       )}
                                       {Boolean(metadata.area) && (
                                         <span className="flex items-center gap-1">
-                                          <span className="w-3 h-3 flex items-center justify-center">
-                                            📐
-                                          </span>
+                                          <span className="flex h-3 w-3 items-center justify-center">📐</span>
                                           {`${metadata.area}`} m²
                                         </span>
                                       )}
                                       {Boolean(metadata.location) && (
                                         <span className="flex items-center gap-1">
-                                          <span className="w-3 h-3 flex items-center justify-center">
-                                            📍
-                                          </span>
+                                          <span className="flex h-3 w-3 items-center justify-center">📍</span>
                                           {`${metadata.location}`}
                                         </span>
                                       )}
@@ -412,44 +351,29 @@ export default function ServiceDetailPage() {
                                   )}
                                 </div>
                               </div>
-                              <p className="font-bold text-lg">
-                                ${variant.priceModifier}
-                              </p>
+                              <p className="font-bold text-lg">${variant.priceModifier}</p>
                             </div>
                           </div>
                         );
                       })
                     ) : (
-                      <p className="text-gray-500">
-                        Aucune option disponible pour ce service.
-                      </p>
+                      <p className="text-gray-500">Aucune option disponible pour ce service.</p>
                     )}
                   </div>
                 </TabsContent>
 
-                <TabsContent value="specs" className="p-6 mt-0">
+                <TabsContent value="specs" className="mt-0 p-6">
                   {(() => {
-                    const variantData = variants?.find(
-                      (v: ServiceVariant) => v.id === selectedVariant,
-                    );
-                    const metadata = (variantData?.metadata ||
-                      service.metadata) as Record<string, unknown> | null;
+                    const variantData = variants?.find((v: ServiceVariant) => v.id === selectedVariant);
+                    const metadata = (variantData?.metadata || service.metadata) as Record<string, unknown> | null;
                     if (!metadata) {
-                      return (
-                        <p className="text-gray-500">
-                          Aucune spécification disponible.
-                        </p>
-                      );
+                      return <p className="text-gray-500">Aucune spécification disponible.</p>;
                     }
 
                     const hasAmenities =
-                      Boolean(metadata.amenities) &&
-                      Array.isArray(metadata.amenities) &&
-                      metadata.amenities.length > 0;
+                      Boolean(metadata.amenities) && Array.isArray(metadata.amenities) && metadata.amenities.length > 0;
                     const hasFeatures =
-                      Boolean(metadata.features) &&
-                      Array.isArray(metadata.features) &&
-                      metadata.features.length > 0;
+                      Boolean(metadata.features) && Array.isArray(metadata.features) && metadata.features.length > 0;
                     const hasSpecs =
                       Boolean(metadata.capacity) ||
                       Boolean(metadata.bedrooms) ||
@@ -461,11 +385,7 @@ export default function ServiceDetailPage() {
                       Boolean(metadata.address) ||
                       Boolean(metadata.luggage);
                     if (!hasAmenities && !hasFeatures && !hasSpecs) {
-                      return (
-                        <p className="text-gray-500">
-                          Aucune spécification disponible.
-                        </p>
-                      );
+                      return <p className="text-gray-500">Aucune spécification disponible.</p>;
                     }
 
                     return (
@@ -473,21 +393,14 @@ export default function ServiceDetailPage() {
                         {/* Équipements */}
                         {hasAmenities && (
                           <div>
-                            <h4 className="font-bold text-lg mb-3">
-                              Équipements
-                            </h4>
+                            <h4 className="mb-3 font-bold text-lg">Équipements</h4>
                             <ul className="grid grid-cols-2 gap-2">
-                              {(metadata.amenities as string[]).map(
-                                (amenity: string, index: number) => (
-                                  <li
-                                    key={index}
-                                    className="flex items-center gap-2 text-sm text-gray-700"
-                                  >
-                                    <Check className="w-4 h-4 text-emerald-500" />
-                                    {amenity}
-                                  </li>
-                                ),
-                              )}
+                              {(metadata.amenities as string[]).map((amenity: string, index: number) => (
+                                <li key={index} className="flex items-center gap-2 text-gray-700 text-sm">
+                                  <Check className="h-4 w-4 text-emerald-500" />
+                                  {amenity}
+                                </li>
+                              ))}
                             </ul>
                           </div>
                         )}
@@ -495,21 +408,14 @@ export default function ServiceDetailPage() {
                         {/* Caractéristiques */}
                         {hasFeatures && (
                           <div>
-                            <h4 className="font-bold text-lg mb-3">
-                              Caractéristiques
-                            </h4>
+                            <h4 className="mb-3 font-bold text-lg">Caractéristiques</h4>
                             <ul className="grid grid-cols-2 gap-2">
-                              {(metadata.features as string[]).map(
-                                (feature: string, index: number) => (
-                                  <li
-                                    key={index}
-                                    className="flex items-center gap-2 text-sm text-gray-700"
-                                  >
-                                    <Check className="w-4 h-4 text-emerald-500" />
-                                    {feature}
-                                  </li>
-                                ),
-                              )}
+                              {(metadata.features as string[]).map((feature: string, index: number) => (
+                                <li key={index} className="flex items-center gap-2 text-gray-700 text-sm">
+                                  <Check className="h-4 w-4 text-emerald-500" />
+                                  {feature}
+                                </li>
+                              ))}
                             </ul>
                           </div>
                         )}
@@ -517,16 +423,12 @@ export default function ServiceDetailPage() {
                         {/* Spécifications techniques */}
                         {hasSpecs && (
                           <div>
-                            <h4 className="font-bold text-lg mb-3">
-                              Spécifications
-                            </h4>
+                            <h4 className="mb-3 font-bold text-lg">Spécifications</h4>
                             <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
                               {Boolean(metadata.capacity) && (
                                 <>
                                   <dt className="text-gray-500">Capacité</dt>
-                                  <dd className="font-medium">
-                                    {`${metadata.capacity}`} personnes
-                                  </dd>
+                                  <dd className="font-medium">{`${metadata.capacity}`} personnes</dd>
                                 </>
                               )}
                               {Boolean(metadata.bedrooms) && (
@@ -537,26 +439,20 @@ export default function ServiceDetailPage() {
                               )}
                               {Boolean(metadata.bathrooms) && (
                                 <>
-                                  <dt className="text-gray-500">
-                                    Salles de bain
-                                  </dt>
+                                  <dt className="text-gray-500">Salles de bain</dt>
                                   <dd className="font-medium">{`${metadata.bathrooms}`}</dd>
                                 </>
                               )}
                               {Boolean(metadata.area) && (
                                 <>
                                   <dt className="text-gray-500">Surface</dt>
-                                  <dd className="font-medium">
-                                    {`${metadata.area}`} m²
-                                  </dd>
+                                  <dd className="font-medium">{`${metadata.area}`} m²</dd>
                                 </>
                               )}
                               {Boolean(metadata.landArea) && (
                                 <>
                                   <dt className="text-gray-500">Terrain</dt>
-                                  <dd className="font-medium">
-                                    {`${metadata.landArea}`} m²
-                                  </dd>
+                                  <dd className="font-medium">{`${metadata.landArea}`} m²</dd>
                                 </>
                               )}
                               {Boolean(metadata.floor) && (
@@ -567,9 +463,7 @@ export default function ServiceDetailPage() {
                               )}
                               {Boolean(metadata.location) && (
                                 <>
-                                  <dt className="text-gray-500">
-                                    Localisation
-                                  </dt>
+                                  <dt className="text-gray-500">Localisation</dt>
                                   <dd className="font-medium">{`${metadata.location}`}</dd>
                                 </>
                               )}
@@ -582,9 +476,7 @@ export default function ServiceDetailPage() {
                               {Boolean(metadata.luggage) && (
                                 <>
                                   <dt className="text-gray-500">Bagages</dt>
-                                  <dd className="font-medium">
-                                    {`${metadata.luggage}`} bagages
-                                  </dd>
+                                  <dd className="font-medium">{`${metadata.luggage}`} bagages</dd>
                                 </>
                               )}
                             </dl>
@@ -595,46 +487,35 @@ export default function ServiceDetailPage() {
                   })()}
                 </TabsContent>
 
-                <TabsContent value="reviews" className="p-6 mt-0">
+                <TabsContent value="reviews" className="mt-0 p-6">
                   <div className="space-y-6">
                     {/* Rating summary */}
-                    <div className="flex items-center gap-8 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-center gap-8 rounded-xl bg-gray-50 p-4">
                       <div className="text-center">
-                        <div className="text-4xl font-black">4.8</div>
-                        <div className="flex items-center gap-0.5 justify-center">
+                        <div className="font-black text-4xl">4.8</div>
+                        <div className="flex items-center justify-center gap-0.5">
                           {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                            />
+                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
-                        <p className="text-sm text-gray-500 mt-1">128 avis</p>
+                        <p className="mt-1 text-gray-500 text-sm">128 avis</p>
                       </div>
                       <Separator orientation="vertical" className="h-16" />
                       <div className="flex-1 space-y-2">
                         {[5, 4, 3, 2, 1].map((star) => (
                           <div key={star} className="flex items-center gap-3">
-                            <span className="text-sm w-4">{star}</span>
-                            <Star className="w-4 h-4 text-gray-300" />
-                            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <span className="w-4 text-sm">{star}</span>
+                            <Star className="h-4 w-4 text-gray-300" />
+                            <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
                               <div
-                                className="h-full bg-yellow-400 rounded-full"
+                                className="h-full rounded-full bg-yellow-400"
                                 style={{
                                   width: `${star === 5 ? 75 : star === 4 ? 15 : 10}%`,
                                 }}
                               />
                             </div>
-                            <span className="text-sm text-gray-500 w-8">
-                              {star === 5
-                                ? 96
-                                : star === 4
-                                  ? 19
-                                  : star === 3
-                                    ? 8
-                                    : star === 2
-                                      ? 4
-                                      : 1}
+                            <span className="w-8 text-gray-500 text-sm">
+                              {star === 5 ? 96 : star === 4 ? 19 : star === 3 ? 8 : star === 2 ? 4 : 1}
                             </span>
                           </div>
                         ))}
@@ -648,8 +529,7 @@ export default function ServiceDetailPage() {
                           name: "Marie K.",
                           rating: 5,
                           date: "Il y a 2 jours",
-                          comment:
-                            "Excellent service ! Je recommande vivement.",
+                          comment: "Excellent service ! Je recommande vivement.",
                         },
                         {
                           name: "Jean P.",
@@ -661,34 +541,23 @@ export default function ServiceDetailPage() {
                           name: "Sophie M.",
                           rating: 4,
                           date: "Il y a 2 semaines",
-                          comment:
-                            "Bon service, légèrement cher mais qualité au rendez-vous.",
+                          comment: "Bon service, légèrement cher mais qualité au rendez-vous.",
                         },
                       ].map((review, i) => (
-                        <div
-                          key={i}
-                          className="border-b last:border-0 pb-4 last:pb-0"
-                        >
-                          <div className="flex items-start justify-between mb-2">
+                        <div key={i} className="border-b pb-4 last:border-0 last:pb-0">
+                          <div className="mb-2 flex items-start justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <span className="font-bold text-gray-600">
-                                  {review.name[0]}
-                                </span>
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200">
+                                <span className="font-bold text-gray-600">{review.name[0]}</span>
                               </div>
                               <div>
                                 <p className="font-semibold">{review.name}</p>
-                                <p className="text-sm text-gray-500">
-                                  {review.date}
-                                </p>
+                                <p className="text-gray-500 text-sm">{review.date}</p>
                               </div>
                             </div>
                             <div className="flex items-center gap-0.5">
                               {[...Array(review.rating)].map((_, j) => (
-                                <Star
-                                  key={j}
-                                  className="w-4 h-4 fill-yellow-400 text-yellow-400"
-                                />
+                                <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                               ))}
                             </div>
                           </div>
@@ -708,24 +577,25 @@ export default function ServiceDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-xl p-6 shadow-sm sticky top-24"
+              className="sticky top-24 rounded-xl bg-white p-6 shadow-sm"
             >
-              <div className="flex items-start justify-between mb-6">
+              <div className="mb-6 flex items-start justify-between">
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">À partir de</p>
-                  <p className="text-3xl font-black">${displayPrice}</p>
-                  <p className="text-sm text-gray-500">/{service.priceUnit}</p>
+                  <p className="mb-1 text-gray-500 text-sm">À partir de</p>
+                  <p className="font-black text-3xl">${displayPrice}</p>
+                  <p className="text-gray-500 text-sm">/{service.priceUnit}</p>
                 </div>
                 <button
-                  onClick={() => setLiked(!liked)}
-                  className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  onClick={handleToggleFavorite}
+                  className={cn(
+                    "relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200",
+                    liked ? "scale-110 bg-rose-500 shadow-lg shadow-rose-300/60" : "border hover:bg-rose-50",
+                  )}
                   aria-label="Favori"
                 >
+                  {liked && <span className="absolute inset-0 animate-ping rounded-full bg-rose-400/50" />}
                   <Heart
-                    className={cn(
-                      "w-5 h-5",
-                      liked ? "fill-rose-500 text-rose-500" : "text-gray-400",
-                    )}
+                    className={cn("h-5 w-5 transition-colors", liked ? "fill-white text-white" : "text-gray-400")}
                   />
                 </button>
               </div>
@@ -733,27 +603,23 @@ export default function ServiceDetailPage() {
               <Separator className="my-4" />
 
               {/* Quick features */}
-              <div className="space-y-3 mb-6">
+              <div className="mb-6 space-y-3">
                 <div className="flex items-center gap-3 text-sm">
-                  <Clock className="w-4 h-4 text-gray-400" />
+                  <Clock className="h-4 w-4 text-gray-400" />
                   <span>Livraison en 24-48h</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <Shield className="w-4 h-4 text-gray-400" />
+                  <Shield className="h-4 w-4 text-gray-400" />
                   <span>Garantie 30 jours</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
-                  <MessageCircle className="w-4 h-4 text-gray-400" />
+                  <MessageCircle className="h-4 w-4 text-gray-400" />
                   <span>Support inclus</span>
                 </div>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                className="w-full mb-3 gap-2"
-                size="lg"
-              >
-                <ShoppingCart className="w-4 h-4" />
+              <Button onClick={handleAddToCart} className="mb-3 w-full gap-2" size="lg">
+                <ShoppingCart className="h-4 w-4" />
                 Ajouter au panier
               </Button>
 
@@ -761,7 +627,7 @@ export default function ServiceDetailPage() {
                 Réserver maintenant
               </Button>
 
-              <p className="text-xs text-center text-gray-500 mt-4">
+              <p className="mt-4 text-center text-gray-500 text-xs">
                 Aucun frais de réservation. Annulation gratuite 24h avant.
               </p>
             </motion.div>
@@ -776,8 +642,8 @@ export default function ServiceDetailPage() {
             transition={{ delay: 0.4 }}
             className="mt-12"
           >
-            <h2 className="text-2xl font-bold mb-6">Services similaires</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <h2 className="mb-6 font-bold text-2xl">Services similaires</h2>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {similarServices.map((s: ServiceWithDetails, i: number) => (
                 <ServiceCard key={s.id} service={s} badgeIndex={i} />
               ))}

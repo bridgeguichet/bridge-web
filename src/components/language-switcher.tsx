@@ -1,6 +1,6 @@
 "use client";
 
-import { Languages } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const languages = [
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "en", name: "English", flag: "🇬🇧" },
+  { code: "fr", name: "Français" },
+  { code: "en", name: "English" },
 ];
 
 export function LanguageSwitcher() {
@@ -28,21 +28,20 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost">
-          <Languages className="size-5" />
-          {currentLanguage.flag}
-          <span className="sr-only">Change language</span>
+        <Button variant="ghost" size="sm" className="h-9 gap-1 rounded-full font-semibold uppercase hover:bg-gray-100">
+          <span className="text-xs text-gray-700">{currentLanguage.code}</span>
+          <ChevronDown className="h-3 w-3 text-gray-700" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-[140px]">
         {languages.map((language) => (
           <DropdownMenuItem
             key={language.code}
             onClick={() => changeLanguage(language.code)}
             className="cursor-pointer"
           >
-            <span className="mr-2">{language.flag}</span>
-            <span>{language.name}</span>
+            <span className="font-medium uppercase">{language.code}</span>
+            <span className="ml-2 text-muted-foreground">— {language.name}</span>
             {currentLanguage.code === language.code && <span className="ml-auto text-primary">✓</span>}
           </DropdownMenuItem>
         ))}

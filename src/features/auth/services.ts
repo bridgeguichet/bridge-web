@@ -1,35 +1,40 @@
 import axios from "axios";
 
+import { signIn, signUp } from "@/lib/auth/auth-client";
+
 import type { LoginCredentials, LoginResponse, ProfileResponse, RegisterData, User } from "./types";
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
-    const { data } = await axios.post("/api/auth/login", credentials, {
-      withCredentials: true,
+    const result = await signIn.email({
+      email: credentials.email,
+      password: credentials.password,
     });
 
-    if (data.error) {
-      throw new Error(data.error || "Erreur lors de la connexion");
+    if (result.error) {
+      throw new Error(result.error.message || "Erreur lors de la connexion");
     }
 
     return {
       success: true,
-      user: data.user as User,
+      user: result.data?.user as User,
     };
   },
 
   register: async (registerData: RegisterData): Promise<LoginResponse> => {
-    const { data } = await axios.post("/api/auth/register", registerData, {
-      withCredentials: true,
+    const result = await signUp.email({
+      email: registerData.email,
+      password: registerData.password,
+      name: registerData.name,
     });
 
-    if (data.error) {
-      throw new Error(data.error || "Erreur lors de l'inscription");
+    if (result.error) {
+      throw new Error(result.error.message || "Erreur lors de l'inscription");
     }
 
     return {
       success: true,
-      user: data.user as User,
+      user: result.data?.user as User,
     };
   },
 
@@ -39,7 +44,7 @@ export const authService = {
   },
 
   getProfile: async (): Promise<ProfileResponse> => {
-    const { data } = await axios.get("/api/auth/profile", {
+    const { data } = await axios.get("/api/auth/get-session", {
       withCredentials: true,
     });
     if (!data.user) {
