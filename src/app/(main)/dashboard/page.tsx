@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useServices } from "@/features/admin";
 import { useTransactionsStore } from "@/features/transactions/store";
@@ -35,7 +35,11 @@ export default function DashboardPage() {
   const { data: servicesData, isLoading: servicesLoading } = useServices();
   const transactions = useTransactionsStore((state) => state.transactions);
 
-  const activityData = useMemo(() => generateActivityData(), []);
+  const [activityData, setActivityData] = useState<Array<{ date: string; value: number }>>([]);
+
+  useEffect(() => {
+    setActivityData(generateActivityData());
+  }, []);
 
   const revenue = useMemo(() => {
     return transactions.filter((t) => t.status === "completed").reduce((sum, t) => sum + t.amount, 0);

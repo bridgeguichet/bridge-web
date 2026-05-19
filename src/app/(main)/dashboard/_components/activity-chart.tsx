@@ -2,15 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -49,9 +41,10 @@ export function ActivityChart({ data, isLoading }: ActivityChartProps) {
           </p>
         </div>
         <div className="flex gap-1">
-          {( ["90", "30", "7"] as Period[] ).map((p) => (
+          {(["90", "30", "7"] as Period[]).map((p) => (
             <button
               key={p}
+              type="button"
               onClick={() => setPeriod(p)}
               className={cn(
                 "rounded-md px-3 py-1 text-xs font-medium transition-colors",
@@ -110,7 +103,7 @@ export function ActivityChart({ data, isLoading }: ActivityChartProps) {
                             year: "numeric",
                           })}
                         </p>
-                        <p className="text-sm font-semibold">{payload[0].value as number} visiteurs</p>
+                        <p className="font-semibold text-sm">{payload[0].value as number} visiteurs</p>
                       </div>
                     );
                   }}

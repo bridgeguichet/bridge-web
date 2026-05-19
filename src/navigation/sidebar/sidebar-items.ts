@@ -1,14 +1,4 @@
-import {
-  Banknote,
-  Box,
-  ChartBar,
-  LayoutDashboard,
-  type LucideIcon,
-  Package,
-  Tags,
-  UserCog,
-  Users,
-} from "lucide-react";
+import { Banknote, Box, ChartBar, LayoutDashboard, type LucideIcon, Package, Tags, UserCog, Users } from "lucide-react";
 
 export interface NavSubItem {
   titleKey: string;
@@ -36,6 +26,16 @@ export interface NavGroup {
 }
 
 export const sidebarItems: NavGroup[] = [
+  {
+    id: 1,
+    items: [
+      {
+        titleKey: "sidebar.dashboard",
+        url: "/dashboard/default",
+        icon: LayoutDashboard,
+      },
+    ],
+  },
   {
     id: 2,
     labelKey: "sidebar.admin",

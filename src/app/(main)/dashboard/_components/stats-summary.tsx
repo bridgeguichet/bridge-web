@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendingUp, Package, Users, ShoppingCart, CreditCard } from "lucide-react";
+import { CreditCard, Package, ShoppingCart, TrendingUp, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";

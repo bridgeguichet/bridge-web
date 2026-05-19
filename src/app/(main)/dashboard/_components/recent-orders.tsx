@@ -6,14 +6,7 @@ import { fr } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Transaction } from "@/features/transactions/types";
 
 interface RecentOrdersProps {
@@ -34,7 +27,7 @@ export function RecentOrders({ transactions, isLoading }: RecentOrdersProps) {
   return (
     <Card className="border bg-card">
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-semibold">Commandes récentes</CardTitle>
+        <CardTitle className="font-semibold text-base">Commandes récentes</CardTitle>
       </CardHeader>
       <CardContent>
         {isLoading ? (
