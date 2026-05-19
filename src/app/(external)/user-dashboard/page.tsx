@@ -5,8 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight01Icon,
   Cash01Icon,
-  CreditCardIcon,
-  FavouriteIcon,
   Invoice01Icon,
   Package01Icon,
   ShoppingBag01Icon,
@@ -24,9 +22,9 @@ import { EmptyState } from "@/components/user-dashboard/empty-state";
 import { StatsCard } from "@/components/user-dashboard/stats-card";
 import { useSession } from "@/features/auth/hooks";
 import { useCartStore } from "@/features/cart/store";
-import { useOrders } from "@/features/orders/hooks";
+import { useTransactionsStore } from "@/features/transactions/store";
 
-const ORDER_STATUS_LABELS: Record<
+const STATUS_LABELS: Record<
   string,
   {
     label: string;
@@ -34,9 +32,9 @@ const ORDER_STATUS_LABELS: Record<
   }
 > = {
   pending: { label: "En attente", variant: "secondary" },
-  in_progress: { label: "En cours", variant: "default" },
   completed: { label: "Terminée", variant: "outline" },
-  cancelled: { label: "Annulée", variant: "destructive" },
+  failed: { label: "Échouée", variant: "destructive" },
+  refunded: { label: "Remboursée", variant: "destructive" },
 };
 
 const containerVariants = {
@@ -67,39 +65,39 @@ export default function UserDashboard() {
   const userName = session?.user?.name || "";
   const cartItems = useCartStore((state) => state.items);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const { data: orders, isLoading: ordersLoading } = useOrders();
+  const transactions = useTransactionsStore((state) => state.transactions);
+  const totalSpent = useTransactionsStore((state) => state.getTotalSpent());
 
-  const activeOrders = orders?.filter((o) => o.status === "in_progress" || o.status === "pending") || [];
-  const totalSpent = orders?.reduce((sum, o) => sum + parseFloat(o.totalAmount || "0"), 0) ?? 0;
-  const packOrders = orders?.filter((o) => o.orderNumber?.startsWith("PACK-")) || [];
-  const recentOrders = packOrders.slice(0, 3);
+  const packTransactions = transactions.filter((t) => t.type === "pack");
+  const pendingTransactions = transactions.filter((t) => t.status === "pending");
+  const recentPacks = packTransactions.slice(0, 3);
 
   const stats = [
     {
       icon: Cash01Icon,
       label: "Total dépenses",
-      value: ordersLoading ? "..." : `$${totalSpent.toFixed(0)}`,
-      trend: `${orders?.length ?? 0} commandes`,
+      value: `$${totalSpent.toFixed(0)}`,
+      trend: `${transactions.length} transactions`,
       trendUp: true,
     },
     {
       icon: Package01Icon,
-      label: "Packs en cours",
-      value: ordersLoading ? "..." : String(activeOrders.length),
-      trend: activeOrders.length > 0 ? "Voir le suivi" : "Aucune active",
-      trendUp: activeOrders.length > 0,
+      label: "Packs créés",
+      value: String(packTransactions.length),
+      trend: packTransactions.length > 0 ? "Voir le suivi" : "Aucun pack",
+      trendUp: packTransactions.length > 0,
     },
     {
       icon: Invoice01Icon,
-      label: "Commandes en cours",
-      value: ordersLoading ? "..." : String(activeOrders.length),
-      trend: activeOrders.length > 0 ? "Voir le suivi" : "Aucune active",
-      trendUp: activeOrders.length > 0,
+      label: "En attente",
+      value: String(pendingTransactions.length),
+      trend: pendingTransactions.length > 0 ? "À traiter" : "Tout est à jour",
+      trendUp: pendingTransactions.length === 0,
     },
     {
       icon: TrendingUpDownIcon,
-      label: "Total commandes",
-      value: ordersLoading ? "..." : String(orders?.length ?? 0),
+      label: "Total transactions",
+      value: String(transactions.length),
       trend: "Depuis le début",
       trendUp: true,
     },
@@ -238,7 +236,7 @@ export default function UserDashboard() {
         </div>
       </motion.div>
 
-      {/* Recent Orders Section */}
+      {/* Recent Packs Section */}
       <motion.div variants={itemVariants}>
         <Card className="overflow-hidden border-0 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between border-b bg-muted/30 px-6 py-5">
@@ -258,41 +256,33 @@ export default function UserDashboard() {
             </Button>
           </CardHeader>
           <CardContent>
-            {ordersLoading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-14 rounded-lg bg-gray-100 animate-pulse" />
-                ))}
-              </div>
-            ) : recentOrders.length === 0 ? (
+            {recentPacks.length === 0 ? (
               <EmptyState
                 icon={Package01Icon}
                 title="Aucun pack pour le moment"
                 description="Vous n'avez pas encore de pack. Explorez nos services pour créer votre premier pack personnalisé."
                 action={{
-                  label: "Explorer les services",
-                  href: "/marketplace#services",
+                  label: "Créer un pack",
+                  href: "/monpack/mode",
                 }}
               />
             ) : (
               <div className="space-y-3">
-                {recentOrders.map((order) => {
-                  const statusInfo = ORDER_STATUS_LABELS[order.status] ?? {
-                    label: order.status,
+                {recentPacks.map((txn) => {
+                  const statusInfo = STATUS_LABELS[txn.status] ?? {
+                    label: txn.status,
                     variant: "outline" as const,
                   };
                   return (
-                    <div key={order.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
+                    <div key={txn.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">Commande #{order.id.slice(0, 8)}</p>
-                        <p className="text-xs text-gray-500">
-                          {new Date(order.createdAt as unknown as string).toLocaleDateString("fr-FR")}
+                        <p className="font-semibold text-gray-900 text-sm">Pack #{txn.id.slice(4, 12)}</p>
+                        <p className="text-gray-500 text-xs">
+                          {new Date(txn.createdAt).toLocaleDateString("fr-FR")}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-gray-900">
-                          ${parseFloat(order.totalAmount || "0").toFixed(2)}
-                        </span>
+                        <span className="font-bold text-gray-900 text-sm">${txn.amount.toFixed(2)}</span>
                         <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                       </div>
                     </div>

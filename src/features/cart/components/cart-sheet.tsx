@@ -144,9 +144,12 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
               <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                 Découvrez nos services et ajoutez-les à votre panier
               </p>
-              <Button onClick={handleExplore} className="rounded-full px-6">
-                Explorer les services
+              <Button className="rounded-full px-6" asChild>
+                <Link href="/">
+                  Explorer les services
+                </Link>
               </Button>
+
             </div>
           ) : (
             /* Cart items */

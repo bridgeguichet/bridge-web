@@ -1,4 +1,4 @@
-import type { Category, CustomPack, PackItem, Service, ServiceVariant } from "@/lib/db/schema";
+import type { Category, Service, ServiceVariant } from "@/lib/db/schema";
 
 export interface PackBuilderState {
   currentCategoryIndex: number;
@@ -8,14 +8,20 @@ export interface PackBuilderState {
   skippedCategories: string[];
 }
 
-export interface PackItemWithDetails extends PackItem {
+export interface PackItemWithDetails {
+  id: string;
+  packId: string;
+  serviceId: string;
+  variantId: string | null;
+  categoryId: string;
+  quantity: number;
+  unitPrice: string;
+  totalPrice: string;
+  metadata: Record<string, unknown>;
+  addedAt: Date;
   service?: Service;
   variant?: ServiceVariant;
   category?: Category;
-}
-
-export interface PackWithDetails extends CustomPack {
-  items: PackItemWithDetails[];
 }
 
 export interface CategoryProgress {

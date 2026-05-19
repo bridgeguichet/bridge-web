@@ -56,3 +56,53 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Erreur lors de la création de la ressource" }, { status: 500 });
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session || session.user.role !== "admin") {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { id, ...data } = body;
+
+    const [resource] = await db.update(resources).set(data).where(eq(resources.id, id)).returning();
+
+    if (!resource) {
+      return NextResponse.json({ error: "Ressource non trouvée" }, { status: 404 });
+    }
+
+    return NextResponse.json(resource);
+  } catch (error) {
+    console.error("Error updating resource:", error);
+    return NextResponse.json({ error: "Erreur lors de la mise à jour de la ressource" }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session || session.user.role !== "admin") {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "ID requis" }, { status: 400 });
+    }
+
+    const [deleted] = await db.delete(resources).where(eq(resources.id, id)).returning();
+
+    if (!deleted) {
+      return NextResponse.json({ error: "Ressource non trouvée" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting resource:", error);
+    return NextResponse.json({ error: "Erreur lors de la suppression de la ressource" }, { status: 500 });
+  }
+}

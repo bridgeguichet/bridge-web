@@ -13,12 +13,9 @@ export const queryKeys = {
     variants: (serviceId: string) => [...queryKeys.services.detail(serviceId), "variants"] as const,
     availability: (serviceId: string) => [...queryKeys.services.detail(serviceId), "availability"] as const,
   },
-  orders: {
-    all: ["orders"] as const,
-    lists: () => [...queryKeys.orders.all, "list"] as const,
-    list: (filters?: Record<string, unknown>) => [...queryKeys.orders.lists(), filters] as const,
-    detail: (id: string) => [...queryKeys.orders.all, id] as const,
-    assignments: (orderId: string) => [...queryKeys.orders.detail(orderId), "assignments"] as const,
+  serviceVariants: {
+    all: ["serviceVariants"] as const,
+    list: (serviceId: string) => [...queryKeys.serviceVariants.all, serviceId] as const,
   },
   resources: {
     all: ["resources"] as const,
@@ -27,15 +24,16 @@ export const queryKeys = {
     detail: (id: string) => [...queryKeys.resources.all, id] as const,
     availability: (resourceId: string) => [...queryKeys.resources.detail(resourceId), "availability"] as const,
   },
+  users: {
+    all: ["users"] as const,
+    lists: () => [...queryKeys.users.all, "list"] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.users.lists(), filters] as const,
+    detail: (id: string) => [...queryKeys.users.all, id] as const,
+    staff: () => [...queryKeys.users.all, "staff"] as const,
+    customers: () => [...queryKeys.users.all, "customers"] as const,
+  },
   cart: {
     all: ["cart"] as const,
     items: () => [...queryKeys.cart.all, "items"] as const,
-  },
-  packs: {
-    all: ["packs"] as const,
-    lists: () => [...queryKeys.packs.all, "list"] as const,
-    list: () => [...queryKeys.packs.lists()] as const,
-    detail: (id: string) => [...queryKeys.packs.all, id] as const,
-    items: (packId: string) => [...queryKeys.packs.detail(packId), "items"] as const,
   },
 };

@@ -51,7 +51,7 @@ export default function FavoritesPage() {
             description="Ajoutez des services à vos favoris pour les retrouver facilement."
             action={{
               label: "Explorer les services",
-              href: "/marketplace#services",
+              href: "/",
             }}
           />
         ) : (

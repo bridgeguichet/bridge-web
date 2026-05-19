@@ -186,6 +186,12 @@
     "lots": "Lots",
     "commercialLots": "Commercial Lots",
     "incidents": "Incidents",
+    "admin": "Administration",
+    "services": "Services",
+    "categories": "Categories",
+    "resources": "Resources",
+    "staff": "Staff",
+    "customers": "Customers",
     "pages": "Pages",
     "users": "Users",
     "roles": "Roles"

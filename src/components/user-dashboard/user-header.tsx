@@ -37,17 +37,7 @@ export function UserHeader() {
     <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
       <SidebarTrigger className="-ml-1" />
 
-      <div className="flex flex-1 items-center justify-end gap-2">
-        <Button variant="ghost" size="icon" className="relative size-8" asChild>
-          <Link href="/user-dashboard/notifications">
-            <HugeiconsIcon icon={Notification01Icon} size={18} color="currentColor" />
-            <span className="absolute right-1 top-1 flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-            </span>
-            <span className="sr-only">Notifications</span>
-          </Link>
-        </Button>
+      {/*<div className="flex flex-1 items-center justify-end gap-2">
 
         {isGuest ? (
           <Button variant="ghost" size="icon" className="size-8" asChild>
@@ -87,7 +77,7 @@ export function UserHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </div>
+      </div>*/}
     </header>
   );
 }

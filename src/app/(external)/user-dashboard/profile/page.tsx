@@ -173,67 +173,15 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
-        {/* Section Mot de passe */}
-        <motion.div variants={itemVariants} className="space-y-6">
-          <div className="border-b border-border pb-4">
-            <h3 className="font-bold text-xl text-foreground">Sécurité</h3>
-            <p className="text-sm text-muted-foreground">Modifiez votre mot de passe</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="current-password" className="font-medium text-foreground">
-                Mot de passe actuel
-              </Label>
-              <Input
-                id="current-password"
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="••••••••"
-                className="border-border bg-muted/30 transition-colors focus:bg-background md:max-w-sm"
-              />
-            </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="new-password" className="font-medium text-foreground">
-                  Nouveau mot de passe
-                </Label>
-                <Input
-                  id="new-password"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="border-border bg-muted/30 transition-colors focus:bg-background"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password" className="font-medium text-foreground">
-                  Confirmer le mot de passe
-                </Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="border-border bg-muted/30 transition-colors focus:bg-background"
-                />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Bouton de sauvegarde unique */}
         <motion.div variants={itemVariants} className="pt-4">
           <Button
             type="submit"
             size="lg"
-            disabled={updateProfile.isPending || changePassword.isPending}
+            disabled={updateProfile.isPending}
             className="w-full bg-accent font-bold text-accent-foreground shadow-md transition-all duration-300 hover:scale-[1.02] hover:bg-accent/90 hover:shadow-lg sm:w-auto sm:px-8"
           >
-            {updateProfile.isPending || changePassword.isPending ? "Mise à jour..." : "Mettre à jour le profil"}
+            {updateProfile.isPending ? "Mise à jour..." : "Mettre à jour le profil"}
           </Button>
         </motion.div>
       </form>

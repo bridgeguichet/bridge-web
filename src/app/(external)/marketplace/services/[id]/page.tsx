@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { CartSheet } from "@/features/cart/components/cart-sheet";
+
 import { useParams, useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
@@ -64,6 +66,8 @@ export default function ServiceDetailPage() {
   const addItem = useCartStore((state) => state.addItem);
 
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const cartItemCount = useCartStore((state) => state.getItemCount());
   const { isAuthenticated } = useSession();
   const { redirectToLogin } = useAuthRedirect();
   const toggle = useFavoritesStore((state) => state.toggle);
@@ -128,20 +132,52 @@ export default function ServiceDetailPage() {
     toast.success("Service ajouté au panier");
   };
 
+  const handleReserveNow = () => {
+    addItem({
+      serviceId: service.id,
+      variantId: selectedVariant || undefined,
+      quantity: 1,
+    });
+    toast.success("Service ajouté au panier");
+
+    if (isAuthenticated) {
+      router.push("/checkout");
+    } else {
+      redirectToLogin("/checkout");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
+      <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
       <div className="sticky top-0 z-50 bg-white">
         <div className="container mx-auto px-6 py-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.back()}
-            className="gap-2 bg-transparent hover:bg-transparent hover:text-primary"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Retour
-          </Button>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.back()}
+              className="gap-2 bg-transparent hover:bg-transparent hover:text-primary"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Retour
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-10 w-10 rounded-full hover:bg-gray-100"
+              onClick={() => setCartOpen(true)}
+            >
+              <ShoppingCart className="h-5 w-5 text-gray-700" />
+              {cartItemCount > 0 && (
+                <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
+                  {cartItemCount > 99 ? "99+" : cartItemCount}
+                </span>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -623,7 +659,7 @@ export default function ServiceDetailPage() {
                 Ajouter au panier
               </Button>
 
-              <Button variant="outline" className="w-full" size="lg">
+              <Button variant="outline" className="w-full" size="lg" onClick={handleReserveNow}>
                 Réserver maintenant
               </Button>
 
@@ -652,5 +688,6 @@ export default function ServiceDetailPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

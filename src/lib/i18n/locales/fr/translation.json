@@ -180,6 +180,12 @@
     "lots": "Lots",
     "commercialLots": "Lots commerciaux",
     "incidents": "Incidents",
+    "admin": "Administration",
+    "services": "Services",
+    "categories": "Catégories",
+    "resources": "Ressources",
+    "staff": "Staff",
+    "customers": "Clients",
     "pages": "Pages",
     "users": "Utilisateurs",
     "roles": "Rôles"

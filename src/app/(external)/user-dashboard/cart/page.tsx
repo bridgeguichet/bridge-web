@@ -105,7 +105,7 @@ export default function CartPage() {
             description="Explorez nos services et ajoutez-les à votre panier pour commencer."
             action={{
               label: "Explorer les services",
-              href: "/marketplace#services",
+              href: "/",
             }}
           />
         </motion.div>
@@ -285,7 +285,7 @@ export default function CartPage() {
               </Button>
 
               <Button variant="outline" className="mt-3 w-full" asChild>
-                <Link href="/marketplace">Continuer mes achats</Link>
+                <Link href="/">Continuer mes achats</Link>
               </Button>
 
               <div className="mt-4 p-3 bg-muted rounded-lg">

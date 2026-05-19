@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -10,14 +12,14 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCartStore } from "@/features/cart/store";
 import { useServices } from "@/features/marketplace/hooks";
-import { useCreateOrder } from "@/features/orders/hooks";
 import { useCreateTransaction } from "@/features/transactions";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [isProcessing, setIsProcessing] = useState(false);
   const { items, clearCart } = useCartStore();
   const { data: services } = useServices();
-  const { mutate: createOrder, isPending } = useCreateOrder();
   const { mutate: createTransaction } = useCreateTransaction();
 
   const cartServices = items.map((item) => ({
@@ -30,79 +32,52 @@ export default function CheckoutPage() {
     return sum + price * item.quantity;
   }, 0);
 
-  const vendorIds = [
-    ...new Set(cartServices.map((i) => i.service?.vendorId).filter(Boolean)),
-  ];
+  const vendorIds = [...new Set(cartServices.map((i) => i.service?.vendorId).filter(Boolean))];
   const hasMultipleVendors = vendorIds.length > 1;
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (items.length === 0) return;
 
     if (hasMultipleVendors) {
-      toast.error(
-        "Votre panier contient des services de plusieurs prestataires. Veuillez commander séparément.",
-      );
+      toast.error("Votre panier contient des services de plusieurs prestataires. Veuillez commander séparément.");
       return;
     }
 
-    const vendorId = cartServices[0].service?.vendorId;
-    if (!vendorId) {
-      toast.error(
-        "Impossible d'identifier le prestataire. Veuillez réessayer.",
-      );
-      return;
-    }
+    setIsProcessing(true);
 
-    createOrder(
-      {
-        items: items.map((item) => {
-          const service = services?.find((s: { id: string }) => s.id === item.serviceId);
-          const unitPrice = service?.basePrice || "0";
-          return {
-            serviceId: item.serviceId,
-            variantId: item.variantId,
-            quantity: item.quantity,
-            unitPrice,
-            totalPrice: (parseFloat(unitPrice) * item.quantity).toString(),
-            metadata: item.metadata,
-          };
-        }),
-        vendorId,
-        totalAmount: total.toString(),
-        paymentMethod,
+    // Simulation du traitement
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Créer une transaction locale
+    createTransaction({
+      type: "order",
+      amount: total,
+      paymentMethod: paymentMethod as "mobile_money" | "card" | "cash" | "bank_transfer",
+      description: `Commande (${items.length} service${items.length > 1 ? "s" : ""})`,
+      items: items.map((item) => {
+        const service = services?.find((s: { id: string }) => s.id === item.serviceId);
+        const unitPrice = parseFloat(service?.basePrice || "0");
+        const totalPrice = unitPrice * item.quantity;
+        return {
+          id: item.serviceId,
+          name: service?.nameFr || "Service",
+          description: service?.descriptionFr ?? undefined,
+          quantity: item.quantity,
+          unitPrice,
+          totalPrice,
+          category: service?.category?.nameFr,
+        };
+      }),
+      metadata: {
+        source: "cart-checkout",
+        paymentMethod: paymentMethod,
       },
-      {
-        onSuccess: (data) => {
-          // Créer une transaction locale pour cette commande
-          createTransaction({
-            type: "order",
-            orderId: data.id,
-            amount: total,
-            paymentMethod: paymentMethod as "mobile_money" | "card" | "cash" | "bank_transfer",
-            description: `Commande #${data.orderNumber || data.id.slice(0, 8)}`,
-            items: items.map((item) => {
-              const service = services?.find((s: { id: string }) => s.id === item.serviceId);
-              const unitPrice = parseFloat(service?.basePrice || "0");
-              const totalPrice = unitPrice * item.quantity;
-              return {
-                id: item.serviceId,
-                name: service?.nameFr || "Service",
-                description: service?.descriptionFr ?? undefined,
-                quantity: item.quantity,
-                unitPrice,
-                totalPrice,
-                category: service?.category?.nameFr,
-              };
-            }),
-            metadata: {
-              orderNumber: data.orderNumber,
-              vendorId: vendorId,
-            },
-          });
-          clearCart();
-        },
-      },
-    );
+    });
+
+    clearCart();
+    setIsProcessing(false);
+    toast.success("Commande enregistrée avec succès !");
+    router.push("/user-dashboard/transactions");
   };
 
   if (items.length === 0) {
@@ -174,13 +149,8 @@ export default function CheckoutPage() {
         </CardContent>
       </Card>
 
-      <Button
-        onClick={handleCheckout}
-        disabled={isPending}
-        className="w-full"
-        size="lg"
-      >
-        {isPending ? "Traitement..." : "Confirmer la commande"}
+      <Button onClick={handleCheckout} disabled={isProcessing} className="w-full" size="lg">
+        {isProcessing ? "Traitement..." : "Confirmer la commande"}
       </Button>
     </div>
   );

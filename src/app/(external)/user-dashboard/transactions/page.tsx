@@ -241,7 +241,7 @@ export default function TransactionsPage() {
             description="Vos transactions apparaîtront ici une fois que vous aurez passé votre première commande."
             action={{
               label: "Explorer les services",
-              href: "/marketplace#services",
+              href: "/",
             }}
           />
         ) : (
