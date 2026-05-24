@@ -29,9 +29,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CartSheet } from "@/features/cart/components/cart-sheet";
 import { useAuthRedirect, useSession } from "@/features/auth/hooks";
 import { useCartStore } from "@/features/cart/store";
 import { ServiceCard } from "@/features/marketplace/components/service-card";
+import { useFavoritesStore } from "@/features/marketplace/store";
 import { useService, useServices } from "@/features/marketplace/hooks";
 import { useFavoritesStore } from "@/features/marketplace/store";
 import type { ServiceWithDetails } from "@/features/marketplace/types";
@@ -72,14 +74,6 @@ export default function ServiceDetailPage() {
   const { redirectToLogin } = useAuthRedirect();
   const toggle = useFavoritesStore((state) => state.toggle);
   const liked = useFavoritesStore((state) => state.isLiked(serviceId));
-
-  const handleToggleFavorite = () => {
-    if (!isAuthenticated) {
-      redirectToLogin(`/marketplace/services/${serviceId}`);
-      return;
-    }
-    toggle(serviceId);
-  };
 
   if (isLoading) {
     return (
@@ -123,6 +117,14 @@ export default function ServiceDetailPage() {
     ?.filter((s: ServiceWithDetails) => s.id !== service.id && s.categoryId === service.categoryId)
     .slice(0, 4);
 
+  const handleToggleFavorite = () => {
+    if (!isAuthenticated) {
+      redirectToLogin(`/marketplace/services/${serviceId}`);
+      return;
+    }
+    toggle(serviceId);
+  };
+
   const handleAddToCart = () => {
     addItem({
       serviceId: service.id,
@@ -152,32 +154,32 @@ export default function ServiceDetailPage() {
       <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
       <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <div className="sticky top-0 z-50 bg-white">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.back()}
-              className="gap-2 bg-transparent hover:bg-transparent hover:text-primary"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Retour
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative h-10 w-10 rounded-full hover:bg-gray-100"
-              onClick={() => setCartOpen(true)}
-            >
-              <ShoppingCart className="h-5 w-5 text-gray-700" />
-              {cartItemCount > 0 && (
-                <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
-                  {cartItemCount > 99 ? "99+" : cartItemCount}
-                </span>
-              )}
-            </Button>
-          </div>
+      <div className="bg-white sticky top-0 z-50 border-b">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.back()}
+            className="gap-2 bg-transparent hover:text-primary hover:bg-transparent"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Retour
+          </Button>
+
+          {/* Bouton Panier */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative h-10 w-10 rounded-full hover:bg-gray-100"
+            onClick={() => setCartOpen(true)}
+          >
+            <ShoppingCart className="h-5 w-5 text-gray-700" />
+            {cartItemCount > 0 && (
+              <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
+                {cartItemCount > 99 ? "99+" : cartItemCount}
+              </span>
+            )}
+          </Button>
         </div>
       </div>
 
@@ -623,15 +625,15 @@ export default function ServiceDetailPage() {
                 </div>
                 <button
                   onClick={handleToggleFavorite}
-                  className={cn(
-                    "relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200",
-                    liked ? "scale-110 bg-rose-500 shadow-lg shadow-rose-300/60" : "border hover:bg-rose-50",
-                  )}
+                  className="relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 border hover:bg-rose-50"
                   aria-label="Favori"
                 >
                   {liked && <span className="absolute inset-0 animate-ping rounded-full bg-rose-400/50" />}
                   <Heart
-                    className={cn("h-5 w-5 transition-colors", liked ? "fill-white text-white" : "text-gray-400")}
+                    className={cn(
+                      "h-5 w-5 transition-colors",
+                      liked ? "fill-rose-500 text-rose-500" : "text-gray-400",
+                    )}
                   />
                 </button>
               </div>
@@ -687,6 +689,8 @@ export default function ServiceDetailPage() {
           </motion.div>
         )}
       </div>
+
+      <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
     </div>
     </>
   );

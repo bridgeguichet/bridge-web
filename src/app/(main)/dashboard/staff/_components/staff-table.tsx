@@ -50,12 +50,22 @@ export function StaffTable({ staff, onEdit }: StaffTableProps) {
     deleteUserMutation.mutate(userId);
   };
 
+<<<<<<< HEAD
   const formatDate = (date: Date) => {
+=======
+  const formatDate = (date: Date | string) => {
+    const d = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(d.getTime())) return "-";
+>>>>>>> backup-plan
     return new Intl.DateTimeFormat("fr-FR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
+<<<<<<< HEAD
     }).format(date);
+=======
+    }).format(d);
+>>>>>>> backup-plan
   };
 
   return (

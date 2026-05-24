@@ -1,6 +1,7 @@
 "use client";
 
-import { BadgeCheck, Bell, LogOut } from "lucide-react";
+import { Bell, LogOut, Settings, UserCircle } from "lucide-react";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -50,17 +51,23 @@ export function AccountSwitcher() {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <BadgeCheck />
-            {t("userMenu.account")}
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/profile">
+              <UserCircle />
+              {t("userMenu.profile")}
+            </Link>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>
-            <CreditCard />
-            {t("userMenu.billing")}
-          </DropdownMenuItem> */}
-          <DropdownMenuItem>
-            <Bell />
-            {t("userMenu.notifications")}
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/settings">
+              <Settings />
+              {t("userMenu.settings")}
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/notifications">
+              <Bell />
+              {t("userMenu.notifications")}
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

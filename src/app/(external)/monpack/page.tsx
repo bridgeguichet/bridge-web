@@ -22,12 +22,13 @@ export default function MonPackPage() {
   const currentCategoryIndex = usePackBuilderStore((state) => state.currentCategoryIndex);
   const packId = usePackBuilderStore((state) => state.packId);
   const setPackId = usePackBuilderStore((state) => state.setPackId);
-  const setCurrentCategoryIndex = usePackBuilderStore((state) => state.setCurrentCategoryIndex);
+  const clearPack = usePackBuilderStore((state) => state.clearPack);
 
-  // Réinitialiser le parcours au montage pour reprendre depuis le début
+  // Réinitialiser tout le pack au montage pour toujours reprendre depuis le début
   useEffect(() => {
-    setCurrentCategoryIndex(0);
-  }, [setCurrentCategoryIndex]);
+    clearPack();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Créer un pack ID local pour le mode test (pas de base de données)
   useEffect(() => {
@@ -78,7 +79,11 @@ export default function MonPackPage() {
       <div className="border-gray-200 border-b bg-white">
         <div className="container mx-auto px-6 py-4 lg:px-8">
           <div className="flex items-center justify-between">
-            <Button onClick={() => router.push("/")} size="sm" className="gap-2 bg-transparent text-secondary hover:text-primary hover:bg-transparent">
+            <Button
+              onClick={() => { clearPack(); router.push("/"); }}
+              size="sm"
+              className="gap-2 bg-transparent text-secondary hover:text-primary hover:bg-transparent"
+            >
               <ArrowLeft className="h-4 w-4" />
               Retour
             </Button>

@@ -78,11 +78,17 @@ export default function ParametrePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [paymentType, setPaymentType] = useState<"mobile" | "card">("mobile");
 
+<<<<<<< HEAD
   // États pour les moyens de paiement enregistrés (null = aucun enregistré)
   const [savedMobileMoney, setSavedMobileMoney] = useState<SavedMobileMoney | null>(null);
   const [savedCard, setSavedCard] = useState<SavedCard | null>(null);
 
   // État pour le formulaire d'ajout de carte
+=======
+  const [savedMobileMoney, setSavedMobileMoney] = useState<SavedMobileMoney | null>(null);
+  const [savedCard, setSavedCard] = useState<SavedCard | null>(null);
+
+>>>>>>> backup-plan
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [cardForm, setCardForm] = useState({
     cardNumber: "",
@@ -142,7 +148,10 @@ export default function ParametrePage() {
       return;
     }
 
+<<<<<<< HEAD
     // Simuler l'enregistrement de la carte
+=======
+>>>>>>> backup-plan
     const last4 = cardForm.cardNumber.replace(/\s/g, "").slice(-4);
     setSavedCard({
       last4,
@@ -167,7 +176,10 @@ export default function ParametrePage() {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
+<<<<<<< HEAD
       {/* Header */}
+=======
+>>>>>>> backup-plan
       <motion.div variants={itemVariants} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
@@ -180,7 +192,10 @@ export default function ParametrePage() {
         </div>
       </motion.div>
 
+<<<<<<< HEAD
       {/* Main Tabs */}
+=======
+>>>>>>> backup-plan
       <motion.div variants={itemVariants}>
         <Tabs defaultValue="compte" className="w-full">
           <TabsList className="mb-6 grid w-full grid-cols-2 lg:w-[400px]">
@@ -194,9 +209,13 @@ export default function ParametrePage() {
             </TabsTrigger>
           </TabsList>
 
+<<<<<<< HEAD
           {/* ==================== COMPTE TAB ==================== */}
           <TabsContent value="compte" className="space-y-6">
             {/* Email Section */}
+=======
+          <TabsContent value="compte" className="space-y-6">
+>>>>>>> backup-plan
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -227,7 +246,11 @@ export default function ParametrePage() {
                   </div>
                   <div className="flex flex-wrap gap-3">
                     <Button type="submit" variant="outline">
+<<<<<<< HEAD
                       Modifier l'email
+=======
+                      Modifier l&apos;email
+>>>>>>> backup-plan
                     </Button>
                     {!isEmailVerified && (
                       <Button type="button" onClick={handleSendVerification}>
@@ -239,7 +262,10 @@ export default function ParametrePage() {
               </CardContent>
             </Card>
 
+<<<<<<< HEAD
             {/* Password Section */}
+=======
+>>>>>>> backup-plan
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -294,7 +320,10 @@ export default function ParametrePage() {
               </CardContent>
             </Card>
 
+<<<<<<< HEAD
             {/* Delete Account Section */}
+=======
+>>>>>>> backup-plan
             <Card className="border-red-200 bg-red-50/50">
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -320,9 +349,13 @@ export default function ParametrePage() {
             </Card>
           </TabsContent>
 
+<<<<<<< HEAD
           {/* ==================== FACTURATION TAB ==================== */}
           <TabsContent value="facturation" className="space-y-6">
             {/* Payment Methods Section */}
+=======
+          <TabsContent value="facturation" className="space-y-6">
+>>>>>>> backup-plan
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -336,7 +369,10 @@ export default function ParametrePage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
+<<<<<<< HEAD
                 {/* Payment Type Tabs */}
+=======
+>>>>>>> backup-plan
                 <div className="flex gap-2">
                   <Button
                     variant={paymentType === "mobile" ? "default" : "outline"}
@@ -358,17 +394,24 @@ export default function ParametrePage() {
                   </Button>
                 </div>
 
+<<<<<<< HEAD
                 {/* Mobile Money Content */}
+=======
+>>>>>>> backup-plan
                 {paymentType === "mobile" && (
                   <div className="space-y-4">
                     {savedMobileMoney ? (
                       <div className="rounded-xl border bg-muted/30 p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
+<<<<<<< HEAD
                             <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${
                               mobileMoneyProviders.find(p => p.id === savedMobileMoney.provider)?.color || "bg-gray-500"
                             }`}>
                               {/* Placeholder pour l'image du provider */}
+=======
+                            <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${mobileMoneyProviders.find(p => p.id === savedMobileMoney.provider)?.color || "bg-gray-500"}`}>
+>>>>>>> backup-plan
                               <span className="font-bold text-white text-xs">
                                 {savedMobileMoney.provider === "mpesa" ? "M" : savedMobileMoney.provider === "orange" ? "O" : "A"}
                               </span>
@@ -410,7 +453,10 @@ export default function ParametrePage() {
                               onClick={() => toast.info(`Fonctionnalité à venir : ajouter ${provider.name}`)}
                               className="group flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-muted-foreground/20 p-4 transition-all hover:border-primary hover:bg-primary/5"
                             >
+<<<<<<< HEAD
                               {/* Placeholder pour l'image - 48x48px */}
+=======
+>>>>>>> backup-plan
                               <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${provider.color} transition-transform group-hover:scale-110`}>
                                 <span className="font-bold text-white">
                                   {provider.id === "mpesa" ? "M" : provider.id === "orange" ? "O" : "A"}
@@ -427,12 +473,18 @@ export default function ParametrePage() {
                   </div>
                 )}
 
+<<<<<<< HEAD
                 {/* Carte Visa Content */}
+=======
+>>>>>>> backup-plan
                 {paymentType === "card" && (
                   <div className="space-y-4">
                     {savedCard ? (
                       <div className="space-y-4">
+<<<<<<< HEAD
                         {/* Visual Card with Bridge Logo */}
+=======
+>>>>>>> backup-plan
                         <div className="relative mx-auto w-full max-w-sm">
                           <div className="aspect-[1.586/1] w-full rounded-2xl bg-linear-to-br from-rose-400 via-rose-500 to-rose-600 p-6 text-white shadow-xl">
                             <div className="flex h-full flex-col justify-between">
@@ -461,19 +513,29 @@ export default function ParametrePage() {
                           </div>
                         </div>
 
+<<<<<<< HEAD
                         {/* Card Details */}
+=======
+>>>>>>> backup-plan
                         <div className="space-y-3">
                           <div className="flex items-center justify-between border-b pb-3">
                             <span className="text-muted-foreground">Numéro de carte</span>
                             <span className="font-mono font-medium">•••• •••• •••• {savedCard.last4}</span>
                           </div>
                           <div className="flex items-center justify-between">
+<<<<<<< HEAD
                             <span className="text-muted-foreground">Date d'expiration</span>
+=======
+                            <span className="text-muted-foreground">Date d&apos;expiration</span>
+>>>>>>> backup-plan
                             <span className="font-medium">{savedCard.expiry}</span>
                           </div>
                         </div>
 
+<<<<<<< HEAD
                         {/* Delete Button */}
+=======
+>>>>>>> backup-plan
                         <Button
                           variant="outline"
                           className="w-full gap-2 text-red-500 hover:bg-red-50 hover:text-red-600"
@@ -583,4 +645,8 @@ export default function ParametrePage() {
       </motion.div>
     </motion.div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> backup-plan

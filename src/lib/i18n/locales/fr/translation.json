@@ -41,8 +41,8 @@
     "unauthorized": "Non autorisé"
   },
   "userMenu": {
-    "account": "Compte",
-    "billing": "Transaction",
+    "profile": "Profil",
+    "settings": "Paramètres",
     "notifications": "Notifications",
     "logOut": "Se déconnecter"
   },

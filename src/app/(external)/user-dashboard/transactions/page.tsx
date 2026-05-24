@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { motion } from "framer-motion";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   ArrowRight01Icon,
   Cash01Icon,
@@ -19,7 +19,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -35,7 +35,7 @@ import { cn } from "@/lib/utils";
 
 const statusConfig: Record<
   TransactionStatus,
-  { label: string; icon: IconSvgElement; color: string }
+  { label: string; icon: any; color: string }
 > = {
   pending: { label: "En attente", icon: Clock01Icon, color: "text-amber-500 bg-amber-50" },
   completed: { label: "Complété", icon: CheckmarkCircle01Icon, color: "text-emerald-500 bg-emerald-50" },
@@ -43,14 +43,14 @@ const statusConfig: Record<
   refunded: { label: "Remboursé", icon: Cash01Icon, color: "text-blue-500 bg-blue-50" },
 };
 
-const typeConfig: Record<TransactionType, { label: string; icon: IconSvgElement }> = {
+const typeConfig: Record<TransactionType, { label: string; icon: any }> = {
   order: { label: "Commande", icon: Package01Icon },
   pack: { label: "Pack", icon: Package01Icon },
   subscription: { label: "Abonnement", icon: CreditCardIcon },
   refund: { label: "Remboursement", icon: Cash01Icon },
 };
 
-const paymentMethodIcons: Record<string, IconSvgElement> = {
+const paymentMethodIcons: Record<string, any> = {
   mobile_money: SmartPhone01Icon,
   card: CreditCardIcon,
   cash: Cash01Icon,
@@ -68,7 +68,6 @@ function TransactionCard({ transaction }: { transaction: Transaction }) {
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <CardContent className="p-0">
         <div className="p-5">
-          {/* Header */}
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -88,7 +87,6 @@ function TransactionCard({ transaction }: { transaction: Transaction }) {
             </div>
           </div>
 
-          {/* Items */}
           {transaction.items.length > 0 && (
             <div className="mt-4 space-y-2">
               <Separator />
@@ -105,7 +103,6 @@ function TransactionCard({ transaction }: { transaction: Transaction }) {
             </div>
           )}
 
-          {/* Footer */}
           <div className="mt-4 flex items-center justify-between">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
@@ -133,7 +130,7 @@ function StatsCard({
   title: string;
   value: string;
   subtitle?: string;
-  icon: IconSvgElement;
+  icon: any;
 }) {
   return (
     <Card>
@@ -166,7 +163,6 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -179,13 +175,12 @@ export default function TransactionsPage() {
             <div>
               <h1 className="text-3xl font-black text-gray-900">Mes transactions</h1>
               <p className="text-muted-foreground">
-                Consultez l'historique de vos paiements
+                Consultez l&apos;historique de vos paiements
               </p>
             </div>
           </div>
         </motion.div>
 
-      {/* Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -198,7 +193,6 @@ export default function TransactionsPage() {
         <StatsCard title="En attente" value={stats.pendingCount.toString()} icon={Clock01Icon} />
       </motion.div>
 
-      {/* Filters */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -232,7 +226,6 @@ export default function TransactionsPage() {
         </Select>
       </motion.div>
 
-      {/* Transactions List */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
         {transactions.length === 0 ? (
           <EmptyState

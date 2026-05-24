@@ -41,8 +41,8 @@
     "unauthorized": "Unauthorized"
   },
   "userMenu": {
-    "account": "Account",
-    "billing": "Transaction",
+    "profile": "Profile",
+    "settings": "Settings",
     "notifications": "Notifications",
     "logOut": "Log out"
   },

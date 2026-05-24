@@ -3,7 +3,7 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Bell, CreditCard, LogIn, LogOut, Menu, ShoppingCart, User, X } from "lucide-react";
+import { LayoutDashboard, LogIn, LogOut, Menu, ShoppingCart, User, UserCircle, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -13,6 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -26,6 +27,7 @@ export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [cartOpen, setCartOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
   const { t } = useTranslation();
   const itemCount = useCartStore((state) => state.getItemCount());
   const { isAuthenticated } = useSession();
@@ -52,6 +54,7 @@ export const HeroHeader = () => {
   ];
 
   React.useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
     };
@@ -98,7 +101,7 @@ export const HeroHeader = () => {
                 onClick={() => setCartOpen(true)}
               >
                 <ShoppingCart className="h-5 w-5 text-gray-700" />
-                {itemCount > 0 && (
+                {mounted && itemCount > 0 && (
                   <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
                     {itemCount > 99 ? "99+" : itemCount}
                   </span>
@@ -129,23 +132,26 @@ export const HeroHeader = () => {
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-52">
+                  {isAuthenticated && (
+                    <>
+                      <DropdownMenuLabel className="flex flex-col gap-0.5 pb-2">
+                        <span className="font-semibold text-sm text-foreground">{currentUser?.name}</span>
+                        <span className="font-normal text-muted-foreground text-xs">{currentUser?.email}</span>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/user-dashboard" className="flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      {t("userMenu.account")}
+                      <LayoutDashboard className="h-4 w-4" />
+                      Mon espace
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/user-dashboard/transactions" className="flex items-center gap-2">
-                      <CreditCard className="h-4 w-4" />
-                      {t("userMenu.billing")}
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/user-dashboard/notifications" className="flex items-center gap-2">
-                      <Bell className="h-4 w-4" />
-                      {t("userMenu.notifications")}
+                    <Link href="/user-dashboard/profile" className="flex items-center gap-2">
+                      <UserCircle className="h-4 w-4" />
+                      Mon profil
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -155,7 +161,7 @@ export const HeroHeader = () => {
                       onClick={() => logout.mutate()}
                     >
                       <LogOut className="h-4 w-4" />
-                      {t("userMenu.logOut")}
+                      Se déconnecter
                     </DropdownMenuItem>
                   ) : (
                     <DropdownMenuItem asChild>

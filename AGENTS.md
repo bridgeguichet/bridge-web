@@ -5,6 +5,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 ## Project Overview
 
 Bridge is a Next.js 16 dashboard application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French.
+Bridge is a Next.js full-stack application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French. Auth is handled by Better Auth with a Neon PostgreSQL database via Drizzle ORM.
 
 ## Commands
 
@@ -21,8 +22,10 @@ Node >= 20.9.0 is required.
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_API_URL` — public-facing API base URL for client-side requests (default: `http://localhost:3000`)
-- `DATABASE_URL` — PostgreSQL connection string for Drizzle ORM
+- `NEXT_PUBLIC_API_URL` — base URL for client-side requests (default: `http://localhost:3000`)
+- `DATABASE_URL` — Neon PostgreSQL connection string
+- `BETTER_AUTH_SECRET` — secret key for Better Auth (generate: `openssl rand -base64 32`)
+- `BETTER_AUTH_URL` — public URL of the app used by Better Auth (default: `http://localhost:3000`)
 
 ## Architecture
 
@@ -31,7 +34,7 @@ Node >= 20.9.0 is required.
 - `src/app/(main)/dashboard/` — authenticated dashboard pages (default, CRM, finance, users)
 - `src/app/(main)/auth/` — login/register pages
 - `src/app/(external)/` — public-facing landing page
-- `src/app/api/auth/[...all]/` — Better Auth API route handler (login, logout, register, OAuth, session management)
+- `src/app/api/auth/[...all]/` — Better Auth catch-all route handler (handles sign-in, sign-up, sign-out, session, etc.)
 
 ### Feature Modules (`src/features/`)
 
@@ -47,12 +50,13 @@ When adding a new feature, follow this pattern. Import features via their barrel
 
 ### Authentication Flow
 
-Auth uses Better Auth with Drizzle ORM:
-1. Better Auth handles all authentication via `/api/auth/*` routes (sign-in, sign-up, OAuth, session management).
-2. Sessions are stored in PostgreSQL via Drizzle ORM with automatic rotation.
-3. The auth client (`src/lib/auth-client.ts`) provides type-safe auth methods for React components.
-4. Server-side auth checks use `auth.api.getSession()` in API routes and server components.
-5. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes (auth enforcement is currently commented out).
+Auth uses **Better Auth** (full-stack, server-side sessions):
+1. `src/lib/auth/auth.ts` — server-side Better Auth instance connected to Neon via Drizzle.
+2. `src/app/api/auth/[...all]/route.ts` — catch-all Next.js route that exposes all Better Auth endpoints.
+3. `src/lib/auth/auth-client.ts` — client-side `authClient` using `better-auth/react`.
+4. `src/features/auth/services.ts` — calls `authClient.signIn.email()`, `signUp.email()`, `signOut()`, `getSession()`, `changePassword()`.
+5. Client-side auth state is managed in a Zustand store (`src/features/auth/store.ts`).
+6. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes by checking the Better Auth session cookie.
 
 ### State Management
 

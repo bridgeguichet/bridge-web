@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Notification01Icon } from "@hugeicons/core-free-icons";
 
 import { EmptyState } from "@/components/user-dashboard/empty-state";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
 
 export default function NotificationsPage() {
   const notifications = [];
@@ -23,7 +23,7 @@ export default function NotificationsPage() {
             <div>
               <h1 className="text-3xl font-black text-gray-900">Mes notifications</h1>
               <p className="text-muted-foreground">
-                Restez informé de l'activité de votre compte
+                Restez informé de l&apos;activité de votre compte
               </p>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function NotificationsPage() {
           <EmptyState
             icon={Notification01Icon}
             title="Aucune notification"
-            description="Vous n'avez pas de nouvelles notifications pour le moment."
+            description="Vous n&apos;avez pas de nouvelles notifications pour le moment."
           />
         ) : (
           <div className="space-y-4">{/* Notifications list will be added here */}</div>

@@ -108,7 +108,7 @@ export default function UserDashboard() {
       icon: ShoppingBag01Icon,
       label: "Explorer les services",
       description: "Découvrez nos services populaires",
-      href: "/marketplace#services",
+      href: "/",
       variant: "primary" as const,
     },
     {

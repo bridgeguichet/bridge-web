@@ -5,17 +5,20 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  Briefcase01Icon,
-  Car01Icon,
-  Home01Icon,
-  Remove01Icon,
-  Package01Icon,
-  Add01Icon,
-  ShoppingCart01Icon,
-  Delete01Icon,
-  UserGroupIcon,
-  Cancel01Icon,
-} from "@hugeicons/core-free-icons";
+  Briefcase,
+  Car,
+  CreditCard,
+  Home,
+  Minus,
+  Package,
+  Plus,
+  ShoppingBag,
+  ShoppingCart,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
+import { ShoppingCart01Icon } from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -170,7 +173,7 @@ export default function CartPage() {
                     <div className="flex items-start gap-4">
                       {/* Icon */}
                       <div
-                        className={`h-24 w-24 shrink-0 rounded-lg bg-linear-to-br ${previewGradient} flex items-center justify-center`}
+                        className={`h-24 w-24 shrink-0 rounded-lg bg-linear-to-br{previewGradient} flex items-center justify-center`}
                       >
                         <HugeiconsIcon icon={IconComponent} size={40} color="white" />
                       </div>

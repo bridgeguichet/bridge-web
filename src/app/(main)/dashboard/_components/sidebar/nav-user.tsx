@@ -1,6 +1,7 @@
 "use client";
 
-import { CircleUser, CreditCard, EllipsisVertical, LogOut, MessageSquareDot } from "lucide-react";
+import { Bell, EllipsisVertical, LogOut, Settings, UserCircle } from "lucide-react";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -70,17 +71,23 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUser />
-                {t("userMenu.account")}
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/profile">
+                  <UserCircle />
+                  {t("userMenu.profile")}
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                {t("userMenu.billing")}
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/settings">
+                  <Settings />
+                  {t("userMenu.settings")}
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <MessageSquareDot />
-                {t("userMenu.notifications")}
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/notifications">
+                  <Bell />
+                  {t("userMenu.notifications")}
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

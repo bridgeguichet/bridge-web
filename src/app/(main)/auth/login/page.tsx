@@ -19,9 +19,14 @@ export default function Login() {
 
   useEffect(() => {
     if (!isLoading && profile) {
-      router.push("/dashboard");
+      const role = profile.user?.role;
+      if (role === "admin" || role === "vendor") {
+        router.push("/dashboard");
+      } else {
+        router.push(callbackUrl || "/user-dashboard");
+      }
     }
-  }, [profile, isLoading, router]);
+  }, [profile, isLoading, router, callbackUrl]);
 
   if (isLoading) {
     return (

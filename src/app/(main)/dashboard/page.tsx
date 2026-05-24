@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { useServices } from "@/features/admin";
+import { useCustomerUsers, useServices } from "@/features/admin";
 import { useTransactionsStore } from "@/features/transactions/store";
-import { useUsers } from "@/features/users";
 import { useTranslation } from "@/lib/i18n/use-translation";
 
 import { ActivityChart } from "./_components/activity-chart";
@@ -31,7 +30,7 @@ function generateActivityData(): Array<{ date: string; value: number }> {
 
 export default function DashboardPage() {
   const { t } = useTranslation();
-  const { data: usersData, isLoading: usersLoading } = useUsers({});
+  const { data: customerUsers, isLoading: usersLoading } = useCustomerUsers();
   const { data: servicesData, isLoading: servicesLoading } = useServices();
   const transactions = useTransactionsStore((state) => state.transactions);
 
@@ -51,7 +50,7 @@ export default function DashboardPage() {
     switch (countKey) {
       case "users":
         return {
-          count: usersData?.count || 0,
+          count: customerUsers?.length ?? 0,
           isLoading: usersLoading,
         };
       default:
@@ -70,7 +69,7 @@ export default function DashboardPage() {
         revenue={revenue}
         orders={transactions.length}
         services={servicesData?.length || 0}
-        clients={usersData?.count || 0}
+        clients={customerUsers?.length ?? 0}
         isLoading={isLoading}
       />
 
