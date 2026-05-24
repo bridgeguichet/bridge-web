@@ -48,11 +48,7 @@ export default function CommandesPage() {
           <EmptyState
             icon={Invoice01Icon}
             title="Aucune commande"
-<<<<<<< HEAD
-            description="Vous n'avez pas encore passé de commande. Explorez nos services pour commencer."
-=======
             description="Vous n&apos;avez pas encore passé de commande. Explorez nos services pour commencer."
->>>>>>> backup-plan
             action={{ label: "Explorer les services", href: "/" }}
           />
         ) : (

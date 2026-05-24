@@ -38,11 +38,7 @@ export default function PacksPage() {
           </div>
           <div>
             <h1 className="font-black text-3xl text-gray-900">Mes packs</h1>
-<<<<<<< HEAD
-            <p className="text-muted-foreground">Suivez l'état de vos packs en cours et passés</p>
-=======
             <p className="text-muted-foreground">Suivez l&apos;état de vos packs en cours et passés</p>
->>>>>>> backup-plan
           </div>
         </div>
       </motion.div>
@@ -52,11 +48,7 @@ export default function PacksPage() {
           <EmptyState
             icon={Package01Icon}
             title="Aucun pack"
-<<<<<<< HEAD
-            description="Vous n'avez pas encore créé de pack. Explorez nos services pour commencer."
-=======
             description="Vous n&apos;avez pas encore créé de pack. Explorez nos services pour commencer."
->>>>>>> backup-plan
             action={{ label: "Créer un pack", href: "/monpack/mode" }}
           />
         ) : (

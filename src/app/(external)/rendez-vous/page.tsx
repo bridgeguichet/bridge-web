@@ -7,11 +7,6 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, CheckCircle2 } from "lucide-react";
 
-<<<<<<< HEAD
-import Footer from "@/components/footer";
-import { HeroHeader } from "@/components/header";
-=======
->>>>>>> backup-plan
 import { Button } from "@/components/ui/button";
 import { AppointmentStep } from "@/features/appointment";
 import type { AppointmentData } from "@/features/appointment";

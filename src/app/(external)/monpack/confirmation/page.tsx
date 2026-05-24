@@ -92,11 +92,7 @@ export default function ConfirmationPage() {
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">{t("confirmationPage.appointment.counselor")}</p>
-<<<<<<< HEAD
-                      <p className="text-gray-500 text-sm">{t("confirmationPage.appointment.counselorDesc")}</p>
-=======
                       <p className="text-gray-500 text-xs">{t("confirmationPage.appointment.counselorDesc")}</p>
->>>>>>> backup-plan
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
