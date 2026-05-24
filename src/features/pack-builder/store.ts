@@ -3,13 +3,20 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import type { AppointmentData } from "../appointment/types";
 import type { PackItemWithDetails } from "./types";
+
+export type PricingMode = "priced" | "budget";
 
 interface PackBuilderStore {
   currentCategoryIndex: number;
   packId: string | null;
   items: PackItemWithDetails[];
   skippedCategories: string[];
+  wantsCounselor: boolean | null;
+  appointment: AppointmentData | null;
+  pricingMode: PricingMode | null;
+  userBudget: number | null;
 
   setPackId: (id: string) => void;
   setCurrentCategoryIndex: (index: number) => void;
@@ -22,6 +29,10 @@ interface PackBuilderStore {
   clearPack: () => void;
   getTotalAmount: () => number;
   getItemsByCategory: (categoryId: string) => PackItemWithDetails[];
+  setWantsCounselor: (value: boolean) => void;
+  setAppointment: (data: AppointmentData | null) => void;
+  setPricingMode: (mode: PricingMode) => void;
+  setUserBudget: (budget: number | null) => void;
 }
 
 export const usePackBuilderStore = create<PackBuilderStore>()(
@@ -31,6 +42,10 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
       packId: null,
       items: [],
       skippedCategories: [],
+      wantsCounselor: null,
+      appointment: null,
+      pricingMode: null,
+      userBudget: null,
 
       setPackId: (id) => set({ packId: id }),
 
@@ -80,7 +95,19 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
           packId: null,
           items: [],
           skippedCategories: [],
+          wantsCounselor: null,
+          appointment: null,
+          pricingMode: null,
+          userBudget: null,
         }),
+
+      setWantsCounselor: (value) => set({ wantsCounselor: value }),
+
+      setAppointment: (data) => set({ appointment: data }),
+
+      setPricingMode: (mode) => set({ pricingMode: mode }),
+
+      setUserBudget: (budget) => set({ userBudget: budget }),
 
       getTotalAmount: () => {
         const { items } = get();

@@ -141,52 +141,6 @@ export default function ProfilePage() {
           </div>
         </motion.div>
 
-        {/* Section Mot de passe */}
-        <motion.div variants={itemVariants} className="space-y-6">
-          <div className="border-b border-border pb-4">
-            <h3 className="font-bold text-xl text-foreground">Sécurité</h3>
-            <p className="text-sm text-muted-foreground">Modifiez votre mot de passe</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="current-password" className="font-medium text-foreground">
-                Mot de passe actuel
-              </Label>
-              <Input
-                id="current-password"
-                type="password"
-                placeholder="••••••••"
-                className="border-border bg-muted/30 transition-colors focus:bg-background"
-              />
-            </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="new-password" className="font-medium text-foreground">
-                  Nouveau mot de passe
-                </Label>
-                <Input
-                  id="new-password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="border-border bg-muted/30 transition-colors focus:bg-background"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirm-password" className="font-medium text-foreground">
-                  Confirmer le mot de passe
-                </Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  placeholder="••••••••"
-                  className="border-border bg-muted/30 transition-colors focus:bg-background"
-                />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Bouton de sauvegarde unique */}
         <motion.div variants={itemVariants} className="pt-4">
           <Button

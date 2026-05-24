@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { QuoteUpIcon, StarIcon } from "@hugeicons/core-free-icons";
 
 const testimonials = [
   {
@@ -47,7 +48,7 @@ export function SocialProof() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-2 mb-6">
-            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+            <HugeiconsIcon icon={StarIcon} size={20} color="rgb(250,204,21)" />
             <span className="font-bold">4.8/5 sur 2,500+ avis</span>
           </div>
 
@@ -65,7 +66,7 @@ export function SocialProof() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 relative"
             >
-              <Quote className="absolute top-6 right-6 w-8 h-8 opacity-20" />
+              <HugeiconsIcon icon={QuoteUpIcon} size={32} color="currentColor" className="text-primary/30 mb-4" />
 
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-14 h-14 rounded-full bg-accent text-primary flex items-center justify-center font-bold text-lg">
@@ -79,7 +80,7 @@ export function SocialProof() {
 
               <div className="flex gap-1 mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <HugeiconsIcon key={i} icon={StarIcon} size={16} color="rgb(250,204,21)" />
                 ))}
               </div>
 

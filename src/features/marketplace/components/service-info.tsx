@@ -1,4 +1,5 @@
-import { DollarSign, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DollarCircleIcon, StarIcon } from "@hugeicons/core-free-icons";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -26,7 +27,7 @@ export function ServiceInfo({ serviceName, description, basePrice, priceUnit, ha
           <h1 className="text-3xl font-bold">{serviceName}</h1>
           <div className="mt-2 flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+              <HugeiconsIcon icon={StarIcon} size={16} color="rgb(250,204,21)" />
               <span className="font-medium">4.8</span>
               <span className="text-sm text-muted-foreground">(24 avis)</span>
             </div>
@@ -37,7 +38,7 @@ export function ServiceInfo({ serviceName, description, basePrice, priceUnit, ha
         {description && <p className="text-muted-foreground">{description}</p>}
 
         <div className="flex items-baseline gap-2 border-t pt-4">
-          <DollarSign className="h-5 w-5 text-muted-foreground" />
+          <HugeiconsIcon icon={DollarCircleIcon} size={16} color="currentColor" className="text-muted-foreground" />
           <div>
             <span className="text-3xl font-bold">${basePrice}</span>
             <span className="text-muted-foreground"> / {priceUnitLabel}</span>

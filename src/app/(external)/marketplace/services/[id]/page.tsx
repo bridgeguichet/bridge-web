@@ -27,8 +27,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CartSheet } from "@/features/cart/components/cart-sheet";
+import { useAuthRedirect, useSession } from "@/features/auth/hooks";
 import { useCartStore } from "@/features/cart/store";
 import { ServiceCard } from "@/features/marketplace/components/service-card";
+import { useFavoritesStore } from "@/features/marketplace/store";
 import { useService, useServices } from "@/features/marketplace/hooks";
 import type { ServiceWithDetails } from "@/features/marketplace/types";
 import type { ServiceVariant } from "@/lib/db/schema/services";
@@ -71,7 +74,12 @@ export default function ServiceDetailPage() {
   const addItem = useCartStore((state) => state.addItem);
 
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
-  const [liked, setLiked] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const cartItemCount = useCartStore((state) => state.getItemCount());
+  const { isAuthenticated } = useSession();
+  const { redirectToLogin } = useAuthRedirect();
+  const toggle = useFavoritesStore((state) => state.toggle);
+  const liked = useFavoritesStore((state) => state.isLiked(serviceId));
 
   if (isLoading) {
     return (
@@ -123,6 +131,14 @@ export default function ServiceDetailPage() {
     )
     .slice(0, 4);
 
+  const handleToggleFavorite = () => {
+    if (!isAuthenticated) {
+      redirectToLogin(`/marketplace/services/${serviceId}`);
+      return;
+    }
+    toggle(serviceId);
+  };
+
   const handleAddToCart = () => {
     addItem({
       serviceId: service.id,
@@ -132,11 +148,26 @@ export default function ServiceDetailPage() {
     toast.success("Service ajouté au panier");
   };
 
+  const handleReserveNow = () => {
+    addItem({
+      serviceId: service.id,
+      variantId: selectedVariant || undefined,
+      quantity: 1,
+    });
+    toast.success("Service ajouté au panier");
+
+    if (isAuthenticated) {
+      router.push("/checkout");
+    } else {
+      redirectToLogin("/checkout");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <div className="bg-white sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+      <div className="bg-white sticky top-0 z-50 border-b">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <Button
             variant="ghost"
             size="sm"
@@ -145,6 +176,21 @@ export default function ServiceDetailPage() {
           >
             <ArrowLeft className="w-4 h-4" />
             Retour
+          </Button>
+
+          {/* Bouton Panier */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative h-10 w-10 rounded-full hover:bg-gray-100"
+            onClick={() => setCartOpen(true)}
+          >
+            <ShoppingCart className="h-5 w-5 text-gray-700" />
+            {cartItemCount > 0 && (
+              <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
+                {cartItemCount > 99 ? "99+" : cartItemCount}
+              </span>
+            )}
           </Button>
         </div>
       </div>
@@ -717,13 +763,14 @@ export default function ServiceDetailPage() {
                   <p className="text-sm text-gray-500">/{service.priceUnit}</p>
                 </div>
                 <button
-                  onClick={() => setLiked(!liked)}
-                  className="w-10 h-10 rounded-full border flex items-center justify-center hover:bg-gray-50 transition-colors"
+                  onClick={handleToggleFavorite}
+                  className="relative flex h-10 w-10 items-center justify-center rounded-full transition-all duration-200 border hover:bg-rose-50"
                   aria-label="Favori"
                 >
+                  {liked && <span className="absolute inset-0 animate-ping rounded-full bg-rose-400/50" />}
                   <Heart
                     className={cn(
-                      "w-5 h-5",
+                      "h-5 w-5 transition-colors",
                       liked ? "fill-rose-500 text-rose-500" : "text-gray-400",
                     )}
                   />
@@ -757,7 +804,7 @@ export default function ServiceDetailPage() {
                 Ajouter au panier
               </Button>
 
-              <Button variant="outline" className="w-full" size="lg">
+              <Button variant="outline" className="w-full" size="lg" onClick={handleReserveNow}>
                 Réserver maintenant
               </Button>
 
@@ -785,6 +832,8 @@ export default function ServiceDetailPage() {
           </motion.div>
         )}
       </div>
+
+      <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
     </div>
   );
 }

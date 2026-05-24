@@ -1,6 +1,7 @@
 import Link from "next/link";
 
-import { ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 interface ServiceDetailHeaderProps {
   serviceName: string;
@@ -13,11 +14,11 @@ export function ServiceDetailHeader({ serviceName, categoryName }: ServiceDetail
       <Link href="/marketplace" className="hover:text-foreground transition-colors">
         Marketplace
       </Link>
-      <ChevronRight className="h-4 w-4" />
+      <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" />
       {categoryName && (
         <>
           <span className="hover:text-foreground transition-colors">{categoryName}</span>
-          <ChevronRight className="h-4 w-4" />
+          <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" />
         </>
       )}
       <span className="text-foreground font-medium">{serviceName}</span>

@@ -41,8 +41,8 @@
     "unauthorized": "Non autorisé"
   },
   "userMenu": {
-    "account": "Compte",
-    "billing": "Facturation",
+    "profile": "Profil",
+    "settings": "Paramètres",
     "notifications": "Notifications",
     "logOut": "Se déconnecter"
   },
@@ -180,6 +180,12 @@
     "lots": "Lots",
     "commercialLots": "Lots commerciaux",
     "incidents": "Incidents",
+    "admin": "Administration",
+    "services": "Services",
+    "categories": "Catégories",
+    "resources": "Ressources",
+    "staff": "Staff",
+    "customers": "Clients",
     "pages": "Pages",
     "users": "Utilisateurs",
     "roles": "Rôles"
@@ -2030,12 +2036,130 @@
   "monpackSection": {
     "badge": "Nouveau",
     "title": "Créez Votre Pack Personnalisé",
-    "description": "Optimisez votre budget avec un pack personnalisé. Choisissez vos services catégorie par catégorie et visualisez votre facture en temps réel.",
+    "description": "Un outil conçu pour optimiser votre budget avant toute décision importante.",
     "features": {
       "guided": "Parcours guidé par catégorie",
       "realtime": "Facture en temps réel",
       "autosave": "Sauvegarde automatique"
     },
+    "steps": {
+      "step1": "Répondez à quelques questions",
+      "step2": "Choisissez vos services",
+      "step3": "Visualisez votre facture en temps réel",
+      "step4": "Échangez avec un expert"
+    },
+    "badge2": "Gratuit • Sans engagement • Résultats immédiats",
     "cta": "Commencer ma personnalisation"
+  },
+  "modeSelection": {
+    "title": "Comment souhaitez-vous personnaliser votre pack ?",
+    "description": "Choisissez le mode qui correspond le mieux à votre situation pour une expérience sur-mesure.",
+    "continue": "Continuer",
+    "priced": {
+      "title": "Avec prix affichés",
+      "description": "Visualisez les tarifs de chaque service et payez directement en ligne.",
+      "feature1": "Prix transparents",
+      "feature2": "Paiement immédiat",
+      "feature3": "Accès instantané aux services"
+    },
+    "budget": {
+      "title": "Budget personnalisé",
+      "description": "Sélectionnez vos services, indiquez votre budget et un conseiller vous accompagne.",
+      "feature1": "Devis sur-mesure",
+      "feature2": "Accompagnement conseiller",
+      "feature3": "Solution adaptée à votre budget",
+      "quotePrice": "Prix sur devis"
+    }
+  },
+  "packSummary": {
+    "budgetMode": {
+      "title": "Devis personnalisé",
+      "description": "Un conseiller vous contactera pour établir un devis adapté à votre budget."
+    }
+  },
+  "packNavigation": {
+    "errorNoServices": "Veuillez sélectionner au moins un service pour finaliser votre pack"
+  },
+  "budgetPage": {
+    "title": "Définissez votre budget",
+    "description": "Indiquez le montant que vous souhaitez allouer à votre pack. Un conseiller vous proposera une solution adaptée.",
+    "selectedServices": "Services sélectionnés",
+    "servicesPlural": "services sélectionnés",
+    "servicesSingular": "service sélectionné",
+    "budgetInput": {
+      "title": "Votre budget disponible",
+      "description": "Ce montant nous permettra de vous proposer une offre personnalisée lors de votre rendez-vous.",
+      "label": "Budget (en USD)",
+      "hint": "Montant indicatif - ajustable lors du rendez-vous"
+    },
+    "info": {
+      "title": "Prochaine étape :",
+      "description": "Après avoir défini votre budget, vous prendrez rendez-vous avec un conseiller Bridge qui vous proposera une solution sur-mesure."
+    },
+    "continue": "Prendre rendez-vous",
+    "steps": {
+      "services": "Services",
+      "budget": "Budget",
+      "appointment": "Rendez-vous"
+    }
+  },
+  "conseillerPage": {
+    "title": "Souhaitez-vous un accompagnement personnalisé ?",
+    "description": "Un conseiller Bridge peut vous guider dans votre démarche et répondre à toutes vos questions.",
+    "continueToPayment": "Continuer vers le paiement",
+    "steps": {
+      "services": "Services",
+      "budget": "Budget",
+      "counselor": "Conseiller",
+      "payment": "Paiement",
+      "confirmation": "Confirmation"
+    },
+    "yesOption": {
+      "title": "Oui, je veux un conseiller",
+      "description": "Réservez un créneau avec un expert Bridge pour un suivi personnalisé.",
+      "feature1": "Prise en charge de A à Z",
+      "feature2": "Réponses à vos questions",
+      "feature3": "Suivi de votre dossier"
+    },
+    "noOption": {
+      "title": "Non, je continue seul",
+      "description": "Accédez directement au paiement et gérez votre pack en autonomie.",
+      "feature1": "Accès immédiat aux services",
+      "feature2": "Tableau de bord personnel",
+      "feature3": "Support via chat disponible"
+    },
+    "budgetMode": {
+      "title": "Prenez rendez-vous avec un conseiller",
+      "description": "En mode budget personnalisé, un rendez-vous avec un conseiller est nécessaire pour finaliser votre devis.",
+      "yourBudget": "Votre budget :",
+      "continue": "Confirmer et terminer"
+    }
+  },
+  "confirmationPage": {
+    "title": "Demande enregistrée !",
+    "description": "Votre demande de pack personnalisé a bien été prise en compte. Un conseiller vous contactera pour finaliser votre devis.",
+    "appointment": {
+      "title": "Votre rendez-vous",
+      "counselor": "Conseiller Bridge",
+      "counselorDesc": "Accompagnement personnalisé",
+      "date": "Date",
+      "time": "Créneau"
+    },
+    "budget": {
+      "title": "Budget indiqué",
+      "yourBudget": "Votre budget"
+    },
+    "services": {
+      "title": "Services demandés",
+      "plural": "services demandés",
+      "singular": "service demandé"
+    },
+    "nextSteps": {
+      "title": "Prochaines étapes",
+      "step1": "Vous recevrez une confirmation par email",
+      "step2": "Un conseiller vous contactera avant le rendez-vous",
+      "step3": "Lors du rendez-vous, vous recevrez un devis personnalisé"
+    },
+    "returnHome": "Retour à l'accueil"
   }
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, CheckCircle, CreditCard, Download, Loader2, Lock, Package, Smartphone, Trash2 } from "lucide-react";
+import { ArrowLeft, CalendarCheck, CheckCircle, Clock, CreditCard, Download, Loader2, Lock, Package, Smartphone, Trash2, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -35,6 +35,8 @@ export default function PaiementPage() {
   const removeItem = usePackBuilderStore((state) => state.removeItem);
   const getTotalAmount = usePackBuilderStore((state) => state.getTotalAmount);
   const clearPack = usePackBuilderStore((state) => state.clearPack);
+  const wantsCounselor = usePackBuilderStore((state) => state.wantsCounselor);
+  const appointment = usePackBuilderStore((state) => state.appointment);
   const { mutate: createTransaction } = useCreateTransaction();
 
   const totalAmount = getTotalAmount();
@@ -173,9 +175,9 @@ export default function PaiementPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-6 lg:px-8">
         <div className="mb-6">
-          <Button onClick={() => router.push("/monpack")} variant="ghost" size="sm" className="gap-2">
+          <Button onClick={() => router.push("/monpack/conseiller")} variant="ghost" size="sm" className="gap-2">
             <ArrowLeft className="h-4 w-4" />
-            Retour au pack
+            Retour
           </Button>
         </div>
 
@@ -233,6 +235,47 @@ export default function PaiementPage() {
                 )}
               </CardContent>
             </Card>
+
+            {/* Récap rendez-vous conseiller */}
+            {wantsCounselor === true && appointment?.date && appointment?.timeSlot && (
+              <Card className="border-primary/20 bg-primary/5">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <CalendarCheck className="h-5 w-5 text-primary" />
+                    Rendez-vous avec un conseiller
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
+                      <User className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-900 text-sm">Conseiller Bridge</p>
+                      <p className="text-gray-500 text-xs">Accompagnement personnalisé</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex items-center gap-2 rounded-lg bg-white p-3">
+                      <CalendarCheck className="h-4 w-4 text-primary" />
+                      <div>
+                        <p className="text-gray-500 text-xs">Date</p>
+                        <p className="font-semibold text-gray-900 text-sm capitalize">
+                          {new Date(appointment.date).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 rounded-lg bg-white p-3">
+                      <Clock className="h-4 w-4 text-primary" />
+                      <div>
+                        <p className="text-gray-500 text-xs">Créneau</p>
+                        <p className="font-semibold text-gray-900 text-sm">{appointment.timeSlot.time}</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Choix du moyen de paiement */}
             <Card>

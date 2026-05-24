@@ -1,6 +1,7 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick01Icon } from "@hugeicons/core-free-icons";
 
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -86,7 +87,7 @@ export function VariantSelector({ variants, selectedVariant, onSelectVariant, la
                       <div className="mt-2 flex flex-wrap gap-1">
                         {metadata.features.slice(0, 4).map((feature: string, index: number) => (
                           <span key={index} className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs">
-                            <Check className="h-3 w-3 text-primary" />
+                            <HugeiconsIcon icon={Tick01Icon} size={16} color="currentColor" className="shrink-0 text-primary" />
                             {feature}
                           </span>
                         ))}

@@ -1,7 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bell, Briefcase, Car, Home, Users } from "lucide-react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import {
+  Notification01Icon,
+  Briefcase01Icon,
+  Car01Icon,
+  Home01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 
 import type { CategoryWithSubs } from "../types";
 
@@ -12,24 +19,24 @@ interface CategoryShowcaseProps {
 
 interface CategoryStyle {
   bg: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  Icon: IconSvgElement;
 }
 
 const CATEGORY_STYLES: Record<string, CategoryStyle> = {
-  car: { bg: "#6C6EDD", Icon: Car },
-  home: { bg: "#8B2039", Icon: Home },
-  users: { bg: "#2A7A2A", Icon: Users },
-  briefcase: { bg: "#C85A00", Icon: Briefcase },
-  bell: { bg: "#5A6E00", Icon: Bell },
+  car: { bg: "#6C6EDD", Icon: Car01Icon },
+  home: { bg: "#8B2039", Icon: Home01Icon },
+  users: { bg: "#2A7A2A", Icon: UserGroupIcon },
+  briefcase: { bg: "#C85A00", Icon: Briefcase01Icon },
+  bell: { bg: "#5A6E00", Icon: Notification01Icon },
 };
 
-const FALLBACK_STYLES = [
-  { bg: "#6C6EDD", Icon: Car },
-  { bg: "#8B2039", Icon: Home },
-  { bg: "#2A7A2A", Icon: Users },
-  { bg: "#C85A00", Icon: Briefcase },
-  { bg: "#5A6E00", Icon: Bell },
-  { bg: "#1A5A7A", Icon: Briefcase },
+const FALLBACK_STYLES: CategoryStyle[] = [
+  { bg: "#6C6EDD", Icon: Car01Icon },
+  { bg: "#8B2039", Icon: Home01Icon },
+  { bg: "#2A7A2A", Icon: UserGroupIcon },
+  { bg: "#C85A00", Icon: Briefcase01Icon },
+  { bg: "#5A6E00", Icon: Notification01Icon },
+  { bg: "#1A5A7A", Icon: Briefcase01Icon },
 ];
 
 export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowcaseProps) {
@@ -43,8 +50,6 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
               (category.subcategories?.length || 0) > 0
                 ? `${category.subcategories!.length * 20}+ services`
                 : "100+ services";
-
-            const CategoryIcon = style.Icon;
 
             return (
               <motion.button
@@ -64,7 +69,7 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
               >
                 {/* Illustration zone */}
                 <div className="relative h-36 flex items-center justify-center" style={{ backgroundColor: style.bg }}>
-                  <CategoryIcon className="w-16 h-16 text-white" />
+                  <HugeiconsIcon icon={style.Icon} size={64} color="white" />
                 </div>
 
                 {/* Label zone */}

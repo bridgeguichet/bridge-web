@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -44,7 +45,7 @@ export function ServiceGallery({ serviceId, serviceName }: ServiceGalleryProps) 
               className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full"
               onClick={handlePrevious}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <HugeiconsIcon icon={ArrowLeft01Icon} size={20} color="currentColor" />
             </Button>
             <Button
               variant="secondary"
@@ -52,7 +53,7 @@ export function ServiceGallery({ serviceId, serviceName }: ServiceGalleryProps) 
               className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full"
               onClick={handleNext}
             >
-              <ChevronRight className="h-4 w-4" />
+              <HugeiconsIcon icon={ArrowRight01Icon} size={20} color="currentColor" />
             </Button>
 
             {/* Indicateurs */}
@@ -79,7 +80,7 @@ export function ServiceGallery({ serviceId, serviceName }: ServiceGalleryProps) 
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all ${
+              className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
                 index === currentIndex ? "border-primary" : "border-transparent opacity-60 hover:opacity-100"
               }`}
             >

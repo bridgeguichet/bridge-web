@@ -3,7 +3,15 @@
 import { useRouter } from "next/navigation";
 
 import { motion } from "framer-motion";
-import { Bell, Briefcase, Car, Home, Star, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Notification01Icon,
+  Briefcase01Icon,
+  Car01Icon,
+  Home01Icon,
+  StarIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import { toast } from "sonner";
 
 import { ZigzagPattern } from "@/components/patterns/zigzag";
@@ -65,11 +73,11 @@ export function ServiceCardHexagon({ service, featured = false }: ServiceCardHex
 
         <div className="relative h-full flex flex-col items-center justify-center p-10 text-center">
           <div className="mb-4">
-            {service.category?.icon === "car" && <Car className="w-14 h-14 text-primary/80" />}
-            {service.category?.icon === "home" && <Home className="w-14 h-14 text-primary/80" />}
-            {service.category?.icon === "users" && <Users className="w-14 h-14 text-primary/80" />}
-            {service.category?.icon === "briefcase" && <Briefcase className="w-14 h-14 text-primary/80" />}
-            {service.category?.icon === "bell" && <Bell className="w-14 h-14 text-primary/80" />}
+            {service.category?.icon === "car" && <HugeiconsIcon icon={Car01Icon} size={56} color="currentColor" className="text-primary/80" />}
+            {service.category?.icon === "home" && <HugeiconsIcon icon={Home01Icon} size={56} color="currentColor" className="text-primary/80" />}
+            {service.category?.icon === "users" && <HugeiconsIcon icon={UserGroupIcon} size={56} color="currentColor" className="text-primary/80" />}
+            {service.category?.icon === "briefcase" && <HugeiconsIcon icon={Briefcase01Icon} size={56} color="currentColor" className="text-primary/80" />}
+            {service.category?.icon === "bell" && <HugeiconsIcon icon={Notification01Icon} size={56} color="currentColor" className="text-primary/80" />}
           </div>
 
           {service.category && (
@@ -84,7 +92,7 @@ export function ServiceCardHexagon({ service, featured = false }: ServiceCardHex
 
           <div className="flex items-center gap-1 mb-4">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+              <HugeiconsIcon key={i} icon={StarIcon} size={12} color="rgb(250,204,21)" />
             ))}
           </div>
 

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { usePackBuilderStore } from "@/features/pack-builder/store";
+import { useTranslation } from "@/lib/i18n/use-translation";
 
 interface PackNavigationProps {
   currentIndex: number;
@@ -15,11 +16,15 @@ interface PackNavigationProps {
 }
 
 export function PackNavigation({ currentIndex, totalCategories, currentCategoryId }: PackNavigationProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const previousCategory = usePackBuilderStore((state) => state.previousCategory);
   const nextCategory = usePackBuilderStore((state) => state.nextCategory);
   const skipCategory = usePackBuilderStore((state) => state.skipCategory);
   const items = usePackBuilderStore((state) => state.items);
+  const pricingMode = usePackBuilderStore((state) => state.pricingMode);
+
+  const isBudgetMode = pricingMode === "budget";
 
   const currentCategoryItems = items.filter((item) => item.categoryId === currentCategoryId);
   const canProceed = currentCategoryItems.length > 0;
@@ -36,11 +41,15 @@ export function PackNavigation({ currentIndex, totalCategories, currentCategoryI
     if (isLastCategory) {
       // Vérifier qu'il y a au moins un service dans le pack
       if (!hasItemsInPack) {
-        toast.error("Veuillez sélectionner au moins un service pour finaliser votre pack");
+        toast.error(t("packNavigation.errorNoServices"));
         return;
       }
-      // Rediriger vers la page de paiement
-      router.push("/monpack/paiement");
+      // Rediriger vers l'étape budget (mode budget) ou conseiller (mode prix)
+      if (isBudgetMode) {
+        router.push("/monpack/budget");
+      } else {
+        router.push("/monpack/conseiller");
+      }
     } else {
       nextCategory();
     }

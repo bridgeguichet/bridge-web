@@ -1,6 +1,5 @@
-import { NextResponse } from "next/server";
-
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 import { categories, subcategories } from "@/lib/db/schema";
@@ -9,20 +8,16 @@ export async function GET() {
   try {
     const allCategories = await db.select().from(categories).orderBy(categories.sortOrder);
 
-    const categoriesWithSubs = await Promise.all(
-      allCategories.map(async (category) => {
-        const subs = await db.select().from(subcategories).where(eq(subcategories.categoryId, category.id));
+    const allSubcategories = await db.select().from(subcategories);
 
-        return {
-          ...category,
-          subcategories: subs,
-        };
-      }),
-    );
+    const result = allCategories.map((cat) => ({
+      ...cat,
+      subcategories: allSubcategories.filter((sub) => sub.categoryId === cat.id),
+    }));
 
-    return NextResponse.json(categoriesWithSubs);
+    return NextResponse.json(result);
   } catch (error) {
-    console.error("Error fetching categories:", error);
-    return NextResponse.json({ error: "Erreur lors de la récupération des catégories" }, { status: 500 });
+    console.error("GET /api/categories error:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

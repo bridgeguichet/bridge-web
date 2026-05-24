@@ -12,7 +12,7 @@ import { FinalCTA } from "@/features/marketplace/components/final-cta";
 import { HeroSection } from "@/features/marketplace/components/hero-section";
 import { ServiceCard } from "@/features/marketplace/components/service-card";
 import { useCategories, useServices } from "@/features/marketplace/hooks";
-import { HeroHeader } from "@/external-components/header";
+import { HeroHeader } from "@/components/header";
 
 const PAGE_SIZE = 8;
 

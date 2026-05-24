@@ -2,18 +2,29 @@
 
 import Link from "next/link";
 
+import {
+  ArrowRight01Icon,
+  Cash01Icon,
+  Invoice01Icon,
+  Package01Icon,
+  ShoppingBag01Icon,
+  ShoppingCart01Icon,
+  SparklesIcon,
+  TrendingUpDownIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "framer-motion";
-import { ArrowRight, CreditCard, Heart, Package, ShoppingBag, ShoppingCart, Sparkles, TrendingUp } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EmptyState } from "@/external-components/user-dashboard/empty-state";
-import { StatsCard } from "@/external-components/user-dashboard/stats-card";
+import { EmptyState } from "@/components/user-dashboard/empty-state";
+import { StatsCard } from "@/components/user-dashboard/stats-card";
+import { useSession } from "@/features/auth/hooks";
 import { useCartStore } from "@/features/cart/store";
-import { useOrders } from "@/features/orders/hooks";
+import { useTransactionsStore } from "@/features/transactions/store";
 
-const ORDER_STATUS_LABELS: Record<
+const STATUS_LABELS: Record<
   string,
   {
     label: string;
@@ -21,9 +32,9 @@ const ORDER_STATUS_LABELS: Record<
   }
 > = {
   pending: { label: "En attente", variant: "secondary" },
-  in_progress: { label: "En cours", variant: "default" },
   completed: { label: "Terminée", variant: "outline" },
-  cancelled: { label: "Annulée", variant: "destructive" },
+  failed: { label: "Échouée", variant: "destructive" },
+  refunded: { label: "Remboursée", variant: "destructive" },
 };
 
 const containerVariants = {
@@ -50,44 +61,43 @@ const itemVariants = {
 };
 
 export default function UserDashboard() {
+  const { data: session } = useSession();
+  const userName = session?.user?.name || "";
   const cartItems = useCartStore((state) => state.items);
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-  const { data: orders, isLoading: ordersLoading } = useOrders();
+  const transactions = useTransactionsStore((state) => state.transactions);
+  const totalSpent = useTransactionsStore((state) => state.getTotalSpent());
 
-  const activeOrders =
-    orders?.filter(
-      (o) => o.status === "in_progress" || o.status === "pending",
-    ) || [];
-  const totalSpent =
-    orders?.reduce((sum, o) => sum + parseFloat(o.totalAmount || "0"), 0) ?? 0;
-  const recentOrders = orders?.slice(0, 3) || [];
+  const packTransactions = transactions.filter((t) => t.type === "pack");
+  const pendingTransactions = transactions.filter((t) => t.status === "pending");
+  const recentPacks = packTransactions.slice(0, 3);
 
   const stats = [
     {
-      icon: CreditCard,
+      icon: Cash01Icon,
       label: "Total dépenses",
-      value: ordersLoading ? "..." : `$${totalSpent.toFixed(0)}`,
-      trend: `${orders?.length ?? 0} commandes`,
+      value: `$${totalSpent.toFixed(0)}`,
+      trend: `${transactions.length} transactions`,
       trendUp: true,
     },
     {
-      icon: Package,
-      label: "Commandes en cours",
-      value: ordersLoading ? "..." : String(activeOrders.length),
-      trend: activeOrders.length > 0 ? "Voir le suivi" : "Aucune active",
-      trendUp: activeOrders.length > 0,
+      icon: Package01Icon,
+      label: "Packs créés",
+      value: String(packTransactions.length),
+      trend: packTransactions.length > 0 ? "Voir le suivi" : "Aucun pack",
+      trendUp: packTransactions.length > 0,
     },
     {
-      icon: Heart,
-      label: "Services favoris",
-      value: "0",
-      trend: "Fonctionnalité à venir",
-      trendUp: false,
+      icon: Invoice01Icon,
+      label: "En attente",
+      value: String(pendingTransactions.length),
+      trend: pendingTransactions.length > 0 ? "À traiter" : "Tout est à jour",
+      trendUp: pendingTransactions.length === 0,
     },
     {
-      icon: TrendingUp,
-      label: "Total commandes",
-      value: ordersLoading ? "..." : String(orders?.length ?? 0),
+      icon: TrendingUpDownIcon,
+      label: "Total transactions",
+      value: String(transactions.length),
       trend: "Depuis le début",
       trendUp: true,
     },
@@ -95,24 +105,31 @@ export default function UserDashboard() {
 
   const quickActions = [
     {
-      icon: ShoppingBag,
+      icon: ShoppingBag01Icon,
       label: "Explorer les services",
       description: "Découvrez nos services populaires",
-      href: "/marketplace#services",
+      href: "/",
       variant: "primary" as const,
     },
     {
-      icon: ShoppingCart,
+      icon: ShoppingCart01Icon,
       label: "Voir mon panier",
       description: `${cartCount} article${cartCount > 1 ? "s" : ""} en attente`,
       href: "/user-dashboard/cart",
-      variant: "accent" as const,
+      variant: "primary" as const,
     },
     {
-      icon: Package,
+      icon: Package01Icon,
       label: "Mes packs",
       description: "Suivez vos packs en cours",
       href: "/user-dashboard/orders",
+      variant: "primary" as const,
+    },
+    {
+      icon: Invoice01Icon,
+      label: "Mes commandes",
+      description: "Suivez vos commandes uniques",
+      href: "/user-dashboard/orders-single",
       variant: "primary" as const,
     },
   ];
@@ -124,13 +141,13 @@ export default function UserDashboard() {
         <div className="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-accent" />
+              <HugeiconsIcon icon={SparklesIcon} size={20} color="currentColor" className="text-accent" />
               <span className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
                 Espace personnel
               </span>
             </div>
             <h1 className="font-black text-4xl tracking-tight text-foreground md:text-5xl lg:text-6xl">
-              Tableau de <span className="text-primary">bord</span>
+              Bienvenue <span className="text-primary">{userName}</span>
             </h1>
             <p className="max-w-lg text-lg leading-relaxed text-muted-foreground">
               Bienvenue sur votre espace. Gérez vos packs, suivez vos transactions et découvrez nos services.
@@ -167,10 +184,9 @@ export default function UserDashboard() {
       {/* Quick Actions avec cards modernes */}
       <motion.div variants={itemVariants} className="space-y-5">
         <h2 className="font-bold text-2xl tracking-tight text-foreground">Actions rapides</h2>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
-            const isAccent = action.variant === "accent";
 
             return (
               <motion.div
@@ -187,22 +203,16 @@ export default function UserDashboard() {
               >
                 <Link href={action.href} className="group block">
                   <Card className="relative overflow-hidden border-0 bg-card shadow-md transition-all duration-300 hover:shadow-xl">
-                    {/* Background accent subtil au hover */}
-                    <div
-                      className={`absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 ${
-                        isAccent ? "bg-accent/5" : "bg-primary/5"
-                      }`}
-                    />
+                    {/* Background subtil au hover */}
+                    <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                     <CardContent className="relative p-6">
                       <div className="flex items-start gap-4">
                         <motion.div
                           whileHover={{ rotate: 3 }}
-                          className={`shrink-0 rounded-xl p-3 ${
-                            isAccent ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
-                          }`}
+                          className="shrink-0 rounded-xl bg-primary p-3 text-primary-foreground"
                         >
-                          <Icon className="h-6 w-6" />
+                          <HugeiconsIcon icon={Icon} size={24} color="currentColor" />
                         </motion.div>
                         <div className="min-w-0 flex-1">
                           <h3 className="font-bold text-lg text-foreground transition-colors group-hover:text-primary">
@@ -210,7 +220,12 @@ export default function UserDashboard() {
                           </h3>
                           <p className="mt-1 text-sm text-muted-foreground">{action.description}</p>
                         </div>
-                        <ArrowRight className="h-5 w-5 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary" />
+                        <HugeiconsIcon
+                          icon={ArrowRight01Icon}
+                          size={20}
+                          color="currentColor"
+                          className="shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary"
+                        />
                       </div>
                     </CardContent>
                   </Card>
@@ -221,7 +236,7 @@ export default function UserDashboard() {
         </div>
       </motion.div>
 
-      {/* Recent Orders Section */}
+      {/* Recent Packs Section */}
       <motion.div variants={itemVariants}>
         <Card className="overflow-hidden border-0 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between border-b bg-muted/30 px-6 py-5">
@@ -236,59 +251,39 @@ export default function UserDashboard() {
             >
               <Link href="/user-dashboard/orders">
                 Voir tout
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" className="ml-2" />
               </Link>
             </Button>
           </CardHeader>
           <CardContent>
-            {ordersLoading ? (
-              <div className="space-y-3">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-14 rounded-lg bg-gray-100 animate-pulse"
-                  />
-                ))}
-              </div>
-            ) : recentOrders.length === 0 ? (
+            {recentPacks.length === 0 ? (
               <EmptyState
-                icon={Package}
+                icon={Package01Icon}
                 title="Aucun pack pour le moment"
                 description="Vous n'avez pas encore de pack. Explorez nos services pour créer votre premier pack personnalisé."
                 action={{
-                  label: "Explorer les services",
-                  href: "/marketplace#services",
+                  label: "Créer un pack",
+                  href: "/monpack/mode",
                 }}
               />
             ) : (
               <div className="space-y-3">
-                {recentOrders.map((order) => {
-                  const statusInfo = ORDER_STATUS_LABELS[order.status] ?? {
-                    label: order.status,
+                {recentPacks.map((txn) => {
+                  const statusInfo = STATUS_LABELS[txn.status] ?? {
+                    label: txn.status,
                     variant: "outline" as const,
                   };
                   return (
-                    <div
-                      key={order.id}
-                      className="flex items-center justify-between rounded-lg border px-4 py-3"
-                    >
+                    <div key={txn.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">
-                          Commande #{order.id.slice(0, 8)}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {new Date(
-                            order.createdAt as unknown as string,
-                          ).toLocaleDateString("fr-FR")}
+                        <p className="font-semibold text-gray-900 text-sm">Pack #{txn.id.slice(4, 12)}</p>
+                        <p className="text-gray-500 text-xs">
+                          {new Date(txn.createdAt).toLocaleDateString("fr-FR")}
                         </p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-bold text-gray-900">
-                          ${parseFloat(order.totalAmount || "0").toFixed(2)}
-                        </span>
-                        <Badge variant={statusInfo.variant}>
-                          {statusInfo.label}
-                        </Badge>
+                        <span className="font-bold text-gray-900 text-sm">${txn.amount.toFixed(2)}</span>
+                        <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                       </div>
                     </div>
                   );

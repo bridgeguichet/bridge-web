@@ -3,106 +3,203 @@ import React from "react";
 
 import Link from "next/link";
 
-import { Menu, X } from "lucide-react";
-import { useScroll } from "motion/react";
+import { LayoutDashboard, LogIn, LogOut, Menu, ShoppingCart, User, UserCircle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
-import { ThemeSwitcher } from "@/app/(main)/dashboard/_components/sidebar/theme-switcher";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/lib/i18n/use-translation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuthRedirect, useLogout, useSession } from "@/features/auth/hooks";
+import { useAuthStore } from "@/features/auth/store";
+import { CartSheet } from "@/features/cart/components/cart-sheet";
+import { useCartStore } from "@/features/cart/store";
 import { cn } from "@/lib/utils";
-
-const menuItems = [
-  { name: "Fonctionnalités", href: "#link" },
-  { name: "Solution", href: "#link" },
-  // { name: 'Pricing', href: '#link' },
-  { name: "A propos", href: "#link" },
-];
 
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [cartOpen, setCartOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
   const { t } = useTranslation();
+  const itemCount = useCartStore((state) => state.getItemCount());
+  const { isAuthenticated } = useSession();
+  const logout = useLogout();
+  const { redirectToLogin } = useAuthRedirect();
+  const [userMenuOpen, setUserMenuOpen] = React.useState(false);
 
-  const { scrollYProgress } = useScroll();
+  // Get user initials for avatar
+  const currentUser = useAuthStore((state) => state.currentUser);
+  const getUserInitials = () => {
+    if (!currentUser?.name) return "?";
+    const parts = currentUser.name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
+
+  const menuItems = [
+    {
+      name: t("external-header.about"),
+      href: "https://www.bridgeguichet.net/a-propos",
+    },
+    { name: t("external-header.service"), href: "/marketplace#services" },
+    { name: t("external-header.temoignage"), href: "/marketplace#services" },
+  ];
 
   React.useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      setScrolled(latest > 0.05);
-    });
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+    setMounted(true);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header>
       <nav
-        data-state={menuState && "active"}
         className={cn(
-          "fixed z-20 w-full border-b transition-colors duration-150",
-          scrolled && "bg-background/50 backdrop-blur-3xl",
+          "fixed top-0 z-50 w-full border-b transition-all duration-500",
+          isScrolled ? "bg-white/80 shadow-sm backdrop-blur-md" : "border-gray-200 bg-white",
         )}
       >
-        <div className="mx-auto container px-6 transition-all duration-300">
-          <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
-            <div className="flex w-full items-center justify-between gap-12 lg:w-auto">
-              <Link href="/" aria-label="home" className="flex items-center space-x-2">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            <div className="flex items-center gap-12">
+              <Link href="/" className="flex items-center">
                 <Logo />
               </Link>
 
-              <button
-                type="button"
-                onClick={() => setMenuState(!menuState)}
-                aria-label={menuState === true ? "Close Menu" : "Open Menu"}
-                className="-m-2.5 -mr-4 relative z-20 block cursor-pointer p-2.5 lg:hidden"
-              >
-                <Menu className="m-auto size-6 in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 duration-200" />
-                <X className="-rotate-180 absolute inset-0 m-auto size-6 in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 scale-0 in-data-[state=active]:opacity-100 opacity-0 duration-200" />
-              </button>
-
-              <div className="hidden lg:block">
-                <ul className="flex gap-8 text-sm">
-                  {menuItems.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        className="block text-muted-foreground duration-150 hover:text-accent-foreground"
-                      >
-                        <span>{item.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ul className="hidden items-center gap-10 lg:flex">
+                {menuItems.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      href={item.href}
+                      className="font-medium text-gray-700 text-sm transition-colors hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="mb-6 in-data-[state=active]:block hidden w-full flex-wrap items-center justify-end space-y-8 rounded-3xl border bg-background p-6 md:flex-nowrap lg:m-0 lg:flex lg:in-data-[state=active]:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent">
-              <div className="lg:hidden">
-                <ul className="space-y-6 text-base">
-                  {menuItems.map((item, index) => (
-                    <li key={index}>
-                      <Link
-                        href={item.href}
-                        className="block text-muted-foreground duration-150 hover:text-accent-foreground"
-                      >
-                        <span>{item.name}</span>
+            <div className="flex items-center gap-3">
+              <LanguageSwitcher />
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative h-10 w-10 rounded-full hover:bg-gray-100"
+                onClick={() => setCartOpen(true)}
+              >
+                <ShoppingCart className="h-5 w-5 text-gray-700" />
+                {mounted && itemCount > 0 && (
+                  <span className="-top-1 -right-1 absolute flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground text-xs">
+                    {itemCount > 99 ? "99+" : itemCount}
+                  </span>
+                )}
+              </Button>
+              <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
+
+              <DropdownMenu
+                open={userMenuOpen}
+                onOpenChange={(open) => {
+                  if (open && !isAuthenticated) {
+                    redirectToLogin("/");
+                    return;
+                  }
+                  setUserMenuOpen(open);
+                }}
+              >
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className={cn("h-10 w-10 rounded-full", isAuthenticated ? "bg-muted" : "hover:bg-gray-100")}
+                  >
+                    {isAuthenticated ? (
+                      <span className="font-semibold text-muted-foreground text-sm">{getUserInitials()}</span>
+                    ) : (
+                      <User className="h-5 w-5 text-gray-700" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52">
+                  {isAuthenticated && (
+                    <>
+                      <DropdownMenuLabel className="flex flex-col gap-0.5 pb-2">
+                        <span className="font-semibold text-sm text-foreground">{currentUser?.name}</span>
+                        <span className="font-normal text-muted-foreground text-xs">{currentUser?.email}</span>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+                  <DropdownMenuItem asChild>
+                    <Link href="/user-dashboard" className="flex items-center gap-2">
+                      <LayoutDashboard className="h-4 w-4" />
+                      Mon espace
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/user-dashboard/profile" className="flex items-center gap-2">
+                      <UserCircle className="h-4 w-4" />
+                      Mon profil
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {isAuthenticated ? (
+                    <DropdownMenuItem
+                      className="flex cursor-pointer items-center gap-2 text-destructive focus:text-destructive"
+                      onClick={() => logout.mutate()}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Se déconnecter
+                    </DropdownMenuItem>
+                  ) : (
+                    <DropdownMenuItem asChild>
+                      <Link href="/auth/login" className="flex items-center gap-2">
+                        <LogIn className="h-4 w-4" />
+                        {t("auth.login")}
                       </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <LanguageSwitcher />
-                <ThemeSwitcher />
-                <Button asChild>
-                  <Link href="/auth/login">
-                    <span>{t("auth.login")}</span>
-                  </Link>
-                </Button>
-              </div>
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <button type="button" onClick={() => setMenuState(!menuState)} className="ml-2 lg:hidden">
+                {menuState ? <X className="h-6 w-6 text-gray-700" /> : <Menu className="h-6 w-6 text-gray-700" />}
+              </button>
             </div>
           </div>
         </div>
+
+        {menuState && (
+          <div className="border-t bg-white lg:hidden">
+            <div className="mx-auto max-w-7xl px-4 py-4">
+              <ul className="space-y-3">
+                {menuItems.map((item, index) => (
+                  <li key={index}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setMenuState(false)}
+                      className="block py-2 font-medium text-base text-gray-700 hover:text-primary"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

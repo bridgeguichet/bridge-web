@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { motion } from "framer-motion";
 
-import Footer from "@/external-components/footer";
-import { HeroHeader } from "@/external-components/header";
-import MonPack from "@/external-components/monpack";
-import TemoingageSection from "@/external-components/temoignage";
+import Footer from "@/components/footer";
+import { HeroHeader } from "@/components/header";
+import MonPack from "@/components/monpack";
+import TemoingageSection from "@/components/temoignage";
 import { CategoryShowcase } from "@/features/marketplace/components/category-showcase";
 import { FinalCTA } from "@/features/marketplace/components/final-cta";
 import { HeroSection } from "@/features/marketplace/components/hero-section";

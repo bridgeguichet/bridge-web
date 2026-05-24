@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { serviceVariants } from "@/lib/db/schema/services";
-import { eq } from "drizzle-orm";
+import { serviceVariants } from "@/lib/db/schema";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const variants = await db
       .select()
@@ -16,7 +16,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(variants);
   } catch (error) {
-    console.error("Error fetching service variants:", error);
-    return NextResponse.json({ error: "Failed to fetch service variants" }, { status: 500 });
+    console.error("GET /api/services/[id]/variants error:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -1,4 +1,5 @@
-import { Mail, MapPin, Phone, Star } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Mail01Icon, StarIcon } from "@hugeicons/core-free-icons";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,7 @@ export function VendorCard({ vendor }: VendorCardProps) {
           <div>
             <p className="font-medium">{vendor.companyName}</p>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <HugeiconsIcon icon={StarIcon} size={16} color="rgb(250,204,21)" />
               <span>4.9</span>
               <span>(156 avis)</span>
             </div>
@@ -44,7 +45,10 @@ export function VendorCard({ vendor }: VendorCardProps) {
         </div>
 
         {vendor.description && (
-          <p className="text-sm text-muted-foreground">{vendor.description}</p>
+          <p className="text-sm text-muted-foreground">
+            <HugeiconsIcon icon={Mail01Icon} size={16} color="currentColor" className="shrink-0 text-muted-foreground" />
+            {vendor.description}
+          </p>
         )}
 
         <div className="border-t pt-4">

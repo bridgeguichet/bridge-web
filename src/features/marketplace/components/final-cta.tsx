@@ -1,19 +1,26 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { motion } from "framer-motion";
+
+import { useAuthRedirect, useSession } from "@/features/auth/hooks";
 
 interface FinalCTAProps {
   onExplore: () => void;
 }
 
 export function FinalCTA({ onExplore }: FinalCTAProps) {
+  const router = useRouter();
+  const { isAuthenticated } = useSession();
+  const { redirectToLogin } = useAuthRedirect();
+
   return (
     <section className="py-20 bg-primary text-white relative overflow-hidden">
       <div
         className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage:
-            "radial-gradient(circle, white 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       />
@@ -38,12 +45,23 @@ export function FinalCTA({ onExplore }: FinalCTAProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
+              type="button"
               onClick={onExplore}
-              className="px-6 py-3 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors font-medium text-sm shadow-lg"
+              className="rounded-full bg-secondary px-6 py-3 font-medium text-secondary-foreground text-sm shadow-lg transition-colors hover:bg-secondary/90"
             >
               Explorer les services
             </button>
-            <button className="px-6 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors font-medium text-sm">
+            <button
+              type="button"
+              onClick={() => {
+                if (!isAuthenticated) {
+                  redirectToLogin("/rendez-vous");
+                  return;
+                }
+                router.push("/rendez-vous");
+              }}
+              className="rounded-full border-2 border-white px-6 py-3 font-medium text-sm text-white transition-colors hover:bg-white/10"
+            >
               Parler à un conseiller
             </button>
           </div>

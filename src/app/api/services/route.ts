@@ -1,74 +1,54 @@
-import { type NextRequest, NextResponse } from "next/server";
-
-import { and, eq, like, or } from "drizzle-orm";
+import { and, eq, ilike, inArray, or } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import {
-  categories,
-  serviceVariants,
-  services,
-  vendors,
-} from "@/lib/db/schema";
+import { categories, serviceVariants, services, vendors } from "@/lib/db/schema";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const categoryId = searchParams.get("categoryId");
+    const subcategoryId = searchParams.get("subcategoryId");
     const search = searchParams.get("search");
     const status = searchParams.get("status") || "active";
 
     const conditions = [eq(services.status, status)];
 
-    if (categoryId) {
-      conditions.push(eq(services.categoryId, categoryId));
-    }
-
+    if (categoryId) conditions.push(eq(services.categoryId, categoryId));
+    if (subcategoryId) conditions.push(eq(services.subcategoryId, subcategoryId));
     if (search) {
       conditions.push(
         or(
-          like(services.nameFr, `%${search}%`),
-          like(services.nameEn, `%${search}%`),
+          ilike(services.nameFr, `%${search}%`),
+          ilike(services.nameEn, `%${search}%`),
+          ilike(services.descriptionFr, `%${search}%`),
         )!,
       );
     }
 
-    const result = await db
-      .select({
-        service: services,
-        category: categories,
-        vendor: vendors,
-        variant: serviceVariants,
-      })
+    const rows = await db
+      .select()
       .from(services)
       .leftJoin(categories, eq(services.categoryId, categories.id))
       .leftJoin(vendors, eq(services.vendorId, vendors.id))
-      .leftJoin(serviceVariants, eq(services.id, serviceVariants.serviceId))
       .where(and(...conditions));
 
-    // Grouper les variantes par service
-    const servicesMap = new Map();
-    result.forEach((row) => {
-      if (!servicesMap.has(row.service.id)) {
-        servicesMap.set(row.service.id, {
-          ...row.service,
-          category: row.category,
-          vendor: row.vendor,
-          variants: [],
-        });
-      }
-      if (row.variant) {
-        servicesMap.get(row.service.id).variants.push(row.variant);
-      }
-    });
+    const serviceIds = rows.map((r) => r.services.id);
+    const variants =
+      serviceIds.length > 0
+        ? await db.select().from(serviceVariants).where(inArray(serviceVariants.serviceId, serviceIds))
+        : [];
 
-    const formattedServices = Array.from(servicesMap.values());
+    const result = rows.map((row) => ({
+      ...row.services,
+      category: row.categories ?? undefined,
+      vendor: row.vendors ?? undefined,
+      variants: variants.filter((v) => v.serviceId === row.services.id),
+    }));
 
-    return NextResponse.json(formattedServices);
+    return NextResponse.json(result);
   } catch (error) {
-    console.error("Error fetching services:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la récupération des services" },
-      { status: 500 },
-    );
+    console.error("GET /api/services error:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

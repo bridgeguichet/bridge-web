@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-Bridge is a Next.js 16 dashboard application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French. It connects to a Django REST backend via JWT authentication.
+Bridge is a Next.js full-stack application (React 19) for "Bridge guichet" — a service platform for the Congolese diaspora, expatriates, investors, and retirees. The UI is primarily in French. Auth is handled by Better Auth with a Neon PostgreSQL database via Drizzle ORM.
 
 ## Commands
 
@@ -21,8 +21,10 @@ Node >= 20.9.0 is required.
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_API_URL` — public-facing API base URL for client-side requests (default: `http://localhost:8000`)
-- `API_URL` — server-side API base URL used by Next.js API routes (default: `http://localhost:8000`)
+- `NEXT_PUBLIC_API_URL` — base URL for client-side requests (default: `http://localhost:3000`)
+- `DATABASE_URL` — Neon PostgreSQL connection string
+- `BETTER_AUTH_SECRET` — secret key for Better Auth (generate: `openssl rand -base64 32`)
+- `BETTER_AUTH_URL` — public URL of the app used by Better Auth (default: `http://localhost:3000`)
 
 ## Architecture
 
@@ -31,7 +33,7 @@ Node >= 20.9.0 is required.
 - `src/app/(main)/dashboard/` — authenticated dashboard pages (default, CRM, finance, users)
 - `src/app/(main)/auth/` — login/register pages
 - `src/app/(external)/` — public-facing landing page
-- `src/app/api/auth/` — Next.js API route handlers that proxy auth requests to the Django backend and manage httpOnly cookies (login, logout, refresh, token)
+- `src/app/api/auth/[...all]/` — Better Auth catch-all route handler (handles sign-in, sign-up, sign-out, session, etc.)
 
 ### Feature Modules (`src/features/`)
 
@@ -47,11 +49,13 @@ When adding a new feature, follow this pattern. Import features via their barrel
 
 ### Authentication Flow
 
-Auth uses a BFF (Backend-For-Frontend) pattern:
-1. Next.js API routes (`src/app/api/auth/`) proxy to the Django backend and store JWT tokens as httpOnly cookies.
-2. The axios instance (`src/lib/axios/`) retrieves the access token via `/api/auth/token` on each request and automatically handles 401 refresh logic.
-3. Client-side auth state is managed in a Zustand store (`src/features/auth/store.ts`).
-4. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes (auth enforcement is currently commented out).
+Auth uses **Better Auth** (full-stack, server-side sessions):
+1. `src/lib/auth/auth.ts` — server-side Better Auth instance connected to Neon via Drizzle.
+2. `src/app/api/auth/[...all]/route.ts` — catch-all Next.js route that exposes all Better Auth endpoints.
+3. `src/lib/auth/auth-client.ts` — client-side `authClient` using `better-auth/react`.
+4. `src/features/auth/services.ts` — calls `authClient.signIn.email()`, `signUp.email()`, `signOut()`, `getSession()`, `changePassword()`.
+5. Client-side auth state is managed in a Zustand store (`src/features/auth/store.ts`).
+6. Middleware (`src/middleware.ts`) guards `/dashboard/*` routes by checking the Better Auth session cookie.
 
 ### State Management
 

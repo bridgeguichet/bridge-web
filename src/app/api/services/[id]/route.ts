@@ -1,56 +1,38 @@
-import { type NextRequest, NextResponse } from "next/server";
-
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
+import { NextRequest, NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import {
-  categories,
-  services,
-  serviceVariants,
-  vendors,
-} from "@/lib/db/schema";
+import { categories, serviceVariants, services, vendors } from "@/lib/db/schema";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
-    const result = await db
-      .select({
-        service: services,
-        category: categories,
-        vendor: vendors,
-      })
+    const rows = await db
+      .select()
       .from(services)
       .leftJoin(categories, eq(services.categoryId, categories.id))
       .leftJoin(vendors, eq(services.vendorId, vendors.id))
       .where(eq(services.id, id));
 
-    if (!result.length || !result[0].service) {
-      return NextResponse.json(
-        { error: "Service non trouvé" },
-        { status: 404 },
-      );
+    if (rows.length === 0) {
+      return NextResponse.json({ error: "Service introuvable" }, { status: 404 });
     }
 
+    const row = rows[0];
     const variants = await db
       .select()
       .from(serviceVariants)
       .where(eq(serviceVariants.serviceId, id));
 
     return NextResponse.json({
-      ...result[0].service,
-      category: result[0].category,
-      vendor: result[0].vendor,
+      ...row.services,
+      category: row.categories ?? undefined,
+      vendor: row.vendors ?? undefined,
       variants,
     });
   } catch (error) {
-    console.error("Error fetching service:", error);
-    return NextResponse.json(
-      { error: "Erreur lors de la récupération du service" },
-      { status: 500 },
-    );
+    console.error("GET /api/services/[id] error:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -3,10 +3,9 @@
 import Link from "next/link";
 
 import { motion } from "framer-motion";
-import { Package } from "lucide-react";
-
+import { Package01Icon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
-import { EmptyState } from "@/external-components/user-dashboard/empty-state";
+import { EmptyState } from "@/components/user-dashboard/empty-state";
 import { useOrders } from "@/features/orders/hooks";
 
 const ORDER_STATUS_LABELS: Record<
@@ -48,7 +47,7 @@ export default function OrdersPage() {
           </div>
         ) : orders.length === 0 ? (
           <EmptyState
-            icon={Package}
+            icon={Package01Icon}
             title="Aucune commande"
             description="Vous n'avez pas encore passé de commande. Explorez nos services pour commencer."
             action={{ label: "Explorer les services", href: "/marketplace" }}

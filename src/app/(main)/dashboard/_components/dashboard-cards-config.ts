@@ -12,7 +12,7 @@ export const DASHBOARD_CARDS: DashboardCardConfig[] = [
   {
     titleKey: "dashboardCards.users.title",
     descriptionKey: "dashboardCards.users.description",
-    href: "/dashboard/users",
+    href: "/dashboard/customers",
     icon: Users,
     countKey: "users",
   },

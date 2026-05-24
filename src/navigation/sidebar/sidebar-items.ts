@@ -1,23 +1,4 @@
-import {
-  AlertTriangle,
-  Banknote,
-  Building2,
-  Calendar,
-  ChartBar,
-  Forklift,
-  Gauge,
-  Gem,
-  Kanban,
-  LayoutDashboard,
-  Lock,
-  type LucideIcon,
-  Mail,
-  MessageSquare,
-  Pickaxe,
-  ReceiptText,
-  SquareArrowUpRight,
-  Users,
-} from "lucide-react";
+import { Banknote, Box, ChartBar, LayoutDashboard, type LucideIcon, Package, Tags, UserCog, Users } from "lucide-react";
 
 export interface NavSubItem {
   titleKey: string;
@@ -47,106 +28,43 @@ export interface NavGroup {
 export const sidebarItems: NavGroup[] = [
   {
     id: 1,
-    labelKey: "sidebar.dashboards",
     items: [
       {
         titleKey: "sidebar.dashboard",
         url: "/dashboard/default",
         icon: LayoutDashboard,
       },
-      {
-        titleKey: "CRM",
-        url: "/dashboard/crm",
-        icon: ChartBar,
-      },
-      {
-        titleKey: "Finance",
-        url: "/dashboard/finance",
-        icon: Banknote,
-      },
-      {
-        titleKey: "Analytics",
-        url: "/dashboard/coming-soon",
-        icon: Gauge,
-        comingSoon: true,
-      },
-      {
-        titleKey: "Logistics",
-        url: "/dashboard/coming-soon",
-        icon: Forklift,
-        comingSoon: true,
-      },
     ],
   },
   {
     id: 2,
-    labelKey: "sidebar.pages",
+    labelKey: "sidebar.admin",
     items: [
       {
-        titleKey: "Email",
-        url: "/dashboard/coming-soon",
-        icon: Mail,
-        comingSoon: true,
+        titleKey: "sidebar.services",
+        url: "/dashboard/services",
+        icon: Package,
       },
       {
-        titleKey: "Chat",
-        url: "/dashboard/coming-soon",
-        icon: MessageSquare,
-        comingSoon: true,
+        titleKey: "sidebar.categories",
+        url: "/dashboard/categories",
+        icon: Tags,
       },
       {
-        titleKey: "Calendar",
-        url: "/dashboard/coming-soon",
-        icon: Calendar,
-        comingSoon: true,
+        titleKey: "sidebar.resources",
+        url: "/dashboard/resources",
+        icon: Box,
       },
       {
-        titleKey: "Kanban",
-        url: "/dashboard/coming-soon",
-        icon: Kanban,
-        comingSoon: true,
+        titleKey: "sidebar.staff",
+        url: "/dashboard/staff",
+        icon: UserCog,
       },
       {
-        titleKey: "Invoice",
-        url: "/dashboard/coming-soon",
-        icon: ReceiptText,
-        comingSoon: true,
-      },
-      {
-        titleKey: "sidebar.users",
-        url: "/dashboard/users",
+        titleKey: "sidebar.customers",
+        url: "/dashboard/customers",
         icon: Users,
-        comingSoon: false,
       },
-      // {
-      //   title: "Roles",
-      //   url: "/dashboard/roles",
-      //   icon: Lock,
-      //   comingSoon: false,
-      // },
-      // {
-      //   title: "Authentication",
-      //   url: "/auth",
-      //   icon: Fingerprint,
-      //   subItems: [
-      //     { title: "Login v1", url: "/auth/v1/login", newTab: true },
-      //     { title: "Login v2", url: "/auth/v2/login", newTab: true },
-      //     { title: "Register v1", url: "/auth/v1/register", newTab: true },
-      //     { title: "Register v2", url: "/auth/v2/register", newTab: true },
-      //   ],
-      // },
     ],
   },
-  // {
-  //   id: 3,
-  //   label: "Misc",
-  //   items: [
-  //     {
-  //       title: "Others",
-  //       url: "/dashboard/coming-soon",
-  //       icon: SquareArrowUpRight,
-  //       comingSoon: true,
-  //     },
-  //   ],
-  // },
 ];
