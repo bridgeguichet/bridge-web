@@ -2,62 +2,84 @@ import { config } from "dotenv";
 
 config();
 
+import { eq } from "drizzle-orm";
+import { auth } from "../auth/auth";
 import { db } from "./index";
 import {
-  accounts,
   categories,
   resources,
   services,
   serviceVariants,
   subcategories,
   users,
+  vendorMembers,
   vendors,
 } from "./schema";
 
-// Generate ID compatible with Better Auth (nanoid-like)
-const generateId = () => {
-  const chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-  for (let i = 0; i < 32; i++) {
-    id += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return id;
-};
+const DEFAULT_PASSWORD = "00000000";
 
-const seedData = async () => {
-  console.log("🌱 Seeding database...");
-
+// Helper to create user via Better Auth API
+async function createUserViaAuth(email: string, name: string, role: string, isSuperUser: boolean) {
   try {
-    // 1. Créer utilisateur admin BRIDGE
-    const adminId = generateId();
-    const [adminUser] = await db
-      .insert(users)
-      .values({
-        id: adminId,
-        email: "admin@bridge-guichet.com",
-        name: "BRIDGE Admin",
-        emailVerified: true,
-        role: "admin",
-        phone: "+243000000000",
-      })
-      .returning();
-
-    console.log("✅ Admin user created");
-
-    // 1b. Créer account email/password pour admin
-    // Note: Le mot de passe sera défini lors du premier login via Better Auth
-    await db.insert(accounts).values({
-      id: generateId(),
-      userId: adminUser.id,
-      accountId: adminUser.email,
-      providerId: "credential",
-      password: null, // Sera défini lors de l'inscription
+    // Create user using Better Auth's internal API
+    const result = await auth.api.signUpEmail({
+      body: {
+        email,
+        password: DEFAULT_PASSWORD,
+        name,
+      },
     });
 
-    console.log("✅ Admin account created");
+    if (!result || !result.user) {
+      throw new Error("Failed to create user");
+    }
 
-    // 2. Créer vendor BRIDGE
+    // Update additional fields (role, isSuperUser)
+    await db.update(users).set({ role, isSuperUser }).where(eq(users.id, result.user.id));
+
+    console.log(`✅ ${email} created (${role}, super=${isSuperUser})`);
+    return result.user;
+  } catch (error: any) {
+    // If user already exists, just return existing
+    if (error.message?.includes("already exists")) {
+      console.log(`⚠️  ${email} already exists`);
+      const existing = await db.select().from(users).where(eq(users.email, email)).limit(1);
+      return existing[0] || null;
+    }
+    console.error(`❌ Error creating ${email}:`, error.message);
+    throw error;
+  }
+}
+
+const seedData = async () => {
+  console.log("🌱 Seeding database...\n");
+
+  try {
+    // ==========================================
+    // 1. Créer ROOT User (super-user, pas membre d'un vendor)
+    // ==========================================
+    const rootUser = await createUserViaAuth("rootuser@bridge.com", "ROOT User", "customer", true);
+
+    if (!rootUser) {
+      throw new Error("Failed to create root user");
+    }
+
+    console.log("✅ ROOT User created (super-user, not a vendor member)\n");
+
+    // ==========================================
+    // 2. Créer utilisateur admin BRIDGE
+    // ==========================================
+    const adminUser = await createUserViaAuth("admin@bridge-guichet.com", "BRIDGE Admin", "admin", false);
+
+    if (!adminUser) {
+      throw new Error("Failed to create admin user");
+    }
+
+    console.log("✅ Admin user created\n");
+
+    // ==========================================
+    // 3. Créer vendor BRIDGE
+    // ==========================================
     const [bridgeVendor] = await db
       .insert(vendors)
       .values({
@@ -70,9 +92,51 @@ const seedData = async () => {
       })
       .returning();
 
-    console.log("✅ BRIDGE vendor created");
+    console.log("✅ BRIDGE vendor created\n");
 
-    // 3. Créer catégories
+    // ==========================================
+    // 4. Créer vendor_members pour l'équipe Bridge
+    // ==========================================
+
+    // Admin comme vendor_member
+    await db.insert(vendorMembers).values({
+      vendorId: bridgeVendor.id,
+      userId: adminUser.id,
+      role: "admin",
+    });
+    console.log("✅ Admin added as vendor member\n");
+
+    // ==========================================
+    // 5. Créer manager BRIDGE
+    // ==========================================
+    const managerUser = await createUserViaAuth("manager@bridge.com", "BRIDGE Manager", "manager", false);
+
+    if (managerUser) {
+      await db.insert(vendorMembers).values({
+        vendorId: bridgeVendor.id,
+        userId: managerUser.id,
+        role: "manager",
+      });
+      console.log("✅ Manager added as vendor member\n");
+    }
+
+    // ==========================================
+    // 6. Créer operator BRIDGE
+    // ==========================================
+    const operatorUser = await createUserViaAuth("operator@bridge.com", "BRIDGE Operator", "operator", false);
+
+    if (operatorUser) {
+      await db.insert(vendorMembers).values({
+        vendorId: bridgeVendor.id,
+        userId: operatorUser.id,
+        role: "operator",
+      });
+      console.log("✅ Operator added as vendor member\n");
+    }
+
+    // ==========================================
+    // 7. Créer catégories
+    // ==========================================
     const categoriesData = [
       {
         slug: "mobilite",
@@ -111,37 +175,25 @@ const seedData = async () => {
       },
     ];
 
-    const createdCategories = await db
-      .insert(categories)
-      .values(categoriesData)
-      .returning();
+    const createdCategories = await db.insert(categories).values(categoriesData).returning();
     console.log("✅ Categories created");
 
-    const mobiliteCategory = createdCategories.find(
-      (c) => c.slug === "mobilite",
-    )!;
-    const logementCategory = createdCategories.find(
-      (c) => c.slug === "logement",
-    )!;
-    const personnelCategory = createdCategories.find(
-      (c) => c.slug === "personnel",
-    )!;
-    const servicesCategory = createdCategories.find(
-      (c) => c.slug === "services",
-    )!;
-    const conciergerieCategory = createdCategories.find(
-      (c) => c.slug === "conciergerie",
-    )!;
+    const mobiliteCategory = createdCategories.find((c) => c.slug === "mobilite")!;
+    const logementCategory = createdCategories.find((c) => c.slug === "logement")!;
+    const personnelCategory = createdCategories.find((c) => c.slug === "personnel")!;
+    const servicesCategory = createdCategories.find((c) => c.slug === "services")!;
+    const conciergerieCategory = createdCategories.find((c) => c.slug === "conciergerie")!;
 
-    // 4. Services Mobilité
+    // ==========================================
+    // 8. Services Mobilité
+    // ==========================================
     const mobiliteServices = [
       {
         vendorId: bridgeVendor.id,
         categoryId: mobiliteCategory.id,
         nameFr: "Voiture avec chauffeur",
         nameEn: "Car with driver",
-        descriptionFr:
-          "Service de voiture avec chauffeur professionnel à Kinshasa",
+        descriptionFr: "Service de voiture avec chauffeur professionnel à Kinshasa",
         descriptionEn: "Professional car with driver service in Kinshasa",
         basePrice: "50",
         priceUnit: "day",
@@ -160,18 +212,15 @@ const seedData = async () => {
       },
     ];
 
-    const [voitureService, transfertService] = await db
-      .insert(services)
-      .values(mobiliteServices)
-      .returning();
+    const [voitureService, transfertService] = await db.insert(services).values(mobiliteServices).returning();
 
-    // Variants pour voiture avec chauffeur (différents véhicules disponibles)
+    // Variants pour voiture avec chauffeur
     await db.insert(serviceVariants).values([
       {
         serviceId: voitureService.id,
         nameFr: "Sedan Standard",
         nameEn: "Standard Sedan",
-        priceModifier: "50", // Prix absolu par jour
+        priceModifier: "50",
         metadata: {
           vehicleType: "sedan",
           capacity: 4,
@@ -204,13 +253,7 @@ const seedData = async () => {
           vehicleType: "premium_suv",
           capacity: 7,
           luggage: 5,
-          features: [
-            "4x4",
-            "Cuir",
-            "Climatisation bi-zone",
-            "GPS",
-            "Chauffeur VIP",
-          ],
+          features: ["4x4", "Cuir", "Climatisation bi-zone", "GPS", "Chauffeur VIP"],
           examples: ["Toyota Land Cruiser Prado", "Lexus GX"],
         },
         sortOrder: 3,
@@ -224,11 +267,7 @@ const seedData = async () => {
           vehicleType: "van",
           capacity: 12,
           luggage: 8,
-          features: [
-            "Climatisation",
-            "Sièges confortables",
-            "Chauffeur + assistant",
-          ],
+          features: ["Climatisation", "Sièges confortables", "Chauffeur + assistant"],
           examples: ["Toyota Hiace", "Mercedes Sprinter"],
         },
         sortOrder: 4,
@@ -261,11 +300,7 @@ const seedData = async () => {
           vehicleType: "sedan",
           capacity: 4,
           luggage: 2,
-          features: [
-            "Climatisation",
-            "Accueil personnalisé",
-            "Flexibilité horaire",
-          ],
+          features: ["Climatisation", "Accueil personnalisé", "Flexibilité horaire"],
         },
         sortOrder: 2,
       },
@@ -293,14 +328,7 @@ const seedData = async () => {
           vehicleType: "premium_suv",
           capacity: 7,
           luggage: 5,
-          features: [
-            "4x4",
-            "Cuir",
-            "WiFi",
-            "Eau fraîche",
-            "Chauffeur VIP",
-            "Flexibilité horaire",
-          ],
+          features: ["4x4", "Cuir", "WiFi", "Eau fraîche", "Chauffeur VIP", "Flexibilité horaire"],
         },
         sortOrder: 4,
       },
@@ -308,7 +336,9 @@ const seedData = async () => {
 
     console.log("✅ Mobility services created");
 
-    // 5. Services Logement
+    // ==========================================
+    // 9. Services Logement
+    // ==========================================
     const logementServices = [
       {
         vendorId: bridgeVendor.id,
@@ -372,10 +402,7 @@ const seedData = async () => {
       },
     ];
 
-    const [studioService, t3Service, villaService] = await db
-      .insert(services)
-      .values(logementServices)
-      .returning();
+    const [studioService, , t3Service, villaService] = await db.insert(services).values(logementServices).returning();
 
     // Variantes pour Studio
     await db.insert(serviceVariants).values([
@@ -429,14 +456,7 @@ const seedData = async () => {
           floor: 5,
           location: "Gombe",
           address: "Avenue Colonel Mondjiba",
-          amenities: [
-            "WiFi",
-            "Climatisation",
-            "Cuisine équipée",
-            "Balcon",
-            "Parking",
-            "Gardien",
-          ],
+          amenities: ["WiFi", "Climatisation", "Cuisine équipée", "Balcon", "Parking", "Gardien"],
           available: true,
         },
         sortOrder: 1,
@@ -453,13 +473,7 @@ const seedData = async () => {
           floor: 2,
           location: "Ngaliema",
           address: "Avenue Pumbu",
-          amenities: [
-            "WiFi",
-            "Climatisation",
-            "Cuisine équipée",
-            "Jardin",
-            "Parking",
-          ],
+          amenities: ["WiFi", "Climatisation", "Cuisine équipée", "Jardin", "Parking"],
           available: true,
         },
         sortOrder: 2,
@@ -606,7 +620,9 @@ const seedData = async () => {
 
     console.log("✅ Housing services created");
 
-    // 6. Services Personnel
+    // ==========================================
+    // 10. Services Personnel
+    // ==========================================
     const personnelServices = [
       {
         vendorId: bridgeVendor.id,
@@ -657,7 +673,9 @@ const seedData = async () => {
     await db.insert(services).values(personnelServices);
     console.log("✅ Household staff services created");
 
-    // 7. Services divers
+    // ==========================================
+    // 11. Services divers
+    // ==========================================
     const diversServices = [
       {
         vendorId: bridgeVendor.id,
@@ -731,7 +749,9 @@ const seedData = async () => {
     await db.insert(services).values(diversServices);
     console.log("✅ Miscellaneous services created");
 
-    // 8. Services Conciergerie
+    // ==========================================
+    // 12. Services Conciergerie
+    // ==========================================
     const conciergerieServices = [
       {
         vendorId: bridgeVendor.id,
@@ -785,7 +805,9 @@ const seedData = async () => {
     await db.insert(services).values(conciergerieServices);
     console.log("✅ Concierge services created");
 
-    // 9. Créer ressources exemple
+    // ==========================================
+    // 13. Créer ressources
+    // ==========================================
     const resourcesData = [
       // Chauffeurs
       {
@@ -878,7 +900,13 @@ const seedData = async () => {
     await db.insert(resources).values(resourcesData);
     console.log("✅ Resources created");
 
-    console.log("🎉 Database seeded successfully!");
+    console.log("\n🎉 Database seeded successfully!");
+    console.log("\n📋 Comptes créés:");
+    console.log("   - rootuser@bridge.com (ROOT User) - super-user");
+    console.log("   - admin@bridge-guichet.com (BRIDGE Admin)");
+    console.log("   - manager@bridge.com (BRIDGE Manager)");
+    console.log("   - operator@bridge.com (BRIDGE Operator)");
+    console.log(`\n🔑 Mot de passe pour tous: ${DEFAULT_PASSWORD}`);
   } catch (error) {
     console.error("❌ Seeding failed:", error);
     throw error;

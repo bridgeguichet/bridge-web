@@ -170,11 +170,7 @@ export function HeroSection({ onExplore, onSearch }: HeroSectionProps) {
                   className={`w-20 h-20 rounded-full ${avatar.color} flex items-center justify-center shadow-xl border-4 border-white overflow-hidden`}
                 >
                   {avatar.image ? (
-                    <img
-                      src={avatar.image}
-                      alt={avatar.label}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={avatar.image} alt={avatar.label} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-white font-black text-lg">{avatar.initials}</span>
                   )}

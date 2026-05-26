@@ -3,7 +3,6 @@
 import Link from "next/link";
 
 import { CircleHelp, ClipboardList, Command, Database, File, Search, Settings } from "lucide-react";
-import { useShallow } from "zustand/react/shallow";
 
 import {
   Sidebar,
@@ -17,7 +16,6 @@ import {
 import { APP_CONFIG } from "@/config/app-config";
 import { useAuthStore } from "@/features/auth";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
-import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -60,18 +58,7 @@ const _data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { sidebarVariant, sidebarCollapsible, isSynced } = usePreferencesStore(
-    useShallow((s) => ({
-      sidebarVariant: s.sidebarVariant,
-      sidebarCollapsible: s.sidebarCollapsible,
-      isSynced: s.isSynced,
-    })),
-  );
-
   const currentUser = useAuthStore((state) => state.currentUser);
-
-  const variant = isSynced ? sidebarVariant : props.variant;
-  const collapsible = isSynced ? sidebarCollapsible : props.collapsible;
 
   const userWithAvatar = currentUser
     ? {
@@ -81,7 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     : null;
 
   return (
-    <Sidebar {...props} variant={variant} collapsible={collapsible}>
+    <Sidebar {...props} variant="sidebar" collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

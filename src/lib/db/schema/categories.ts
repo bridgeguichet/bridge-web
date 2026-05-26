@@ -6,6 +6,7 @@ export const categories = pgTable("categories", {
   nameFr: varchar("name_fr", { length: 255 }).notNull(),
   nameEn: varchar("name_en", { length: 255 }).notNull(),
   icon: varchar("icon", { length: 50 }),
+  imageUrl: varchar("image_url", { length: 500 }),
   sortOrder: integer("sort_order").default(0).notNull(),
 });
 

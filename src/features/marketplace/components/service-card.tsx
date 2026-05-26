@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 import { useAuthRedirect, useSession } from "@/features/auth/hooks";
+import { getCardImageUrl } from "@/lib/cloudinary/client";
 import { useCartStore } from "@/features/cart/store";
 import { useFavoritesStore } from "@/features/marketplace/store";
 import { cn } from "@/lib/utils";
@@ -103,6 +104,7 @@ export function ServiceCard({ service, featured = false, badgeIndex = 0 }: Servi
   const badge = featured ? BADGES[badgeIndex % BADGES.length] : null;
   const avatarColor = AVATAR_COLORS[badgeIndex % AVATAR_COLORS.length];
   const initials = service.nameFr.slice(0, 2).toUpperCase();
+  const optimizedImageUrl = getCardImageUrl(service.imageUrl, 600, 400);
 
   return (
     <motion.div
@@ -111,16 +113,22 @@ export function ServiceCard({ service, featured = false, badgeIndex = 0 }: Servi
       onClick={() => router.push(`/marketplace/services/${service.id}`)}
     >
       {/* Preview image zone */}
-      <div className={cn("relative h-44 bg-linear-to-br", previewGradient)}>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <HugeiconsIcon icon={IconComponent} size={96} color="rgba(255,255,255,0.3)" />
-        </div>
-        {/* Fake UI overlay to mimic a screenshot */}
-        <div className="absolute inset-4 flex flex-col gap-1.5 rounded-xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
-          <div className="h-2 w-3/4 rounded-full bg-white/40" />
-          <div className="h-2 w-1/2 rounded-full bg-white/30" />
-          <div className="h-2 w-2/3 rounded-full bg-white/20" />
-        </div>
+      <div className={cn("relative h-44 bg-linear-to-br", service.imageUrl ? "" : previewGradient)}>
+        {optimizedImageUrl ? (
+          <img src={optimizedImageUrl} alt={service.nameFr} className="h-full w-full object-cover" loading="lazy" />
+        ) : (
+          <>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <HugeiconsIcon icon={IconComponent} size={96} color="rgba(255,255,255,0.3)" />
+            </div>
+            {/* Fake UI overlay to mimic a screenshot */}
+            <div className="absolute inset-4 flex flex-col gap-1.5 rounded-xl border border-white/20 bg-white/10 p-3 backdrop-blur-sm">
+              <div className="h-2 w-3/4 rounded-full bg-white/40" />
+              <div className="h-2 w-1/2 rounded-full bg-white/30" />
+              <div className="h-2 w-2/3 rounded-full bg-white/20" />
+            </div>
+          </>
+        )}
         {/* Favorite button */}
         <button
           type="button"

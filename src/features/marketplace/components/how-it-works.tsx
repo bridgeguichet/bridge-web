@@ -2,11 +2,7 @@
 
 import { motion } from "framer-motion";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import {
-  CheckmarkCircle01Icon,
-  Search01Icon,
-  ShoppingCart01Icon,
-} from "@hugeicons/core-free-icons";
+import { CheckmarkCircle01Icon, Search01Icon, ShoppingCart01Icon } from "@hugeicons/core-free-icons";
 
 import { Button } from "@/components/ui/button";
 

@@ -64,15 +64,11 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
   const cartServices = items.map((item) => ({
     ...item,
     service: services?.find((s) => s.id === item.serviceId),
-    variant: services
-      ?.find((s) => s.id === item.serviceId)
-      ?.variants?.find((v) => v.id === item.variantId),
+    variant: services?.find((s) => s.id === item.serviceId)?.variants?.find((v) => v.id === item.variantId),
   }));
 
   const subtotal = cartServices.reduce((sum, item) => {
-    const price = item.variant
-      ? item.variant.priceModifier
-      : item.service?.basePrice || "0";
+    const price = item.variant ? item.variant.priceModifier : item.service?.basePrice || "0";
     return sum + parseFloat(price) * item.quantity;
   }, 0);
 
@@ -96,10 +92,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="right"
-        className="flex flex-col w-full sm:max-w-md p-0 gap-0"
-      >
+      <SheetContent side="right" className="flex flex-col w-full sm:max-w-md p-0 gap-0">
         {/* Header */}
         <SheetHeader className="px-6 pt-6 pb-4 border-b">
           <div className="flex items-center gap-3">
@@ -107,9 +100,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
               <ShoppingCart className="h-5 w-5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <SheetTitle className="text-xl font-black text-gray-900">
-                Votre panier
-              </SheetTitle>
+              <SheetTitle className="text-xl font-black text-gray-900">Votre panier</SheetTitle>
               <SheetDescription className="text-sm text-muted-foreground">
                 {items.length === 0
                   ? "Connectez-vous pour finaliser votre commande"
@@ -138,18 +129,13 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
               <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-5">
                 <HugeiconsIcon icon={ShoppingBag01Icon} size={36} color="currentColor" className="text-gray-400" />
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-2">
-                Votre panier est vide
-              </h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Votre panier est vide</h3>
               <p className="text-sm text-muted-foreground mb-6 max-w-xs">
                 Découvrez nos services et ajoutez-les à votre panier
               </p>
               <Button className="rounded-full px-6" asChild>
-                <Link href="/">
-                  Explorer les services
-                </Link>
+                <Link href="/">Explorer les services</Link>
               </Button>
-
             </div>
           ) : (
             /* Cart items */
@@ -185,9 +171,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
 
                       {/* Info */}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-gray-900 truncate leading-tight">
-                          {displayName}
-                        </p>
+                        <p className="text-sm font-semibold text-gray-900 truncate leading-tight">{displayName}</p>
                         {item.variant && (
                           <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary mt-1">
                             Variante
@@ -199,34 +183,20 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
                             <button
                               className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
                               onClick={() =>
-                                updateQuantity(
-                                  item.serviceId,
-                                  Math.max(1, item.quantity - 1),
-                                  item.variantId,
-                                )
+                                updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)
                               }
                             >
                               <HugeiconsIcon icon={Remove01Icon} size={12} color="currentColor" />
                             </button>
-                            <span className="w-6 text-center text-xs font-bold">
-                              {item.quantity}
-                            </span>
+                            <span className="w-6 text-center text-xs font-bold">{item.quantity}</span>
                             <button
                               className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.serviceId,
-                                  item.quantity + 1,
-                                  item.variantId,
-                                )
-                              }
+                              onClick={() => updateQuantity(item.serviceId, item.quantity + 1, item.variantId)}
                             >
                               <HugeiconsIcon icon={Add01Icon} size={12} color="currentColor" />
                             </button>
                           </div>
-                          <span className="text-sm font-black text-primary ml-1">
-                            {itemTotal.toFixed(2)} USD
-                          </span>
+                          <span className="text-sm font-black text-primary ml-1">{itemTotal.toFixed(2)} USD</span>
                         </div>
                       </div>
 
@@ -278,10 +248,7 @@ export function CartSheet({ open, onOpenChange }: CartSheetProps) {
               </div>
 
               {/* CTA */}
-              <Button
-                className="w-full gap-2 mt-1 rounded-xl h-11"
-                onClick={handleCheckout}
-              >
+              <Button className="w-full gap-2 mt-1 rounded-xl h-11" onClick={handleCheckout}>
                 <User className="h-4 w-4" />
                 {isAuthenticated ? "Passer commande" : "Se connecter pour payer"}
               </Button>

@@ -52,9 +52,13 @@ export function CategoryCard({ category, onEdit }: CategoryCardProps) {
     <Card className="group relative transition-shadow hover:shadow-md">
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-            <Icon className="h-5 w-5 text-primary" />
-          </div>
+          {category.imageUrl ? (
+            <img src={category.imageUrl} alt={category.nameFr} className="h-10 w-10 rounded-lg object-cover" />
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <Icon className="h-5 w-5 text-primary" />
+            </div>
+          )}
           <div>
             <h3 className="font-semibold">{category.nameFr}</h3>
             <p className="text-muted-foreground text-sm">{subcategoriesCount} sous-catégorie(s)</p>

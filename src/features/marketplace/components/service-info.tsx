@@ -13,12 +13,13 @@ interface ServiceInfoProps {
 }
 
 export function ServiceInfo({ serviceName, description, basePrice, priceUnit, hasVariants }: ServiceInfoProps) {
-  const priceUnitLabel = {
-    hour: "heure",
-    day: "jour",
-    month: "mois",
-    unit: "unité",
-  }[priceUnit] || priceUnit;
+  const priceUnitLabel =
+    {
+      hour: "heure",
+      day: "jour",
+      month: "mois",
+      unit: "unité",
+    }[priceUnit] || priceUnit;
 
   return (
     <Card className="p-6">

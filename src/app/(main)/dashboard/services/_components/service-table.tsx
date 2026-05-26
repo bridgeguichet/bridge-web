@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal, Pencil, Settings2, Trash2 } from "lucide-react";
+import { Clock, MoreHorizontal, Pencil, Settings2, Trash2 } from "lucide-react";
 
 import {
   AlertDialog,
@@ -73,6 +73,7 @@ export function ServiceTable({ services, onEdit, onManageVariants }: ServiceTabl
             <TableHead>Catégorie</TableHead>
             <TableHead>Prix</TableHead>
             <TableHead>Statut</TableHead>
+            <TableHead>Expiration</TableHead>
             <TableHead>Variantes</TableHead>
             <TableHead className="w-[70px]">Actions</TableHead>
           </TableRow>
@@ -80,7 +81,18 @@ export function ServiceTable({ services, onEdit, onManageVariants }: ServiceTabl
         <TableBody>
           {services.map((service) => (
             <TableRow key={service.id}>
-              <TableCell className="font-medium">{service.nameFr}</TableCell>
+              <TableCell className="font-medium">
+                <div className="flex items-center gap-3">
+                  {service.imageUrl ? (
+                    <img src={service.imageUrl} alt={service.nameFr} className="h-10 w-10 rounded-lg object-cover" />
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                      <Settings2 className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  )}
+                  <span>{service.nameFr}</span>
+                </div>
+              </TableCell>
               <TableCell>{service.category?.nameFr || "—"}</TableCell>
               <TableCell>
                 {service.basePrice} USD{priceUnitLabels[service.priceUnit]}
@@ -89,6 +101,16 @@ export function ServiceTable({ services, onEdit, onManageVariants }: ServiceTabl
                 <Badge variant={service.status === "active" ? "default" : "secondary"}>
                   {statusLabels[service.status] || service.status}
                 </Badge>
+              </TableCell>
+              <TableCell>
+                {service.expiresAt ? (
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-3 w-3 text-orange-500" />
+                    <span className="text-sm">{new Date(service.expiresAt).toLocaleDateString("fr-FR")}</span>
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground text-sm">—</span>
+                )}
               </TableCell>
               <TableCell>
                 <Button

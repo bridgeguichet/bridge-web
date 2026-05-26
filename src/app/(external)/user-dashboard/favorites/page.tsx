@@ -2,7 +2,6 @@
 
 import { FavouriteIcon } from "@hugeicons/core-free-icons";
 import { motion } from "framer-motion";
-import { FavouriteIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 import { EmptyState } from "@/components/user-dashboard/empty-state";
@@ -11,7 +10,7 @@ import { useServices } from "@/features/marketplace/hooks";
 import { useFavoritesStore } from "@/features/marketplace/store";
 
 export default function FavoritesPage() {
-  const likedIds = useFavoritesStore((state) => state.likedIds);
+  const likedIds = useFavoritesStore((state) => state.ids);
   const { data: allServices, isLoading } = useServices();
 
   const favorites = (allServices ?? []).filter((s) => likedIds.includes(s.id));

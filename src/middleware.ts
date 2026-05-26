@@ -26,13 +26,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/auth/login?callbackUrl=${callbackUrl}`, request.url));
   }
 
-  // user-dashboard is only for customers
-  if (isUserDashboardRoute && user.role !== "customer") {
+  // Super users can access both dashboards
+  const isSuperUser = user.isSuperUser === true || user.isSuperUser === "true";
+
+  console.log("[Middleware] User:", user.email, "Role:", user.role, "isSuperUser:", isSuperUser);
+
+  // user-dashboard is only for customers (but super-users can access anything)
+  if (isUserDashboardRoute && user.role !== "customer" && !isSuperUser) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // dashboard is for admins/vendors only
-  if (isDashboardRoute && user.role === "customer") {
+  // dashboard is for admins/vendors only (super-users bypass)
+  if (isDashboardRoute && user.role === "customer" && !isSuperUser) {
     return NextResponse.redirect(new URL("/user-dashboard", request.url));
   }
 

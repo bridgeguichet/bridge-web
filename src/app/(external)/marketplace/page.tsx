@@ -19,9 +19,7 @@ const PAGE_SIZE = 8;
 const FILTER_LABELS = ["Options service", "Prestataire", "Budget", "Délai"];
 
 export default function MarketplacePage() {
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
-    undefined,
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const [topRated, setTopRated] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -55,19 +53,13 @@ export default function MarketplacePage() {
     const hash = window.location.hash;
     if (hash) {
       const el = document.querySelector(hash);
-      if (el)
-        setTimeout(
-          () => el.scrollIntoView({ behavior: "smooth", block: "start" }),
-          100,
-        );
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
     }
   }, []);
 
   const allServices = services || [];
   const sortedServices = topRated
-    ? [...allServices].sort(
-        (a, b) => parseFloat(b.basePrice) - parseFloat(a.basePrice),
-      )
+    ? [...allServices].sort((a, b) => parseFloat(b.basePrice) - parseFloat(a.basePrice))
     : allServices;
   const totalPages = Math.max(1, Math.ceil(sortedServices.length / PAGE_SIZE));
   const paged = sortedServices.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -79,10 +71,7 @@ export default function MarketplacePage() {
     <div className="min-h-screen bg-white">
       <HeroHeader />
       <HeroSection onExplore={scrollToServices} onSearch={handleSearch} />
-      <CategoryShowcase
-        categories={categories || []}
-        onSelectCategory={handleCategorySelect}
-      />
+      <CategoryShowcase categories={categories || []} onSelectCategory={handleCategorySelect} />
 
       {/* ───── Services section ───── */}
       <section ref={servicesRef} id="services" className="py-14 bg-white">
@@ -90,9 +79,7 @@ export default function MarketplacePage() {
           {/* Section heading */}
           <div className="mb-8">
             <h2 className="text-4xl font-black tracking-tight text-gray-900 mb-1">
-              {searchQuery
-                ? `Résultats pour "${searchQuery}"`
-                : "Découvrez les meilleurs services"}
+              {searchQuery ? `Résultats pour "${searchQuery}"` : "Découvrez les meilleurs services"}
             </h2>
             <div className="flex items-center gap-3">
               <p className="text-gray-400 text-sm">de Kinshasa</p>
@@ -143,9 +130,7 @@ export default function MarketplacePage() {
               </button>
             ))}
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">
-                Top Noté
-              </span>
+              <span className="text-sm font-medium text-gray-700">Top Noté</span>
               <button
                 role="switch"
                 aria-checked={topRated}
@@ -173,10 +158,7 @@ export default function MarketplacePage() {
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl bg-gray-100 animate-pulse h-72"
-                />
+                <div key={i} className="rounded-2xl bg-gray-100 animate-pulse h-72" />
               ))}
             </div>
           ) : paged.length > 0 ? (
@@ -188,24 +170,14 @@ export default function MarketplacePage() {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
             >
               {paged.map((service, i) => (
-                <ServiceCard
-                  key={service.id}
-                  service={service}
-                  featured={i < 4}
-                  badgeIndex={i}
-                />
+                <ServiceCard key={service.id} service={service} featured={i < 4} badgeIndex={i} />
               ))}
             </motion.div>
           ) : (
             <div className="flex flex-col items-center justify-center h-56 text-center">
               <span className="text-5xl mb-4">🔍</span>
-              <p className="text-gray-600 font-medium">
-                Aucun service dans cette catégorie
-              </p>
-              <button
-                onClick={() => setSelectedCategory(undefined)}
-                className="mt-3 text-sm text-primary underline"
-              >
+              <p className="text-gray-600 font-medium">Aucun service dans cette catégorie</p>
+              <button onClick={() => setSelectedCategory(undefined)} className="mt-3 text-sm text-primary underline">
                 Voir tous les services
               </button>
             </div>
@@ -221,18 +193,13 @@ export default function MarketplacePage() {
               >
                 ←
               </button>
-              {Array.from(
-                { length: Math.min(totalPages, 10) },
-                (_, i) => i + 1,
-              ).map((n) => (
+              {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => i + 1).map((n) => (
                 <button
                   key={n}
                   onClick={() => setPage(n)}
                   className={cn(
                     "w-9 h-9 rounded-full text-sm font-medium transition-colors",
-                    n === page
-                      ? "bg-primary text-primary-foreground"
-                      : "text-gray-500 hover:bg-gray-100",
+                    n === page ? "bg-primary text-primary-foreground" : "text-gray-500 hover:bg-gray-100",
                   )}
                 >
                   {n}

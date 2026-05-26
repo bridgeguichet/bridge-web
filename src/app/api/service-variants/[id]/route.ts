@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { eq } from "drizzle-orm";
@@ -5,18 +6,32 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth/auth";
 import { db } from "@/lib/db";
 import { serviceVariants } from "@/lib/db/schema/services";
+import { users } from "@/lib/db/schema";
+
+async function isAdmin(userId: string) {
+  const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+  return user[0]?.role === "admin";
+}
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
-    if (!session || session.user.role !== "admin") {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) {
+      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+    if (!(await isAdmin(session.user.id))) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 
     const { id } = await params;
     const body = await request.json();
 
+    console.log(`[PUT /api/service-variants/${id}] Received body:`, body);
+    console.log(`[PUT /api/service-variants/${id}] imageUrl:`, body.imageUrl);
+
     const [variant] = await db.update(serviceVariants).set(body).where(eq(serviceVariants.id, id)).returning();
+
+    console.log(`[PUT /api/service-variants/${id}] Updated variant:`, variant);
 
     if (!variant) {
       return NextResponse.json({ error: "Variante non trouvée" }, { status: 404 });
@@ -29,10 +44,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await auth.api.getSession({ headers: request.headers });
-    if (!session || session.user.role !== "admin") {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session) {
+      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+    if (!(await isAdmin(session.user.id))) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 403 });
     }
 

@@ -19,6 +19,7 @@ export const services = pgTable("services", {
   basePrice: decimal("base_price", { precision: 10, scale: 2 }).notNull(),
   priceUnit: varchar("price_unit", { length: 50 }).notNull(), // hour, day, month, unit
   status: varchar("status", { length: 50 }).notNull().default("active"), // active, draft, archived
+  expiresAt: timestamp("expires_at"), // Date d'expiration pour les services temporaires
   metadata: jsonb("metadata"), // Configuration spécifique par type de service
   imageUrl: varchar("image_url", { length: 500 }),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -34,6 +35,7 @@ export const serviceVariants = pgTable("service_variants", {
   nameEn: varchar("name_en", { length: 255 }).notNull(),
   priceModifier: decimal("price_modifier", { precision: 10, scale: 2 }).notNull(), // Prix absolu ou différence
   metadata: jsonb("metadata"),
+  imageUrl: varchar("image_url", { length: 500 }),
   sortOrder: integer("sort_order").default(0).notNull(),
 });
 

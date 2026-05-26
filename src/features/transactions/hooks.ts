@@ -29,9 +29,7 @@ export function useTransactions(filters?: TransactionFilters) {
     totalCount: filtered.length,
     pendingCount: filtered.filter((t) => t.status === "pending").length,
     completedCount: filtered.filter((t) => t.status === "completed").length,
-    totalSpent: filtered
-      .filter((t) => t.status === "completed")
-      .reduce((sum, t) => sum + t.amount, 0),
+    totalSpent: filtered.filter((t) => t.status === "completed").reduce((sum, t) => sum + t.amount, 0),
   };
 }
 

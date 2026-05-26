@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Tags } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ImageUploader } from "@/components/image-uploader";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ interface FormData {
   nameEn: string;
   slug: string;
   icon: string;
+  imageUrl: string;
   sortOrder: number;
 }
 
@@ -46,6 +48,7 @@ const initialFormData: FormData = {
   nameEn: "",
   slug: "",
   icon: "Briefcase",
+  imageUrl: "",
   sortOrder: 0,
 };
 
@@ -65,6 +68,7 @@ export function CategoryFormDialog({ open, onOpenChange, categoryId }: CategoryF
         nameEn: editingCategory.nameEn,
         slug: editingCategory.slug,
         icon: editingCategory.icon || "Briefcase",
+        imageUrl: editingCategory.imageUrl || "",
         sortOrder: editingCategory.sortOrder,
       });
     } else {
@@ -184,6 +188,15 @@ export function CategoryFormDialog({ open, onOpenChange, categoryId }: CategoryF
                 onChange={(e) => setFormData({ ...formData, sortOrder: parseInt(e.target.value) || 0 })}
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Image</Label>
+            <ImageUploader
+              value={formData.imageUrl}
+              onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+              onRemove={() => setFormData({ ...formData, imageUrl: "" })}
+            />
           </div>
 
           <DialogFooter>

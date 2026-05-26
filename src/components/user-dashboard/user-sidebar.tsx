@@ -86,11 +86,7 @@ export function UserSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <Link href="/" className={state === "collapsed" ? "justify-center" : undefined}>
-                {state === "collapsed" ? (
-                  <LogoIcon className="size-5" />
-                ) : (
-                  <Logo className="h-10 w-auto" />
-                )}
+                {state === "collapsed" ? <LogoIcon className="size-5" /> : <Logo className="h-10 w-auto" />}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -136,9 +132,7 @@ export function UserSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                 >
                   <Avatar className="size-8 rounded-lg">
                     <AvatarImage src={userAvatar} alt={currentUser?.name || "User"} />
-                    <AvatarFallback className="rounded-lg">
-                      {getInitials(currentUser?.name || "U")}
-                    </AvatarFallback>
+                    <AvatarFallback className="rounded-lg">{getInitials(currentUser?.name || "U")}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{currentUser?.name || "Utilisateur"}</span>
@@ -157,9 +151,7 @@ export function UserSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) 
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="size-8 rounded-lg">
                       <AvatarImage src={userAvatar} alt={currentUser?.name || "User"} />
-                      <AvatarFallback className="rounded-lg">
-                        {getInitials(currentUser?.name || "U")}
-                      </AvatarFallback>
+                      <AvatarFallback className="rounded-lg">{getInitials(currentUser?.name || "U")}</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">{currentUser?.name || "Utilisateur"}</span>

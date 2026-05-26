@@ -18,7 +18,18 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { ShoppingCart01Icon } from "@hugeicons/core-free-icons";
+import {
+  Add01Icon,
+  Briefcase01Icon,
+  Cancel01Icon,
+  Car01Icon,
+  Delete01Icon,
+  Home01Icon,
+  Package01Icon,
+  Remove01Icon,
+  ShoppingCart01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -60,16 +71,12 @@ export default function CartPage() {
   const cartServices = items.map((item) => ({
     ...item,
     service: services?.find((s) => s.id === item.serviceId),
-    variant: services
-      ?.find((s) => s.id === item.serviceId)
-      ?.variants?.find((v) => v.id === item.variantId),
+    variant: services?.find((s) => s.id === item.serviceId)?.variants?.find((v) => v.id === item.variantId),
   }));
 
   // Calculate totals using variant prices when available
   const subtotal = cartServices.reduce((sum, item) => {
-    const price = item.variant
-      ? item.variant.priceModifier
-      : item.service?.basePrice || "0";
+    const price = item.variant ? item.variant.priceModifier : item.service?.basePrice || "0";
     return sum + parseFloat(price) * item.quantity;
   }, 0);
 
@@ -79,20 +86,14 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
               <HugeiconsIcon icon={ShoppingCart01Icon} size={24} color="currentColor" className="text-primary" />
             </div>
             <div>
               <h1 className="text-3xl font-black text-gray-900">Mon panier</h1>
-              <p className="text-muted-foreground">
-                Gérez vos services avant de passer commande
-              </p>
+              <p className="text-muted-foreground">Gérez vos services avant de passer commande</p>
             </div>
           </div>
         </motion.div>
@@ -126,19 +127,12 @@ export default function CartPage() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">
-            Mon panier
-          </h1>
+          <h1 className="text-4xl font-black text-gray-900 md:text-5xl">Mon panier</h1>
           <p className="mt-2 text-lg text-gray-600">
-            {items.length} article{items.length > 1 ? "s" : ""} dans votre
-            panier
+            {items.length} article{items.length > 1 ? "s" : ""} dans votre panier
           </p>
         </div>
-        <Button
-          variant="ghost"
-          onClick={clearCart}
-          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-        >
+        <Button variant="ghost" onClick={clearCart} className="text-red-600 hover:text-red-700 hover:bg-red-50">
           <HugeiconsIcon icon={Delete01Icon} size={16} color="currentColor" className="mr-2" />
           Vider le panier
         </Button>
@@ -149,13 +143,11 @@ export default function CartPage() {
         <div className="lg:col-span-2 space-y-4">
           {cartServices.map((item, index) => {
             const icon = item.service?.category?.icon || "briefcase";
-            const previewGradient =
-              PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-500";
-            const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase01Icon;  // IconSvgElement
+            const previewGradient = PREVIEW_COLORS[icon] ?? "from-gray-400 to-gray-500";
+            const IconComponent = PREVIEW_ICONS[icon] ?? Briefcase01Icon; // IconSvgElement
             const displayName = item.variant
               ? `${item.service?.nameFr} - ${item.variant.nameFr}`
-              : item.service?.nameFr ||
-                `Service #${item.serviceId.slice(0, 8)}`;
+              : item.service?.nameFr || `Service #${item.serviceId.slice(0, 8)}`;
             const unitPrice = item.variant
               ? parseFloat(item.variant.priceModifier)
               : parseFloat(item.service?.basePrice || "0");
@@ -179,12 +171,8 @@ export default function CartPage() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-gray-900 truncate">
-                          {displayName}
-                        </h3>
-                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">
-                          {item.service?.descriptionFr || ""}
-                        </p>
+                        <h3 className="text-lg font-bold text-gray-900 truncate">{displayName}</h3>
+                        <p className="mt-1 text-sm text-gray-600 line-clamp-2">{item.service?.descriptionFr || ""}</p>
 
                         {/* Variant badge */}
                         {item.variant && (
@@ -200,37 +188,23 @@ export default function CartPage() {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.serviceId,
-                                  Math.max(1, item.quantity - 1),
-                                )
-                              }
+                              onClick={() => updateQuantity(item.serviceId, Math.max(1, item.quantity - 1))}
                             >
                               <HugeiconsIcon icon={Remove01Icon} size={16} color="currentColor" />
                             </Button>
-                            <span className="w-8 text-center font-semibold">
-                              {item.quantity}
-                            </span>
+                            <span className="w-8 text-center font-semibold">{item.quantity}</span>
                             <Button
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() =>
-                                updateQuantity(
-                                  item.serviceId,
-                                  item.quantity + 1,
-                                )
-                              }
+                              onClick={() => updateQuantity(item.serviceId, item.quantity + 1)}
                             >
                               <HugeiconsIcon icon={Add01Icon} size={16} color="currentColor" />
                             </Button>
                           </div>
 
                           {/* Price */}
-                          <span className="text-xl font-black text-primary">
-                            ${itemTotal.toFixed(2)}
-                          </span>
+                          <span className="text-xl font-black text-primary">${itemTotal.toFixed(2)}</span>
                         </div>
                       </div>
 
@@ -273,12 +247,8 @@ export default function CartPage() {
                 </div>
                 <div className="border-t pt-4">
                   <div className="flex justify-between">
-                    <span className="text-lg font-bold text-gray-900">
-                      Total
-                    </span>
-                    <span className="text-2xl font-black text-primary">
-                      ${total.toFixed(2)}
-                    </span>
+                    <span className="text-lg font-bold text-gray-900">Total</span>
+                    <span className="text-2xl font-black text-primary">${total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -293,8 +263,7 @@ export default function CartPage() {
 
               <div className="mt-4 p-3 bg-muted rounded-lg">
                 <p className="text-xs text-muted-foreground text-center">
-                  <span className="font-medium">Garantie satisfaction</span> •
-                  Annulation gratuite sous 24h
+                  <span className="font-medium">Garantie satisfaction</span> • Annulation gratuite sous 24h
                 </p>
               </div>
             </CardContent>

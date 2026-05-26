@@ -66,9 +66,7 @@ export default function ModePage() {
             <h2 className="mb-4 font-bold text-3xl text-gray-900 tracking-tight lg:text-4xl">
               {t("modeSelection.title")}
             </h2>
-            <p className="mx-auto max-w-xl text-gray-600 text-lg leading-relaxed">
-              {t("modeSelection.description")}
-            </p>
+            <p className="mx-auto max-w-xl text-gray-600 text-lg leading-relaxed">{t("modeSelection.description")}</p>
           </motion.div>
 
           {/* Mode cards */}

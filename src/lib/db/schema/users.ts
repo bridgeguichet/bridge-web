@@ -13,6 +13,7 @@ export const users = pgTable("user", {
   // Champs additionnels Bridge
   role: varchar("role", { length: 50 }).notNull().default("customer"),
   phone: varchar("phone", { length: 20 }),
+  isSuperUser: boolean("isSuperUser").notNull().default(false),
 });
 
 // Table session Better Auth

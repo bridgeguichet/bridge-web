@@ -2,13 +2,9 @@
 
 import { motion } from "framer-motion";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import {
-  Notification01Icon,
-  Briefcase01Icon,
-  Car01Icon,
-  Home01Icon,
-  UserGroupIcon,
-} from "@hugeicons/core-free-icons";
+import { Notification01Icon, Briefcase01Icon, Car01Icon, Home01Icon, UserGroupIcon } from "@hugeicons/core-free-icons";
+
+import { getCardImageUrl } from "@/lib/cloudinary/client";
 
 import type { CategoryWithSubs } from "../types";
 
@@ -50,6 +46,7 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
               (category.subcategories?.length || 0) > 0
                 ? `${category.subcategories!.length * 20}+ services`
                 : "100+ services";
+            const optimizedImageUrl = getCardImageUrl(category.imageUrl, 400, 300);
 
             return (
               <motion.button
@@ -68,8 +65,20 @@ export function CategoryShowcase({ categories, onSelectCategory }: CategoryShowc
                 className="group rounded-2xl overflow-hidden text-left shadow-sm hover:shadow-xl transition-shadow duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 {/* Illustration zone */}
-                <div className="relative h-36 flex items-center justify-center" style={{ backgroundColor: style.bg }}>
-                  <HugeiconsIcon icon={style.Icon} size={64} color="white" />
+                <div
+                  className="relative h-36 flex items-center justify-center overflow-hidden"
+                  style={{ backgroundColor: optimizedImageUrl ? undefined : style.bg }}
+                >
+                  {optimizedImageUrl ? (
+                    <img
+                      src={optimizedImageUrl}
+                      alt={category.nameFr}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <HugeiconsIcon icon={style.Icon} size={64} color="white" />
+                  )}
                 </div>
 
                 {/* Label zone */}

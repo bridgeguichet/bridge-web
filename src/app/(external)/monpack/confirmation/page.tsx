@@ -172,7 +172,10 @@ export default function ConfirmationPage() {
                   </div>
                   <div className="mt-4 border-gray-200 border-t pt-4">
                     <p className="text-center text-gray-500 text-sm">
-                      {items.length} {items.length > 1 ? t("confirmationPage.services.plural") : t("confirmationPage.services.singular")}
+                      {items.length}{" "}
+                      {items.length > 1
+                        ? t("confirmationPage.services.plural")
+                        : t("confirmationPage.services.singular")}
                     </p>
                   </div>
                 </CardContent>

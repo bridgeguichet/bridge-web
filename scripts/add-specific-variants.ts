@@ -7,7 +7,7 @@ async function addVariants() {
 
     // Variants pour "Voiture avec chauffeur" (ID: c6c93104-5b4f-4b8a-8bb6-5b9abb1608d9)
     const voitureId = "c6c93104-5b4f-4b8a-8bb6-5b9abb1608d9";
-    
+
     await db.insert(serviceVariants).values([
       {
         serviceId: voitureId,
@@ -51,7 +51,7 @@ async function addVariants() {
 
     // Variants pour "Studio" (ID: 8b03d1e3-989a-4c52-82d0-cfadfe0d4952)
     const studioId = "8b03d1e3-989a-4c52-82d0-cfadfe0d4952";
-    
+
     await db.insert(serviceVariants).values([
       {
         serviceId: studioId,
@@ -89,7 +89,7 @@ async function addVariants() {
 
     // Variants pour "Appartement T2" (ID: 90a37a8c-2f92-40ad-9e4e-7d908c44c877)
     const t2Id = "90a37a8c-2f92-40ad-9e4e-7d908c44c877";
-    
+
     await db.insert(serviceVariants).values([
       {
         serviceId: t2Id,

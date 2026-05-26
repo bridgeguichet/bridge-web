@@ -12,6 +12,8 @@ import type {
   NewResource,
   NewService,
   NewServiceVariant,
+  NewVendorMember,
+  PendingAction,
   Resource,
   ResourceFilters,
   Service,
@@ -19,6 +21,7 @@ import type {
   ServiceVariant,
   User,
   UserFilters,
+  VendorMember,
 } from "./types";
 
 // Categories
@@ -225,6 +228,97 @@ export function useDeleteUser() {
     mutationFn: (id: string) => adminService.deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.users.all });
+    },
+  });
+}
+
+// Vendor Members
+export function useVendorMembers(vendorId: string) {
+  return useQuery({
+    queryKey: ["vendor-members", vendorId],
+    queryFn: () => adminService.getVendorMembers(vendorId),
+    enabled: !!vendorId,
+  });
+}
+
+export function useCreateVendorMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (member: import("./types").CreateVendorMemberInput) => adminService.createVendorMember(member),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["vendor-members", variables.vendorId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.users.customers() });
+    },
+  });
+}
+
+export function useUpdateVendorMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, vendorId, data }: { id: string; vendorId: string; data: Partial<VendorMember> }) =>
+      adminService.updateVendorMember(id, data),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["vendor-members", variables.vendorId] });
+    },
+  });
+}
+
+export function useDeleteVendorMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, vendorId }: { id: string; vendorId: string }) => adminService.deleteVendorMember(id),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["vendor-members", variables.vendorId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.users.customers() });
+    },
+  });
+}
+
+// User Vendor Context
+export function useUserVendorContext() {
+  return useQuery({
+    queryKey: ["user-vendor-context"],
+    queryFn: () => adminService.getUserVendorContext(),
+    retry: false,
+  });
+}
+
+// Pending Actions
+export function usePendingActions(vendorId: string, status?: string) {
+  return useQuery({
+    queryKey: ["pending-actions", vendorId, status],
+    queryFn: () => adminService.getPendingActions(vendorId, status),
+    enabled: !!vendorId,
+  });
+}
+
+export function useCreatePendingAction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (action: Omit<PendingAction, "id" | "createdAt" | "reviewedAt">) =>
+      adminService.createPendingAction(action),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["pending-actions", variables.vendorId] });
+    },
+  });
+}
+
+export function useReviewPendingAction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      vendorId,
+      status,
+      reason,
+    }: {
+      id: string;
+      vendorId: string;
+      status: "approved" | "rejected";
+      reason?: string;
+    }) => adminService.reviewPendingAction(id, status, reason),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["pending-actions", variables.vendorId] });
     },
   });
 }

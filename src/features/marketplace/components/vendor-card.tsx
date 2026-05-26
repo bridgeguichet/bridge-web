@@ -25,9 +25,7 @@ export function VendorCard({ vendor }: VendorCardProps) {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-12 w-12">
-            <AvatarFallback className="bg-primary text-primary-foreground">
-              {initials}
-            </AvatarFallback>
+            <AvatarFallback className="bg-primary text-primary-foreground">{initials}</AvatarFallback>
           </Avatar>
           <div>
             <p className="font-medium">{vendor.companyName}</p>
@@ -37,16 +35,19 @@ export function VendorCard({ vendor }: VendorCardProps) {
               <span>(156 avis)</span>
             </div>
             {vendor.isBridgeOfficial && (
-              <span className="inline-flex items-center gap-1 text-xs text-primary">
-                ✓ Prestataire officiel Bridge
-              </span>
+              <span className="inline-flex items-center gap-1 text-xs text-primary">✓ Prestataire officiel Bridge</span>
             )}
           </div>
         </div>
 
         {vendor.description && (
           <p className="text-sm text-muted-foreground">
-            <HugeiconsIcon icon={Mail01Icon} size={16} color="currentColor" className="shrink-0 text-muted-foreground" />
+            <HugeiconsIcon
+              icon={Mail01Icon}
+              size={16}
+              color="currentColor"
+              className="shrink-0 text-muted-foreground"
+            />
             {vendor.description}
           </p>
         )}
@@ -56,9 +57,7 @@ export function VendorCard({ vendor }: VendorCardProps) {
             Contacter le prestataire
           </Button>
 
-          <p className="mt-2 text-xs text-center text-muted-foreground">
-            Fonctionnalité bientôt disponible
-          </p>
+          <p className="mt-2 text-xs text-center text-muted-foreground">Fonctionnalité bientôt disponible</p>
         </div>
       </div>
     </Card>

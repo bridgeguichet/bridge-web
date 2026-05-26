@@ -4,7 +4,20 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { ArrowLeft, CalendarCheck, CheckCircle, Clock, CreditCard, Download, Loader2, Lock, Package, Smartphone, Trash2, User } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarCheck,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  Download,
+  Loader2,
+  Lock,
+  Package,
+  Smartphone,
+  Trash2,
+  User,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -261,7 +274,11 @@ export default function PaiementPage() {
                       <div>
                         <p className="text-gray-500 text-xs">Date</p>
                         <p className="font-semibold text-gray-900 text-sm capitalize">
-                          {new Date(appointment.date).toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })}
+                          {new Date(appointment.date).toLocaleDateString("fr-FR", {
+                            weekday: "short",
+                            day: "numeric",
+                            month: "short",
+                          })}
                         </p>
                       </div>
                     </div>

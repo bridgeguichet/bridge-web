@@ -127,7 +127,13 @@ export default function ParametrePage() {
 
   const handleAddCard = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!cardForm.cardNumber || !cardForm.holderName || !cardForm.expiryMonth || !cardForm.expiryYear || !cardForm.cvv) {
+    if (
+      !cardForm.cardNumber ||
+      !cardForm.holderName ||
+      !cardForm.expiryMonth ||
+      !cardForm.expiryYear ||
+      !cardForm.cvv
+    ) {
       toast.error("Veuillez remplir tous les champs");
       return;
     }
@@ -164,7 +170,12 @@ export default function ParametrePage() {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
-      <motion.div variants={itemVariants} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <motion.div
+        variants={itemVariants}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
             <HugeiconsIcon icon={Settings01Icon} size={24} color="currentColor" className="text-primary" />
@@ -200,7 +211,10 @@ export default function ParametrePage() {
                     <CardTitle className="text-lg">Adresse email</CardTitle>
                     <CardDescription>Gérez votre adresse email et sa vérification</CardDescription>
                   </div>
-                  <Badge variant={isEmailVerified ? "default" : "secondary"} className={isEmailVerified ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}>
+                  <Badge
+                    variant={isEmailVerified ? "default" : "secondary"}
+                    className={isEmailVerified ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}
+                  >
                     {isEmailVerified ? "Vérifié" : "Non vérifié"}
                   </Badge>
                 </div>
@@ -301,7 +315,8 @@ export default function ParametrePage() {
               <CardContent>
                 <div className="space-y-4">
                   <p className="text-sm text-red-700">
-                    La suppression de votre compte entraînera la perte définitive de toutes vos données, y compris vos commandes, vos favoris et votre historique. Cette action ne peut pas être annulée.
+                    La suppression de votre compte entraînera la perte définitive de toutes vos données, y compris vos
+                    commandes, vos favoris et votre historique. Cette action ne peut pas être annulée.
                   </p>
                   <Button variant="destructive" onClick={handleDeleteAccount}>
                     Supprimer mon compte
@@ -352,14 +367,20 @@ export default function ParametrePage() {
                       <div className="rounded-xl border bg-muted/30 p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${mobileMoneyProviders.find(p => p.id === savedMobileMoney.provider)?.color || "bg-gray-500"}`}>
+                            <div
+                              className={`flex h-12 w-12 items-center justify-center rounded-xl ${mobileMoneyProviders.find((p) => p.id === savedMobileMoney.provider)?.color || "bg-gray-500"}`}
+                            >
                               <span className="font-bold text-white text-xs">
-                                {savedMobileMoney.provider === "mpesa" ? "M" : savedMobileMoney.provider === "orange" ? "O" : "A"}
+                                {savedMobileMoney.provider === "mpesa"
+                                  ? "M"
+                                  : savedMobileMoney.provider === "orange"
+                                    ? "O"
+                                    : "A"}
                               </span>
                             </div>
                             <div>
                               <p className="font-semibold">
-                                {mobileMoneyProviders.find(p => p.id === savedMobileMoney.provider)?.name}
+                                {mobileMoneyProviders.find((p) => p.id === savedMobileMoney.provider)?.name}
                               </p>
                               <p className="text-sm text-muted-foreground">
                                 {savedMobileMoney.phoneNumber.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3")}
@@ -394,7 +415,9 @@ export default function ParametrePage() {
                               onClick={() => toast.info(`Fonctionnalité à venir : ajouter ${provider.name}`)}
                               className="group flex flex-col items-center gap-3 rounded-xl border-2 border-dashed border-muted-foreground/20 p-4 transition-all hover:border-primary hover:bg-primary/5"
                             >
-                              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${provider.color} transition-transform group-hover:scale-110`}>
+                              <div
+                                className={`flex h-12 w-12 items-center justify-center rounded-xl ${provider.color} transition-transform group-hover:scale-110`}
+                              >
                                 <span className="font-bold text-white">
                                   {provider.id === "mpesa" ? "M" : provider.id === "orange" ? "O" : "A"}
                                 </span>
@@ -493,7 +516,9 @@ export default function ParametrePage() {
                             <Input
                               id="expiryMonth"
                               value={cardForm.expiryMonth}
-                              onChange={(e) => setCardForm({ ...cardForm, expiryMonth: e.target.value.replace(/\D/g, "").slice(0, 2) })}
+                              onChange={(e) =>
+                                setCardForm({ ...cardForm, expiryMonth: e.target.value.replace(/\D/g, "").slice(0, 2) })
+                              }
                               placeholder="MM"
                               maxLength={2}
                             />
@@ -503,7 +528,9 @@ export default function ParametrePage() {
                             <Input
                               id="expiryYear"
                               value={cardForm.expiryYear}
-                              onChange={(e) => setCardForm({ ...cardForm, expiryYear: e.target.value.replace(/\D/g, "").slice(0, 2) })}
+                              onChange={(e) =>
+                                setCardForm({ ...cardForm, expiryYear: e.target.value.replace(/\D/g, "").slice(0, 2) })
+                              }
                               placeholder="AA"
                               maxLength={2}
                             />
@@ -514,7 +541,9 @@ export default function ParametrePage() {
                               id="cvv"
                               type="password"
                               value={cardForm.cvv}
-                              onChange={(e) => setCardForm({ ...cardForm, cvv: e.target.value.replace(/\D/g, "").slice(0, 4) })}
+                              onChange={(e) =>
+                                setCardForm({ ...cardForm, cvv: e.target.value.replace(/\D/g, "").slice(0, 4) })
+                              }
                               placeholder="•••"
                               maxLength={4}
                             />
@@ -539,15 +568,15 @@ export default function ParametrePage() {
                     ) : (
                       <div className="flex flex-col items-center gap-4 py-8">
                         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                          <HugeiconsIcon icon={CreditCardIcon} size={32} color="currentColor" className="text-muted-foreground" />
+                          <HugeiconsIcon
+                            icon={CreditCardIcon}
+                            size={32}
+                            color="currentColor"
+                            className="text-muted-foreground"
+                          />
                         </div>
-                        <p className="text-center text-muted-foreground">
-                          Aucune carte enregistrée
-                        </p>
-                        <Button
-                          onClick={() => setIsAddingCard(true)}
-                          className="gap-2"
-                        >
+                        <p className="text-center text-muted-foreground">Aucune carte enregistrée</p>
+                        <Button onClick={() => setIsAddingCard(true)} className="gap-2">
                           <HugeiconsIcon icon={PlusSignIcon} size={16} color="currentColor" />
                           Ajouter une carte
                         </Button>

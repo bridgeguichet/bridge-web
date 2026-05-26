@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { APP_CONFIG } from "@/config/app-config";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { GoogleButton } from "@/features/auth/components/social-auth/google-button";
 
-export default function RegisterV2() {
+function RegisterContent() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -45,5 +46,13 @@ export default function RegisterV2() {
         <LanguageSwitcher />
       </div>
     </div>
+  );
+}
+
+export default function RegisterV2() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[500px] w-full items-center justify-center">Chargement...</div>}>
+      <RegisterContent />
+    </Suspense>
   );
 }

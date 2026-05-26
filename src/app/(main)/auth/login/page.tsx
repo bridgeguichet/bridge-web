@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -11,7 +11,7 @@ import { APP_CONFIG } from "@/config/app-config";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { useProfile } from "@/features/auth/hooks";
 
-export default function Login() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -94,5 +94,13 @@ export default function Login() {
         <LanguageSwitcher />
       </div>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[500px] w-full items-center justify-center">Chargement...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

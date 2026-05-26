@@ -11,23 +11,17 @@ export default function NotificationsPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <HugeiconsIcon icon={Notification01Icon} size={24} color="currentColor" className="text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-gray-900">Mes notifications</h1>
-              <p className="text-muted-foreground">
-                Restez informé de l&apos;activité de votre compte
-              </p>
-            </div>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+            <HugeiconsIcon icon={Notification01Icon} size={24} color="currentColor" className="text-primary" />
           </div>
-        </motion.div>
+          <div>
+            <h1 className="text-3xl font-black text-gray-900">Mes notifications</h1>
+            <p className="text-muted-foreground">Restez informé de l&apos;activité de votre compte</p>
+          </div>
+        </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

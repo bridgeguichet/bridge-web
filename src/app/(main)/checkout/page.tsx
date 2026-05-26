@@ -83,9 +83,7 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="container mx-auto py-8">
-        <p className="text-center text-muted-foreground">
-          Votre panier est vide
-        </p>
+        <p className="text-center text-muted-foreground">Votre panier est vide</p>
       </div>
     );
   }
@@ -96,8 +94,8 @@ export default function CheckoutPage() {
 
       {hasMultipleVendors && (
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          ⚠️ Votre panier contient des services de plusieurs prestataires.
-          Veuillez les commander séparément pour finaliser.
+          ⚠️ Votre panier contient des services de plusieurs prestataires. Veuillez les commander séparément pour
+          finaliser.
         </div>
       )}
 
@@ -108,18 +106,12 @@ export default function CheckoutPage() {
         <CardContent>
           <div className="space-y-2">
             {cartServices.map((item) => (
-              <div
-                key={`${item.serviceId}-${item.variantId}`}
-                className="flex justify-between"
-              >
+              <div key={`${item.serviceId}-${item.variantId}`} className="flex justify-between">
                 <span>
                   {item.service?.nameFr} x {item.quantity}
                 </span>
                 <span className="font-semibold">
-                  {(
-                    parseFloat(item.service?.basePrice || "0") * item.quantity
-                  ).toFixed(2)}{" "}
-                  USD
+                  {(parseFloat(item.service?.basePrice || "0") * item.quantity).toFixed(2)} USD
                 </span>
               </div>
             ))}

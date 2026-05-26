@@ -27,7 +27,7 @@ export default function MonPackPage() {
   // Réinitialiser tout le pack au montage pour toujours reprendre depuis le début
   useEffect(() => {
     clearPack();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Créer un pack ID local pour le mode test (pas de base de données)
@@ -80,7 +80,10 @@ export default function MonPackPage() {
         <div className="container mx-auto px-6 py-4 lg:px-8">
           <div className="flex items-center justify-between">
             <Button
-              onClick={() => { clearPack(); router.push("/"); }}
+              onClick={() => {
+                clearPack();
+                router.push("/");
+              }}
               size="sm"
               className="gap-2 bg-transparent text-secondary hover:text-primary hover:bg-transparent"
             >

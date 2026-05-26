@@ -5,9 +5,12 @@ import type {
   CategoryFilters,
   CategoryWithSubcategories,
   NewCategory,
+  NewPendingAction,
   NewResource,
   NewService,
   NewServiceVariant,
+  NewVendorMember,
+  PendingAction,
   Resource,
   ResourceFilters,
   Service,
@@ -16,6 +19,8 @@ import type {
   ServiceWithRelations,
   User,
   UserFilters,
+  VendorContext,
+  VendorMember,
 } from "./types";
 
 export const adminService = {
@@ -95,7 +100,10 @@ export const adminService = {
     return data;
   },
 
-  createServiceVariant: async (serviceId: string, variant: Omit<NewServiceVariant, "id" | "serviceId">): Promise<ServiceVariant> => {
+  createServiceVariant: async (
+    serviceId: string,
+    variant: Omit<NewServiceVariant, "id" | "serviceId">,
+  ): Promise<ServiceVariant> => {
     const { data } = await axiosInstance.post(`/api/services/${serviceId}/variants`, variant);
     return data;
   },
@@ -132,5 +140,58 @@ export const adminService = {
 
   deleteUser: async (id: string): Promise<void> => {
     await axiosInstance.delete(`/api/users/${id}`);
+  },
+
+  // Vendor Members
+  getVendorMembers: async (
+    vendorId: string,
+  ): Promise<
+    Array<{ member: VendorMember; user: { id: string; email: string; name: string; image: string | null } }>
+  > => {
+    const { data } = await axiosInstance.get("/api/vendor-members", { params: { vendorId } });
+    return data;
+  },
+
+  createVendorMember: async (member: import("./types").CreateVendorMemberInput): Promise<VendorMember> => {
+    const { data } = await axiosInstance.post("/api/vendor-members", member);
+    return data;
+  },
+
+  updateVendorMember: async (id: string, member: Partial<VendorMember>): Promise<VendorMember> => {
+    const { data } = await axiosInstance.put(`/api/vendor-members/${id}`, member);
+    return data;
+  },
+
+  deleteVendorMember: async (id: string): Promise<void> => {
+    await axiosInstance.delete(`/api/vendor-members/${id}`);
+  },
+
+  // User Vendor Context
+  getUserVendorContext: async (): Promise<VendorContext> => {
+    const { data } = await axiosInstance.get("/api/users/me/vendor-context");
+    return data;
+  },
+
+  // Pending Actions
+  getPendingActions: async (
+    vendorId: string,
+    status?: string,
+  ): Promise<Array<{ action: PendingAction; requester: { id: string; email: string; name: string } }>> => {
+    const { data } = await axiosInstance.get("/api/pending-actions", { params: { vendorId, status } });
+    return data;
+  },
+
+  createPendingAction: async (action: Omit<NewPendingAction, "id">): Promise<PendingAction> => {
+    const { data } = await axiosInstance.post("/api/pending-actions", action);
+    return data;
+  },
+
+  reviewPendingAction: async (
+    id: string,
+    status: "approved" | "rejected",
+    reason?: string,
+  ): Promise<{ message: string; action: PendingAction }> => {
+    const { data } = await axiosInstance.put(`/api/pending-actions/${id}`, { status, reason });
+    return data;
   },
 };

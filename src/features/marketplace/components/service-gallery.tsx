@@ -34,7 +34,11 @@ export function ServiceGallery({ serviceId, serviceName }: ServiceGalleryProps) 
   return (
     <Card className="overflow-hidden">
       <div className="relative aspect-video bg-muted">
-        <img src={images[currentIndex]} alt={`${serviceName} - Image ${currentIndex + 1}`} className="h-full w-full object-cover" />
+        <img
+          src={images[currentIndex]}
+          alt={`${serviceName} - Image ${currentIndex + 1}`}
+          className="h-full w-full object-cover"
+        />
 
         {/* Navigation */}
         {images.length > 1 && (

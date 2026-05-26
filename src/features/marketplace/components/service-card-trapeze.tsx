@@ -62,11 +62,21 @@ export function ServiceCardTrapeze({ service, featured = false }: ServiceCardTra
         <div className="relative h-full flex flex-col p-8">
           <div className="flex items-start justify-between mb-4">
             <div>
-              {service.category?.icon === "car" && <HugeiconsIcon icon={Car01Icon} size={56} color="rgba(255,255,255,0.9)" />}
-              {service.category?.icon === "home" && <HugeiconsIcon icon={Home01Icon} size={56} color="rgba(255,255,255,0.9)" />}
-              {service.category?.icon === "users" && <HugeiconsIcon icon={UserGroupIcon} size={56} color="rgba(255,255,255,0.9)" />}
-              {service.category?.icon === "briefcase" && <HugeiconsIcon icon={Briefcase01Icon} size={56} color="rgba(255,255,255,0.9)" />}
-              {service.category?.icon === "bell" && <HugeiconsIcon icon={Notification01Icon} size={56} color="rgba(255,255,255,0.9)" />}
+              {service.category?.icon === "car" && (
+                <HugeiconsIcon icon={Car01Icon} size={56} color="rgba(255,255,255,0.9)" />
+              )}
+              {service.category?.icon === "home" && (
+                <HugeiconsIcon icon={Home01Icon} size={56} color="rgba(255,255,255,0.9)" />
+              )}
+              {service.category?.icon === "users" && (
+                <HugeiconsIcon icon={UserGroupIcon} size={56} color="rgba(255,255,255,0.9)" />
+              )}
+              {service.category?.icon === "briefcase" && (
+                <HugeiconsIcon icon={Briefcase01Icon} size={56} color="rgba(255,255,255,0.9)" />
+              )}
+              {service.category?.icon === "bell" && (
+                <HugeiconsIcon icon={Notification01Icon} size={56} color="rgba(255,255,255,0.9)" />
+              )}
             </div>
 
             {service.category && (

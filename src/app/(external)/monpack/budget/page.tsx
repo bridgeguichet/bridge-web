@@ -141,7 +141,8 @@ export default function BudgetPage() {
                 </div>
                 <div className="mt-4 border-gray-200 border-t pt-4">
                   <p className="text-center text-gray-500 text-sm">
-                    {items.length} {items.length > 1 ? t("budgetPage.servicesPlural") : t("budgetPage.servicesSingular")}
+                    {items.length}{" "}
+                    {items.length > 1 ? t("budgetPage.servicesPlural") : t("budgetPage.servicesSingular")}
                   </p>
                 </div>
               </CardContent>

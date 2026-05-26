@@ -184,7 +184,8 @@
     "services": "Services",
     "categories": "Catégories",
     "resources": "Ressources",
-    "staff": "Staff",
+    "vendorMembers": "Membres",
+    "pendingActions": "Validations",
     "customers": "Clients",
     "pages": "Pages",
     "users": "Utilisateurs",
@@ -2022,6 +2023,17 @@
       "available": "Disponible",
       "busy": "Occupé",
       "unavailable": "Indisponible"
+    },
+    "services": {
+      "temporary": "Service temporaire",
+      "temporaryDescription": "Le service expirera automatiquement à la date spécifiée",
+      "expiration": "Date d'expiration",
+      "expirationRequired": "Date d'expiration requise",
+      "expiresAt": "Expire le",
+      "expiresInfo": "Le service sera automatiquement archivé après cette date",
+      "expiresFuture": "La date d'expiration doit être dans le futur",
+      "noExpiration": "—",
+      "permissionDenied": "Permission refusée pour créer un service temporaire"
     }
   },
   "testimonialSection": {

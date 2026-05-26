@@ -21,10 +21,13 @@ export function VariantSelector({ variants, selectedVariant, onSelectVariant, la
   return (
     <Card className="p-6">
       <h3 className="mb-4 text-lg font-semibold">Sélectionnez une variante</h3>
-      <RadioGroup value={selectedVariant?.id} onValueChange={(id) => {
-        const variant = variants.find((v) => v.id === id);
-        if (variant) onSelectVariant(variant);
-      }}>
+      <RadioGroup
+        value={selectedVariant?.id}
+        onValueChange={(id) => {
+          const variant = variants.find((v) => v.id === id);
+          if (variant) onSelectVariant(variant);
+        }}
+      >
         <div className="space-y-3">
           {variants.map((variant) => {
             const isSelected = selectedVariant?.id === variant.id;
@@ -55,30 +58,16 @@ export function VariantSelector({ variants, selectedVariant, onSelectVariant, la
                           </span>
                         )}
                         {metadata.luggage && (
-                          <span className="flex items-center gap-1">
-                            🧳 {metadata.luggage} bagages
-                          </span>
+                          <span className="flex items-center gap-1">🧳 {metadata.luggage} bagages</span>
                         )}
                         {metadata.bedrooms && (
-                          <span className="flex items-center gap-1">
-                            🛏️ {metadata.bedrooms} ch.
-                          </span>
+                          <span className="flex items-center gap-1">🛏️ {metadata.bedrooms} ch.</span>
                         )}
                         {metadata.bathrooms && (
-                          <span className="flex items-center gap-1">
-                            🚿 {metadata.bathrooms} sdb.
-                          </span>
+                          <span className="flex items-center gap-1">🚿 {metadata.bathrooms} sdb.</span>
                         )}
-                        {metadata.area && (
-                          <span className="flex items-center gap-1">
-                            📐 {metadata.area}
-                          </span>
-                        )}
-                        {metadata.location && (
-                          <span className="flex items-center gap-1">
-                            📍 {metadata.location}
-                          </span>
-                        )}
+                        {metadata.area && <span className="flex items-center gap-1">📐 {metadata.area}</span>}
+                        {metadata.location && <span className="flex items-center gap-1">📍 {metadata.location}</span>}
                       </div>
                     )}
 
@@ -86,8 +75,16 @@ export function VariantSelector({ variants, selectedVariant, onSelectVariant, la
                     {metadata?.features && Array.isArray(metadata.features) && metadata.features.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
                         {metadata.features.slice(0, 4).map((feature: string, index: number) => (
-                          <span key={index} className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs">
-                            <HugeiconsIcon icon={Tick01Icon} size={16} color="currentColor" className="shrink-0 text-primary" />
+                          <span
+                            key={index}
+                            className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs"
+                          >
+                            <HugeiconsIcon
+                              icon={Tick01Icon}
+                              size={16}
+                              color="currentColor"
+                              className="shrink-0 text-primary"
+                            />
                             {feature}
                           </span>
                         ))}

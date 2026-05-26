@@ -20,23 +20,14 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { EmptyState } from "@/components/user-dashboard/empty-state";
 import { useTransactions, useTransactionStats } from "@/features/transactions";
 import type { Transaction, TransactionStatus, TransactionType } from "@/features/transactions";
 import { cn } from "@/lib/utils";
 
-const statusConfig: Record<
-  TransactionStatus,
-  { label: string; icon: any; color: string }
-> = {
+const statusConfig: Record<TransactionStatus, { label: string; icon: any; color: string }> = {
   pending: { label: "En attente", icon: Clock01Icon, color: "text-amber-500 bg-amber-50" },
   completed: { label: "Complété", icon: CheckmarkCircle01Icon, color: "text-emerald-500 bg-emerald-50" },
   failed: { label: "Échoué", icon: CancelCircleIcon, color: "text-red-500 bg-red-50" },
@@ -163,23 +154,17 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-              <HugeiconsIcon icon={CreditCardIcon} size={24} color="currentColor" className="text-primary" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-gray-900">Mes transactions</h1>
-              <p className="text-muted-foreground">
-                Consultez l&apos;historique de vos paiements
-              </p>
-            </div>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+            <HugeiconsIcon icon={CreditCardIcon} size={24} color="currentColor" className="text-primary" />
           </div>
-        </motion.div>
+          <div>
+            <h1 className="text-3xl font-black text-gray-900">Mes transactions</h1>
+            <p className="text-muted-foreground">Consultez l&apos;historique de vos paiements</p>
+          </div>
+        </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -188,7 +173,12 @@ export default function TransactionsPage() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       >
         <StatsCard title="Total dépensé" value={`${totalSpent.toFixed(2)} USD`} icon={CreditCardIcon} />
-        <StatsCard title="Transactions" value={stats.totalTransactions.toString()} subtitle={`${stats.completedCount} complétées`} icon={Package01Icon} />
+        <StatsCard
+          title="Transactions"
+          value={stats.totalTransactions.toString()}
+          subtitle={`${stats.completedCount} complétées`}
+          icon={Package01Icon}
+        />
         <StatsCard title="Ce mois" value={`${stats.thisMonthSpent.toFixed(2)} USD`} icon={Cash01Icon} />
         <StatsCard title="En attente" value={stats.pendingCount.toString()} icon={Clock01Icon} />
       </motion.div>
@@ -226,7 +216,11 @@ export default function TransactionsPage() {
         </Select>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+      >
         {transactions.length === 0 ? (
           <EmptyState
             icon={CreditCardIcon}

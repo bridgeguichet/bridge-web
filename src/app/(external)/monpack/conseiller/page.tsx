@@ -146,7 +146,9 @@ export default function ConseillerPage() {
             className="text-center"
           >
             <div className="mb-4 flex justify-center">
-              <div className={`flex h-14 w-14 items-center justify-center rounded-full ${isBudgetMode ? "bg-amber-100" : "bg-primary/10"}`}>
+              <div
+                className={`flex h-14 w-14 items-center justify-center rounded-full ${isBudgetMode ? "bg-amber-100" : "bg-primary/10"}`}
+              >
                 <MessageCircle className={`h-7 w-7 ${isBudgetMode ? "text-amber-600" : "text-primary"}`} />
               </div>
             </div>
@@ -189,7 +191,9 @@ export default function ConseillerPage() {
                 )}
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${
-                    wantsCounselor === true ? "bg-primary text-white" : "bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary"
+                    wantsCounselor === true
+                      ? "bg-primary text-white"
+                      : "bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary"
                   }`}
                 >
                   <UserCheck className="h-6 w-6" />
@@ -199,7 +203,11 @@ export default function ConseillerPage() {
                   <p className="mt-1 text-gray-500 text-sm">{t("conseillerPage.yesOption.description")}</p>
                 </div>
                 <ul className="space-y-1.5">
-                  {[t("conseillerPage.yesOption.feature1"), t("conseillerPage.yesOption.feature2"), t("conseillerPage.yesOption.feature3")].map((item) => (
+                  {[
+                    t("conseillerPage.yesOption.feature1"),
+                    t("conseillerPage.yesOption.feature2"),
+                    t("conseillerPage.yesOption.feature3"),
+                  ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-gray-600 text-xs">
                       <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                       {item}
@@ -225,7 +233,9 @@ export default function ConseillerPage() {
                 )}
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${
-                    wantsCounselor === false ? "bg-gray-500 text-white" : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+                    wantsCounselor === false
+                      ? "bg-gray-500 text-white"
+                      : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
                   }`}
                 >
                   <X className="h-6 w-6" />
@@ -235,14 +245,16 @@ export default function ConseillerPage() {
                   <p className="mt-1 text-gray-500 text-sm">{t("conseillerPage.noOption.description")}</p>
                 </div>
                 <ul className="space-y-1.5">
-                  {[t("conseillerPage.noOption.feature1"), t("conseillerPage.noOption.feature2"), t("conseillerPage.noOption.feature3")].map(
-                    (item) => (
-                      <li key={item} className="flex items-center gap-2 text-gray-600 text-xs">
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-                        {item}
-                      </li>
-                    ),
-                  )}
+                  {[
+                    t("conseillerPage.noOption.feature1"),
+                    t("conseillerPage.noOption.feature2"),
+                    t("conseillerPage.noOption.feature3"),
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-gray-600 text-xs">
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </button>
             </motion.div>

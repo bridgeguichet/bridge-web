@@ -1,10 +1,4 @@
-import type {
-  Category,
-  Service,
-  ServiceVariant,
-  Subcategory,
-  Vendor,
-} from "@/lib/db/schema";
+import type { Category, Service, ServiceVariant, Subcategory, Vendor } from "@/lib/db/schema";
 
 export interface ServiceFilters {
   categoryId?: string;

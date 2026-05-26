@@ -2,12 +2,7 @@
 
 import { motion } from "framer-motion";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import {
-  Award01Icon,
-  CheckmarkCircle01Icon,
-  HeadphonesIcon,
-  Shield01Icon,
-} from "@hugeicons/core-free-icons";
+import { Award01Icon, CheckmarkCircle01Icon, HeadphonesIcon, Shield01Icon } from "@hugeicons/core-free-icons";
 
 const guarantees: { icon: IconSvgElement; title: string; description: string }[] = [
   {

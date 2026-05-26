@@ -1,4 +1,17 @@
-import { Banknote, Box, ChartBar, LayoutDashboard, type LucideIcon, Package, Tags, UserCog, Users } from "lucide-react";
+import {
+  Banknote,
+  Box,
+  ChartBar,
+  Clock,
+  LayoutDashboard,
+  type LucideIcon,
+  Package,
+  ShieldAlert,
+  Tags,
+  UserCog,
+  Users,
+  UsersRound,
+} from "lucide-react";
 
 export interface NavSubItem {
   titleKey: string;
@@ -56,9 +69,14 @@ export const sidebarItems: NavGroup[] = [
         icon: Box,
       },
       {
-        titleKey: "sidebar.staff",
-        url: "/dashboard/staff",
-        icon: UserCog,
+        titleKey: "sidebar.vendorMembers",
+        url: "/dashboard/vendor-members",
+        icon: UsersRound,
+      },
+      {
+        titleKey: "sidebar.pendingActions",
+        url: "/dashboard/pending-actions",
+        icon: Clock,
       },
       {
         titleKey: "sidebar.customers",

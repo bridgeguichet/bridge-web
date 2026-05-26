@@ -24,8 +24,7 @@ export default function ProfilePage() {
   if (!currentUser) return null;
 
   const avatar =
-    currentUser.image ||
-    `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&size=128`;
+    currentUser.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&size=128`;
 
   const handleSave = () => {
     updateProfile.mutate({ name, phone: phone || undefined });

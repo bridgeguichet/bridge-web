@@ -59,11 +59,7 @@ export default function CartPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="container mx-auto max-w-6xl px-6 py-12">
           {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             <Button variant="ghost" className="gap-2 mb-6" onClick={() => router.back()}>
               <ArrowLeft className="w-4 h-4" />
               Retour
@@ -97,7 +93,12 @@ export default function CartPage() {
                       <CardContent className="p-0">
                         <div className="flex items-stretch">
                           {/* Image placeholder */}
-                          <div className={cn("w-32 shrink-0 bg-linear-to-br flex items-center justify-center", previewGradient)}>
+                          <div
+                            className={cn(
+                              "w-32 shrink-0 bg-linear-to-br flex items-center justify-center",
+                              previewGradient,
+                            )}
+                          >
                             <Package className="w-8 h-8 text-white/60" />
                           </div>
 
@@ -123,7 +124,9 @@ export default function CartPage() {
                             <div className="flex items-center justify-between mt-4">
                               <div className="flex items-center gap-3 bg-muted rounded-lg px-3 py-1.5">
                                 <button
-                                  onClick={() => updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)}
+                                  onClick={() =>
+                                    updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)
+                                  }
                                   className="w-6 h-6 rounded-full bg-background hover:bg-muted-foreground/20 flex items-center justify-center transition-colors"
                                 >
                                   <Minus className="w-3 h-3" />
@@ -149,19 +152,13 @@ export default function CartPage() {
               })}
 
               {items.length === 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-center py-16"
-                >
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
                   <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                     <ShoppingBag className="w-10 h-10 text-muted-foreground" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">Votre panier est vide</h3>
                   <p className="text-muted-foreground mb-6">Découvrez nos services et ajoutez-les à votre panier</p>
-                  <Button onClick={() => router.push("/")}>
-                    Explorer les services
-                  </Button>
+                  <Button onClick={() => router.push("/")}>Explorer les services</Button>
                 </motion.div>
               )}
             </div>
@@ -203,11 +200,7 @@ export default function CartPage() {
                     </div>
                   </div>
 
-                  <Button
-                    className="w-full gap-2"
-                    size="lg"
-                    onClick={() => router.push("/auth/login")}
-                  >
+                  <Button className="w-full gap-2" size="lg" onClick={() => router.push("/auth/login")}>
                     <User className="w-4 h-4" />
                     Se connecter pour payer
                   </Button>
@@ -229,11 +222,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto max-w-6xl px-6 py-12">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <Button variant="ghost" className="gap-2 mb-6" onClick={() => router.back()}>
             <ArrowLeft className="w-4 h-4" />
             Retour
@@ -244,7 +233,9 @@ export default function CartPage() {
             </div>
             <div>
               <h1 className="text-3xl font-black">Votre panier</h1>
-              <p className="text-muted-foreground">{items.length} service{items.length > 1 ? "s" : ""} sélectionné{items.length > 1 ? "s" : ""}</p>
+              <p className="text-muted-foreground">
+                {items.length} service{items.length > 1 ? "s" : ""} sélectionné{items.length > 1 ? "s" : ""}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -274,7 +265,12 @@ export default function CartPage() {
                       <CardContent className="p-0">
                         <div className="flex items-stretch">
                           {/* Image placeholder */}
-                          <div className={cn("w-32 shrink-0 bg-linear-to-br flex items-center justify-center", previewGradient)}>
+                          <div
+                            className={cn(
+                              "w-32 shrink-0 bg-linear-to-br flex items-center justify-center",
+                              previewGradient,
+                            )}
+                          >
                             <Package className="w-8 h-8 text-white/60" />
                           </div>
 
@@ -300,7 +296,9 @@ export default function CartPage() {
                             <div className="flex items-center justify-between mt-4">
                               <div className="flex items-center gap-3 bg-muted rounded-lg px-3 py-1.5">
                                 <button
-                                  onClick={() => updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)}
+                                  onClick={() =>
+                                    updateQuantity(item.serviceId, Math.max(1, item.quantity - 1), item.variantId)
+                                  }
                                   className="w-7 h-7 rounded-full bg-background hover:bg-muted-foreground/20 flex items-center justify-center transition-colors"
                                 >
                                   <Minus className="w-3 h-3" />
@@ -327,19 +325,13 @@ export default function CartPage() {
             )}
 
             {items.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center py-16"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
                 <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
                   <ShoppingBag className="w-10 h-10 text-muted-foreground" />
                 </div>
                 <h3 className="font-semibold text-lg mb-2">Votre panier est vide</h3>
                 <p className="text-muted-foreground mb-6">Découvrez nos services et ajoutez-les à votre panier</p>
-                <Button onClick={() => router.push("/")}>
-                  Explorer les services
-                </Button>
+                <Button onClick={() => router.push("/")}>Explorer les services</Button>
               </motion.div>
             )}
           </div>
@@ -381,12 +373,7 @@ export default function CartPage() {
                   <ArrowRight className="w-4 h-4" />
                 </Button>
 
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={clearCart}
-                  disabled={items.length === 0}
-                >
+                <Button variant="outline" className="w-full" onClick={clearCart} disabled={items.length === 0}>
                   Vider le panier
                 </Button>
 

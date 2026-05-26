@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Package } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ImageUploader } from "@/components/image-uploader";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,9 @@ interface FormData {
   basePrice: number;
   priceUnit: string;
   status: string;
+  isTemporary: boolean;
+  expiresAt: string;
+  imageUrl: string;
 }
 
 const initialFormData: FormData = {
@@ -47,6 +51,9 @@ const initialFormData: FormData = {
   basePrice: 0,
   priceUnit: "unit",
   status: "active",
+  isTemporary: false,
+  expiresAt: "",
+  imageUrl: "",
 };
 
 export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceFormDialogProps) {
@@ -70,6 +77,9 @@ export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceForm
         basePrice: Number(editingService.basePrice),
         priceUnit: editingService.priceUnit,
         status: editingService.status,
+        isTemporary: !!editingService.expiresAt,
+        expiresAt: editingService.expiresAt ? new Date(editingService.expiresAt).toISOString().split("T")[0] : "",
+        imageUrl: editingService.imageUrl || "",
       });
     } else {
       setFormData(initialFormData);
@@ -81,6 +91,7 @@ export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceForm
     const submitData = {
       ...formData,
       basePrice: String(formData.basePrice),
+      expiresAt: formData.isTemporary && formData.expiresAt ? new Date(formData.expiresAt) : null,
     };
     if (isEditing && serviceId) {
       updateService.mutate({ id: serviceId, data: submitData });
@@ -229,6 +240,52 @@ export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceForm
                   onCheckedChange={(checked) => setFormData({ ...formData, status: checked ? "active" : "draft" })}
                 />
               </div>
+            </div>
+
+            <div className="rounded-lg border bg-muted/30 p-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="isTemporary">Service temporaire</Label>
+                  <p className="text-muted-foreground text-sm">
+                    Le service expirera automatiquement à la date spécifiée
+                  </p>
+                </div>
+                <Switch
+                  id="isTemporary"
+                  checked={formData.isTemporary}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, isTemporary: checked, expiresAt: checked ? "" : "" })
+                  }
+                />
+              </div>
+            </div>
+
+            {formData.isTemporary && (
+              <div className="space-y-2">
+                <Label htmlFor="expiresAt">
+                  Date d'expiration <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="expiresAt"
+                  type="date"
+                  value={formData.expiresAt}
+                  onChange={(e) => setFormData({ ...formData, expiresAt: e.target.value })}
+                  min={new Date().toISOString().split("T")[0]}
+                  required={formData.isTemporary}
+                />
+                <p className="text-muted-foreground text-xs">
+                  Le service sera automatiquement archivé après cette date
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label>Image</Label>
+              <ImageUploader
+                value={formData.imageUrl}
+                onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+                onRemove={() => setFormData({ ...formData, imageUrl: "" })}
+              />
             </div>
           </div>
 

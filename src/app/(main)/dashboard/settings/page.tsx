@@ -69,8 +69,8 @@ export default function SettingsPage() {
               <Input value={currentUser.email} disabled className="bg-muted" />
             </div>
             <p className="rounded-md bg-muted/50 p-3 text-muted-foreground text-sm">
-              La modification de l'adresse email nécessite une vérification. Veuillez contacter
-              l'administrateur système ou utiliser la procédure de récupération de compte.
+              La modification de l'adresse email nécessite une vérification. Veuillez contacter l'administrateur système
+              ou utiliser la procédure de récupération de compte.
             </p>
           </CardContent>
         </Card>

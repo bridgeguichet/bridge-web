@@ -1,8 +1,9 @@
-import { eq, ne } from "drizzle-orm";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+
+import { and, eq, ne, notExists } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
+import { users, vendorMembers } from "@/lib/db/schema";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +16,17 @@ export async function GET(request: NextRequest) {
       const roles = role.split(",").map((r) => r.trim());
       if (roles.length === 1) {
         if (roles[0] === "customer") {
-          result = await db.select().from(users).where(eq(users.role, "customer")).orderBy(users.createdAt);
+          // Exclude users who are vendor members (double protection)
+          result = await db
+            .select()
+            .from(users)
+            .where(
+              and(
+                eq(users.role, "customer"),
+                notExists(db.select().from(vendorMembers).where(eq(vendorMembers.userId, users.id))),
+              ),
+            )
+            .orderBy(users.createdAt);
         } else {
           result = await db.select().from(users).where(ne(users.role, "customer")).orderBy(users.createdAt);
         }

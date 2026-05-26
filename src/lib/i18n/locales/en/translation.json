@@ -190,7 +190,8 @@
     "services": "Services",
     "categories": "Categories",
     "resources": "Resources",
-    "staff": "Staff",
+    "vendorMembers": "Members",
+    "pendingActions": "Approvals",
     "customers": "Customers",
     "pages": "Pages",
     "users": "Users",
@@ -2008,6 +2009,17 @@
       "available": "Available",
       "busy": "Busy",
       "unavailable": "Unavailable"
+    },
+    "services": {
+      "temporary": "Temporary Service",
+      "temporaryDescription": "The service will automatically expire on the specified date",
+      "expiration": "Expiration Date",
+      "expirationRequired": "Expiration date required",
+      "expiresAt": "Expires on",
+      "expiresInfo": "The service will be automatically archived after this date",
+      "expiresFuture": "The expiration date must be in the future",
+      "noExpiration": "—",
+      "permissionDenied": "Permission denied to create a temporary service"
     }
   },
   "testimonialSection": {

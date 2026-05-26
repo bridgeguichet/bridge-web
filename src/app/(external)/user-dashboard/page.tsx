@@ -277,9 +277,7 @@ export default function UserDashboard() {
                     <div key={txn.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">Pack #{txn.id.slice(4, 12)}</p>
-                        <p className="text-gray-500 text-xs">
-                          {new Date(txn.createdAt).toLocaleDateString("fr-FR")}
-                        </p>
+                        <p className="text-gray-500 text-xs">{new Date(txn.createdAt).toLocaleDateString("fr-FR")}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="font-bold text-gray-900 text-sm">${txn.amount.toFixed(2)}</span>

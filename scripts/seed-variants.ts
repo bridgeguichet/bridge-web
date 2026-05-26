@@ -7,10 +7,7 @@ async function seedVariants() {
     console.log("🌱 Seeding service variants...");
 
     // Trouver les services de mobilité (location de voiture)
-    const mobilityServices = await db
-      .select()
-      .from(services)
-      .where(like(services.nameFr, "%location%voiture%"));
+    const mobilityServices = await db.select().from(services).where(like(services.nameFr, "%location%voiture%"));
 
     console.log(`Found ${mobilityServices.length} mobility services`);
 
@@ -54,13 +51,7 @@ async function seedVariants() {
         metadata: {
           capacity: 4,
           luggage: 3,
-          features: [
-            "Climatisation",
-            "GPS",
-            "Bluetooth",
-            "Sièges cuir",
-            "Toit ouvrant",
-          ],
+          features: ["Climatisation", "GPS", "Bluetooth", "Sièges cuir", "Toit ouvrant"],
         },
         sortOrder: 3,
       });
@@ -69,10 +60,7 @@ async function seedVariants() {
     }
 
     // Trouver les services de logement
-    const housingServices = await db
-      .select()
-      .from(services)
-      .where(like(services.nameFr, "%logement%"));
+    const housingServices = await db.select().from(services).where(like(services.nameFr, "%logement%"));
 
     console.log(`Found ${housingServices.length} housing services`);
 
@@ -124,13 +112,7 @@ async function seedVariants() {
           bathrooms: 1,
           area: "65m²",
           capacity: 4,
-          amenities: [
-            "WiFi",
-            "Cuisine équipée",
-            "Climatisation",
-            "Balcon",
-            "Lave-linge",
-          ],
+          amenities: ["WiFi", "Cuisine équipée", "Climatisation", "Balcon", "Lave-linge"],
           features: ["Meublé", "Charges incluses", "Parking", "Ascenseur"],
         },
         sortOrder: 3,
