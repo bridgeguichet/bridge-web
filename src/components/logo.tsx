@@ -1,21 +1,16 @@
 import Image from "next/image";
 
-import { div } from "motion/react-client";
-
 import { cn } from "@/lib/utils";
 
-export const Logo = ({ className, uniColor }: { className?: string; uniColor?: boolean }) => {
+export const Logo = ({ className }: { className?: string }) => {
   return (
-    <div>
-      <Image
-        src="/media/logo-bridge.png"
-        alt="Bridge Logo"
-        // className={cn("size-16", className)}
-        className={cn("h-10 w-auto", className)}
-        width={100}
-        height={100}
-      />
-    </div>
+    <Image
+      src="/media/logo_bridge.png"
+      alt="Bridge Logo"
+      className={cn("h-10 w-auto", className)}
+      width={200}
+      height={60}
+    />
   );
 };
 

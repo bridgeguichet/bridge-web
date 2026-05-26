@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Camera, Mail, Phone, User } from "lucide-react";
+import { Mail, Phone, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,20 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useAuthStore, useUpdateProfile } from "@/features/auth";
 import { getInitials } from "@/lib/utils";
+
+const ROLE_CONFIG: Record<string, { label: string; color: string }> = {
+  admin: { label: "Administrateur", color: "bg-purple-100 text-purple-700" },
+  manager: { label: "Manager", color: "bg-blue-100 text-blue-700" },
+  operator: { label: "Opérateur", color: "bg-gray-100 text-gray-600" },
+  user: { label: "Utilisateur", color: "bg-green-100 text-green-700" },
+};
+
+function RoleBadge({ role }: { role: string }) {
+  const config = ROLE_CONFIG[role] || { label: role, color: "bg-muted text-muted-foreground" };
+  return (
+    <Badge className={`${config.color} border-0 px-3 py-1 text-sm font-medium`}>{config.label}</Badge>
+  );
+}
 
 export default function ProfilePage() {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -39,25 +53,17 @@ export default function ProfilePage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
-          <CardHeader className="items-center text-center">
-            <div className="relative">
-              <Avatar className="size-24 rounded-full">
-                <AvatarImage src={avatar} alt={currentUser.name} />
-                <AvatarFallback className="text-2xl">{getInitials(currentUser.name)}</AvatarFallback>
-              </Avatar>
-              <button
-                type="button"
-                className="absolute bottom-0 right-0 flex size-8 items-center justify-center rounded-full bg-primary text-primary-foreground shadow"
-              >
-                <Camera className="size-4" />
-              </button>
+          <CardContent className="flex flex-col items-center justify-center gap-3 pt-8 pb-8 text-center">
+            <Avatar className="size-24 rounded-full">
+              <AvatarImage src={avatar} alt={currentUser.name} />
+              <AvatarFallback className="text-2xl">{getInitials(currentUser.name)}</AvatarFallback>
+            </Avatar>
+            <div className="space-y-1">
+              <p className="font-semibold text-lg leading-tight">{currentUser.name}</p>
+              <p className="text-muted-foreground text-sm">{currentUser.email}</p>
             </div>
-            <CardTitle className="mt-2">{currentUser.name}</CardTitle>
-            <CardDescription>{currentUser.email}</CardDescription>
-            <Badge variant="secondary" className="capitalize">
-              {currentUser.role ?? "admin"}
-            </Badge>
-          </CardHeader>
+            <RoleBadge role={(currentUser as any).role ?? "admin"} />
+          </CardContent>
         </Card>
 
         <Card className="lg:col-span-2">

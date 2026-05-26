@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Package, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { Box, CreditCard, Package, ShoppingCart, TrendingUp, Users } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface StatsSummaryProps {
   revenue: number;
   orders: number;
+  packets: number;
   services: number;
   clients: number;
   isLoading?: boolean;
@@ -55,12 +56,12 @@ function StatCard({ label, value, subLabel, subDescription, icon, badgeLabel, is
   );
 }
 
-export function StatsSummary({ revenue, orders, services, clients, isLoading }: StatsSummaryProps) {
+export function StatsSummary({ revenue, orders, packets, services, clients, isLoading }: StatsSummaryProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       <StatCard
         label="Chiffre d'affaires"
-        value={`${revenue.toLocaleString("fr-FR")} CDF`}
+        value={`${revenue.toLocaleString("fr-FR")} USD`}
         subLabel="Revenus des commandes payées"
         subDescription="Total des ventes confirmées"
         icon={<CreditCard className="h-3.5 w-3.5" />}
@@ -73,6 +74,15 @@ export function StatsSummary({ revenue, orders, services, clients, isLoading }: 
         subLabel="Toutes les commandes"
         subDescription="Commandes en cours et livrées"
         icon={<ShoppingCart className="h-3.5 w-3.5" />}
+        badgeLabel="Total"
+        isLoading={isLoading}
+      />
+      <StatCard
+        label="Packets"
+        value={packets}
+        subLabel="Tous les packets"
+        subDescription="Packets en cours et livrés"
+        icon={<Box className="h-3.5 w-3.5" />}
         badgeLabel="Total"
         isLoading={isLoading}
       />

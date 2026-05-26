@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 
-import { CircleHelp, ClipboardList, Command, Database, File, Search, Settings } from "lucide-react";
+import { CircleHelp, ClipboardList, Database, File, Search, Settings } from "lucide-react";
 
+import { Logo, LogoIcon } from "@/components/logo";
 import {
   Sidebar,
   SidebarContent,
@@ -12,8 +13,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { APP_CONFIG } from "@/config/app-config";
 import { useAuthStore } from "@/features/auth";
 import { sidebarItems } from "@/navigation/sidebar/sidebar-items";
 
@@ -59,6 +60,7 @@ const _data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const currentUser = useAuthStore((state) => state.currentUser);
+  const { state } = useSidebar();
 
   const userWithAvatar = currentUser
     ? {
@@ -73,9 +75,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Link prefetch={false} href="/dashboard/default">
-                <Command />
-                <span className="font-semibold text-base">{APP_CONFIG.name}</span>
+              <Link prefetch={false} href="/dashboard/default" className={state === "collapsed" ? "justify-center" : ""}>
+                {state === "collapsed" ? <LogoIcon className="size-6 w-auto" /> : <Logo className="h-14 w-auto" />}
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
