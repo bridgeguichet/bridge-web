@@ -10,18 +10,18 @@ interface ServiceDetailHeaderProps {
 
 export function ServiceDetailHeader({ serviceName, categoryName }: ServiceDetailHeaderProps) {
   return (
-    <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-      <Link href="/marketplace" className="hover:text-foreground transition-colors">
+    <nav className="flex items-center gap-3 text-base font-semibold text-muted-foreground transition-all duration-300">
+      <Link href="/marketplace" className="hover:text-primary transition-colors">
         Marketplace
       </Link>
-      <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" />
+      <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" className="transition-transform transform hover:scale-110"/>
       {categoryName && (
         <>
-          <span className="hover:text-foreground transition-colors">{categoryName}</span>
-          <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" />
+          <span className="hover:text-primary transition-colors">{categoryName}</span>
+          <HugeiconsIcon icon={ArrowRight01Icon} size={16} color="currentColor" className="transition-transform transform hover:scale-110"/>
         </>
       )}
-      <span className="text-foreground font-medium">{serviceName}</span>
+      <span className="text-foreground font-bold">{serviceName}</span>
     </nav>
   );
 }

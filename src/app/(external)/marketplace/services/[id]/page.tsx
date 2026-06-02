@@ -66,6 +66,7 @@ export default function ServiceDetailPage() {
   const addItem = useCartStore((state) => state.addItem);
 
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("description");
   const [cartOpen, setCartOpen] = useState(false);
   const cartItemCount = useCartStore((state) => state.getItemCount());
   const { isAuthenticated } = useSession();
@@ -271,19 +272,13 @@ export default function ServiceDetailPage() {
                 transition={{ delay: 0.2 }}
                 className="rounded-xl bg-white shadow-sm"
               >
-                <Tabs defaultValue="description" className="w-full">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="h-auto w-full justify-start rounded-t-xl rounded-b-none border-b bg-transparent p-0">
                     <TabsTrigger
                       value="description"
                       className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
                     >
                       Description
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="variants"
-                      className="rounded-none border-transparent border-b-2 px-6 py-4 data-[state=active]:border-primary data-[state=active]:bg-transparent"
-                    >
-                      Options & Tarifs
                     </TabsTrigger>
                     <TabsTrigger
                       value="specs"
@@ -325,127 +320,63 @@ export default function ServiceDetailPage() {
                     </div>
                   </TabsContent>
 
-                  <TabsContent value="variants" className="mt-0 p-6">
-                    <div className="space-y-4">
-                      <h4 className="font-bold text-lg">Choisissez votre option</h4>
-                      {variants && variants.length > 0 ? (
-                        variants.map((variant: ServiceVariant) => {
-                          const metadata = variant.metadata as Record<string, unknown> | null;
-                          return (
-                            <div
-                              key={variant.id}
-                              onClick={() => setSelectedVariant(variant.id)}
-                              className={cn(
-                                "cursor-pointer rounded-xl border p-4 transition-all",
-                                selectedVariant === variant.id
-                                  ? "border-primary bg-primary/5"
-                                  : "hover:border-gray-300",
-                              )}
-                            >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                  <div
-                                    className={cn(
-                                      "flex h-5 w-5 items-center justify-center rounded-full border-2",
-                                      selectedVariant === variant.id ? "border-primary" : "border-gray-300",
-                                    )}
-                                  >
-                                    {selectedVariant === variant.id && (
-                                      <div className="h-2.5 w-2.5 rounded-full bg-primary" />
-                                    )}
-                                  </div>
-                                  <div>
-                                    <p className="font-semibold">{variant.nameFr}</p>
-                                    {/* Metadata badges */}
-                                    {metadata && (
-                                      <div className="mt-2 flex flex-wrap gap-2 text-muted-foreground text-xs">
-                                        {Boolean(metadata.capacity) && (
-                                          <span className="flex items-center gap-1">
-                                            <Users className="h-3 w-3" />
-                                            {`${metadata.capacity}`} places
-                                          </span>
-                                        )}
-                                        {Boolean(metadata.luggage) && (
-                                          <span className="flex items-center gap-1">
-                                            <Briefcase className="h-3 w-3" />
-                                            {`${metadata.luggage}`} bagages
-                                          </span>
-                                        )}
-                                        {Boolean(metadata.bedrooms) && (
-                                          <span className="flex items-center gap-1">
-                                            <Home className="h-3 w-3" />
-                                            {`${metadata.bedrooms}`} ch.
-                                          </span>
-                                        )}
-                                        {Boolean(metadata.bathrooms) && (
-                                          <span className="flex items-center gap-1">
-                                            <span className="flex h-3 w-3 items-center justify-center">🚿</span>
-                                            {`${metadata.bathrooms}`} sdb.
-                                          </span>
-                                        )}
-                                        {Boolean(metadata.area) && (
-                                          <span className="flex items-center gap-1">
-                                            <span className="flex h-3 w-3 items-center justify-center">📐</span>
-                                            {`${metadata.area}`} m²
-                                          </span>
-                                        )}
-                                        {Boolean(metadata.location) && (
-                                          <span className="flex items-center gap-1">
-                                            <span className="flex h-3 w-3 items-center justify-center">📍</span>
-                                            {`${metadata.location}`}
-                                          </span>
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                                <p className="font-bold text-lg">${variant.priceModifier}</p>
-                              </div>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <p className="text-gray-500">Aucune option disponible pour ce service.</p>
-                      )}
-                    </div>
-                  </TabsContent>
-
                   <TabsContent value="specs" className="mt-0 p-6">
                     {(() => {
                       const variantData = variants?.find((v: ServiceVariant) => v.id === selectedVariant);
                       const metadata = (variantData?.metadata || service.metadata) as Record<string, unknown> | null;
-                      if (!metadata) {
+
+                      // Variant image preview
+                      const hasVariantImage = variantData?.imageUrl;
+
+                      if (!metadata && !hasVariantImage) {
                         return <p className="text-gray-500">Aucune spécification disponible.</p>;
                       }
 
                       const hasAmenities =
-                        Boolean(metadata.amenities) &&
-                        Array.isArray(metadata.amenities) &&
-                        metadata.amenities.length > 0;
+                        Boolean(metadata?.amenities) &&
+                        Array.isArray(metadata?.amenities) &&
+                        metadata!.amenities.length > 0;
                       const hasFeatures =
-                        Boolean(metadata.features) && Array.isArray(metadata.features) && metadata.features.length > 0;
+                        Boolean(metadata?.features) && Array.isArray(metadata?.features) && metadata!.features.length > 0;
                       const hasSpecs =
-                        Boolean(metadata.capacity) ||
-                        Boolean(metadata.bedrooms) ||
-                        Boolean(metadata.bathrooms) ||
-                        Boolean(metadata.area) ||
-                        Boolean(metadata.landArea) ||
-                        Boolean(metadata.floor) ||
-                        Boolean(metadata.location) ||
-                        Boolean(metadata.address) ||
-                        Boolean(metadata.luggage);
-                      if (!hasAmenities && !hasFeatures && !hasSpecs) {
+                        Boolean(metadata?.capacity) ||
+                        Boolean(metadata?.bedrooms) ||
+                        Boolean(metadata?.bathrooms) ||
+                        Boolean(metadata?.area) ||
+                        Boolean(metadata?.landArea) ||
+                        Boolean(metadata?.floor) ||
+                        Boolean(metadata?.location) ||
+                        Boolean(metadata?.address) ||
+                        Boolean(metadata?.luggage);
+                      if (!hasAmenities && !hasFeatures && !hasSpecs && !hasVariantImage) {
                         return <p className="text-gray-500">Aucune spécification disponible.</p>;
                       }
 
                       return (
                         <div className="space-y-6">
+                          {/* Variant Image Preview */}
+                          {hasVariantImage && (
+                            <div className="relative overflow-hidden rounded-xl border bg-gray-50">
+                              <div className="aspect-video w-full">
+                                <img
+                                  src={variantData!.imageUrl || ""}
+                                  alt={variantData?.nameFr || "Variante"}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/60 to-transparent p-4">
+                                <p className="font-semibold text-white">{variantData!.nameFr}</p>
+                                <p className="text-sm text-white/80">${variantData!.priceModifier}</p>
+                              </div>
+                            </div>
+                          )}
+
                           {/* Équipements */}
                           {hasAmenities && (
                             <div>
                               <h4 className="mb-3 font-bold text-lg">Équipements</h4>
                               <ul className="grid grid-cols-2 gap-2">
-                                {(metadata.amenities as string[]).map((amenity: string, index: number) => (
+                                {(metadata!.amenities as string[]).map((amenity: string, index: number) => (
                                   <li key={index} className="flex items-center gap-2 text-gray-700 text-sm">
                                     <Check className="h-4 w-4 text-emerald-500" />
                                     {amenity}
@@ -460,7 +391,7 @@ export default function ServiceDetailPage() {
                             <div>
                               <h4 className="mb-3 font-bold text-lg">Caractéristiques</h4>
                               <ul className="grid grid-cols-2 gap-2">
-                                {(metadata.features as string[]).map((feature: string, index: number) => (
+                                {(metadata!.features as string[]).map((feature: string, index: number) => (
                                   <li key={index} className="flex items-center gap-2 text-gray-700 text-sm">
                                     <Check className="h-4 w-4 text-emerald-500" />
                                     {feature}
@@ -475,58 +406,58 @@ export default function ServiceDetailPage() {
                             <div>
                               <h4 className="mb-3 font-bold text-lg">Spécifications</h4>
                               <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                                {Boolean(metadata.capacity) && (
+                                {Boolean(metadata?.capacity) && (
                                   <>
                                     <dt className="text-gray-500">Capacité</dt>
-                                    <dd className="font-medium">{`${metadata.capacity}`} personnes</dd>
+                                    <dd className="font-medium">{`${metadata!.capacity}`} personnes</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.bedrooms) && (
+                                {Boolean(metadata?.bedrooms) && (
                                   <>
                                     <dt className="text-gray-500">Chambres</dt>
-                                    <dd className="font-medium">{`${metadata.bedrooms}`}</dd>
+                                    <dd className="font-medium">{`${metadata!.bedrooms}`}</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.bathrooms) && (
+                                {Boolean(metadata?.bathrooms) && (
                                   <>
                                     <dt className="text-gray-500">Salles de bain</dt>
-                                    <dd className="font-medium">{`${metadata.bathrooms}`}</dd>
+                                    <dd className="font-medium">{`${metadata!.bathrooms}`}</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.area) && (
+                                {Boolean(metadata?.area) && (
                                   <>
                                     <dt className="text-gray-500">Surface</dt>
-                                    <dd className="font-medium">{`${metadata.area}`} m²</dd>
+                                    <dd className="font-medium">{`${metadata!.area}`} m²</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.landArea) && (
+                                {Boolean(metadata?.landArea) && (
                                   <>
                                     <dt className="text-gray-500">Terrain</dt>
-                                    <dd className="font-medium">{`${metadata.landArea}`} m²</dd>
+                                    <dd className="font-medium">{`${metadata!.landArea}`} m²</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.floor) && (
+                                {Boolean(metadata?.floor) && (
                                   <>
                                     <dt className="text-gray-500">Étage</dt>
-                                    <dd className="font-medium">{`${metadata.floor}`}</dd>
+                                    <dd className="font-medium">{`${metadata!.floor}`}</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.location) && (
+                                {Boolean(metadata?.location) && (
                                   <>
                                     <dt className="text-gray-500">Localisation</dt>
-                                    <dd className="font-medium">{`${metadata.location}`}</dd>
+                                    <dd className="font-medium">{`${metadata!.location}`}</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.address) && (
+                                {Boolean(metadata?.address) && (
                                   <>
                                     <dt className="text-gray-500">Adresse</dt>
-                                    <dd className="font-medium">{`${metadata.address}`}</dd>
+                                    <dd className="font-medium">{`${metadata!.address}`}</dd>
                                   </>
                                 )}
-                                {Boolean(metadata.luggage) && (
+                                {Boolean(metadata?.luggage) && (
                                   <>
                                     <dt className="text-gray-500">Bagages</dt>
-                                    <dd className="font-medium">{`${metadata.luggage}`} bagages</dd>
+                                    <dd className="font-medium">{`${metadata!.luggage}`} bagages</dd>
                                   </>
                                 )}
                               </dl>
@@ -652,21 +583,71 @@ export default function ServiceDetailPage() {
 
                 <Separator className="my-4" />
 
-                {/* Quick features */}
-                <div className="mb-6 space-y-3">
-                  <div className="flex items-center gap-3 text-sm">
-                    <Clock className="h-4 w-4 text-gray-400" />
-                    <span>Livraison en 24-48h</span>
+                {/* Variant selector - Options & Tarifs */}
+                {variants && variants.length > 0 && (
+                  <div className="mb-6 space-y-3">
+                    <p className="text-sm font-medium text-gray-700">Options & Tarifs</p>
+                    {variants.map((variant: ServiceVariant) => {
+                      const metadata = variant.metadata as Record<string, unknown> | null;
+                      return (
+                        <div
+                          key={variant.id}
+                          onClick={() => {
+                            setSelectedVariant(variant.id);
+                            setActiveTab("specs");
+                          }}
+                          className={cn(
+                            "cursor-pointer rounded-lg border p-3 transition-all",
+                            selectedVariant === variant.id
+                              ? "border-primary bg-primary/5"
+                              : "border-gray-200 hover:border-gray-300",
+                          )}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={cn(
+                                  "flex h-4 w-4 items-center justify-center rounded-full border-2",
+                                  selectedVariant === variant.id ? "border-primary" : "border-gray-300",
+                                )}
+                              >
+                                {selectedVariant === variant.id && (
+                                  <div className="h-2 w-2 rounded-full bg-primary" />
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-sm">{variant.nameFr}</p>
+                                {metadata && (
+                                  <div className="mt-1 flex flex-wrap gap-2 text-muted-foreground text-xs">
+                                    {Boolean(metadata.capacity) && (
+                                      <span className="flex items-center gap-1">
+                                        <Users className="h-3 w-3" />
+                                        {`${metadata.capacity}`} places
+                                      </span>
+                                    )}
+                                    {Boolean(metadata.luggage) && (
+                                      <span className="flex items-center gap-1">
+                                        <Briefcase className="h-3 w-3" />
+                                        {`${metadata.luggage}`} bagages
+                                      </span>
+                                    )}
+                                    {Boolean(metadata.bedrooms) && (
+                                      <span className="flex items-center gap-1">
+                                        <Home className="h-3 w-3" />
+                                        {`${metadata.bedrooms}`} ch.
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <p className="font-bold">${variant.priceModifier}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Shield className="h-4 w-4 text-gray-400" />
-                    <span>Garantie 30 jours</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <MessageCircle className="h-4 w-4 text-gray-400" />
-                    <span>Support inclus</span>
-                  </div>
-                </div>
+                )}
 
                 <Button onClick={handleAddToCart} className="mb-3 w-full gap-2" size="lg">
                   <ShoppingCart className="h-4 w-4" />
