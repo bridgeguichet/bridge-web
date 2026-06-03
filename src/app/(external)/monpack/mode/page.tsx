@@ -17,11 +17,11 @@ export default function ModePage() {
 
   const pricingMode = usePackBuilderStore((state) => state.pricingMode);
   const setPricingMode = usePackBuilderStore((state) => state.setPricingMode);
-  const clearPack = usePackBuilderStore((state) => state.clearPack);
+  const resetPackItems = usePackBuilderStore((state) => state.resetPackItems);
 
   useEffect(() => {
-    clearPack();
-  }, [clearPack]);
+    resetPackItems();
+  }, [resetPackItems]);
 
   const handleSelectMode = (mode: "priced" | "budget") => {
     setPricingMode(mode);

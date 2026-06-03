@@ -27,6 +27,7 @@ interface PackBuilderStore {
   removeItem: (itemId: string) => void;
   updateItemQuantity: (itemId: string, quantity: number) => void;
   clearPack: () => void;
+  resetPackItems: () => void;
   getTotalAmount: () => number;
   getItemsByCategory: (categoryId: string) => PackItemWithDetails[];
   setWantsCounselor: (value: boolean) => void;
@@ -99,6 +100,16 @@ export const usePackBuilderStore = create<PackBuilderStore>()(
           appointment: null,
           pricingMode: null,
           userBudget: null,
+        }),
+
+      resetPackItems: () =>
+        set({
+          currentCategoryIndex: 0,
+          packId: null,
+          items: [],
+          skippedCategories: [],
+          wantsCounselor: null,
+          appointment: null,
         }),
 
       setWantsCounselor: (value) => set({ wantsCounselor: value }),

@@ -7,7 +7,7 @@ export const Logo = ({ className }: { className?: string }) => {
     <Image
       src="/media/logo_bridge.png"
       alt="Bridge Logo"
-      className={cn("h-10 w-auto", className)}
+      className={cn("h-16 w-auto", className)}
       width={200}
       height={60}
     />

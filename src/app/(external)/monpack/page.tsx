@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/logo";
 import { useCategories } from "@/features/marketplace/hooks";
 import { usePackBuilderStore } from "@/features/pack-builder/store";
 import { useTranslation } from "@/lib/i18n/use-translation";
@@ -22,11 +23,12 @@ export default function MonPackPage() {
   const currentCategoryIndex = usePackBuilderStore((state) => state.currentCategoryIndex);
   const packId = usePackBuilderStore((state) => state.packId);
   const setPackId = usePackBuilderStore((state) => state.setPackId);
-  const clearPack = usePackBuilderStore((state) => state.clearPack);
+  const items = usePackBuilderStore((state) => state.items);
+  const resetPackItems = usePackBuilderStore((state) => state.resetPackItems);
 
-  // Réinitialiser tout le pack au montage pour toujours reprendre depuis le début
+  // Réinitialiser les items au montage mais conserver le pricingMode choisi
   useEffect(() => {
-    clearPack();
+    resetPackItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -81,8 +83,10 @@ export default function MonPackPage() {
           <div className="flex items-center justify-between">
             <Button
               onClick={() => {
-                clearPack();
-                router.push("/");
+                if (items.length > 0) {
+                  resetPackItems();
+                }
+                router.push("/monpack/mode");
               }}
               size="sm"
               className="gap-2 bg-transparent text-secondary hover:text-primary hover:bg-transparent"
@@ -91,34 +95,38 @@ export default function MonPackPage() {
               Retour
             </Button>
             <h1 className="font-bold text-xl text-gray-900">{t("monpackSection.title")}</h1>
-            <div className="w-24" />
+            <Logo className="h-15 w-auto" />
           </div>
         </div>
       </div>
 
-      {/* Progress */}
-      <CategoryProgress categories={sortedCategories} currentIndex={currentCategoryIndex} />
+      {/* Main Content with Sidebar Stepper */}
+      <div className="container mx-auto px-6 py-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[220px_1fr_340px]">
+          {/* Left: Vertical Stepper */}
+          <div>
+            <CategoryProgress categories={sortedCategories} currentIndex={currentCategoryIndex} />
+          </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 py-8 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-          {/* Left: Services Grid */}
+          {/* Center: Services Grid */}
           <div>
             <CategoryServicesGrid category={currentCategory} packId={packId} />
           </div>
 
           {/* Right: Pack Summary (Sticky) */}
-          <div className="lg:sticky lg:top-8 lg:h-fit">
+          <div className="lg:sticky lg:top-6 lg:h-fit">
             <PackSummaryPanel packId={packId} />
           </div>
-        </div>
 
-        {/* Navigation */}
-        <PackNavigation
-          currentIndex={currentCategoryIndex}
-          totalCategories={sortedCategories.length}
-          currentCategoryId={currentCategory.id}
-        />
+          {/* Bottom Navigation */}
+          <div className="lg:col-start-2 lg:col-span-2">
+            <PackNavigation
+              currentIndex={currentCategoryIndex}
+              totalCategories={sortedCategories.length}
+              currentCategoryId={currentCategory.id}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
