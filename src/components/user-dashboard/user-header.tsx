@@ -18,6 +18,8 @@ import {
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/features/auth";
 import { useLogout } from "@/features/auth/hooks";
+import { NotificationDropdown } from "@/features/notifications/components/notification-dropdown";
+import { NotificationProvider } from "@/features/notifications/components/notification-provider";
 import { getInitials } from "@/lib/utils";
 
 export function UserHeader() {
@@ -37,7 +39,10 @@ export function UserHeader() {
     <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
       <SidebarTrigger className="-ml-1" />
 
-      {/*<div className="flex flex-1 items-center justify-end gap-2">
+      <div className="flex flex-1 items-center justify-end gap-2">
+        <NotificationProvider>
+          <NotificationDropdown notificationsHref="/user-dashboard/notifications" />
+        </NotificationProvider>
 
         {isGuest ? (
           <Button variant="ghost" size="icon" className="size-8" asChild>
@@ -77,7 +82,7 @@ export function UserHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </div>*/}
+      </div>
     </header>
   );
 }

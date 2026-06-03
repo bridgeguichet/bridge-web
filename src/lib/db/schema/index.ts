@@ -1,4 +1,5 @@
 export * from "./categories";
+export * from "./notifications";
 export * from "./pending-actions";
 export * from "./resources";
 export * from "./services";

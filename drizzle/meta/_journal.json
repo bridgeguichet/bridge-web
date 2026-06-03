@@ -43,6 +43,13 @@
       "when": 1779764325766,
       "tag": "0005_same_toro",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1780505436935,
+      "tag": "0006_petite_captain_britain",
+      "breakpoints": true
     }
   ]
 }

@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { ProfileLoader } from "./_components/profile-loader";
 import { SidebarConfigEnforcer } from "./_components/sidebar-config-enforcer";
 import { SearchDialog } from "./_components/sidebar/search-dialog";
+import { HeaderNotifications } from "./_components/header-notifications";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
@@ -34,6 +35,9 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
               <LanguageSwitcher />
+            </div>
+            <div className="flex items-center gap-2">
+              <HeaderNotifications />
             </div>
           </div>
         </header>
