@@ -38,7 +38,19 @@
     "passwordsDoNotMatch": "Passwords do not match.",
     "loginSuccess": "Login successful",
     "loginError": "Login error",
-    "unauthorized": "Unauthorized"
+    "unauthorized": "Unauthorized",
+    "verifyEmail": "Verify your email",
+    "enterOtp": "Enter the 6-digit code",
+    "otpSent": "A verification code has been sent to your email",
+    "resendCode": "Resend code",
+    "verifying": "Verifying...",
+    "invalidOtp": "Invalid code, please try again",
+    "verifyButton": "Verify my email",
+    "backToRegister": "Back to registration",
+    "otpResent": "A new code has been sent",
+    "noEmailProvided": "No email address provided",
+    "otpExpired": "The code has expired, please request a new one",
+    "otpCooldown": "Please wait {{seconds}} seconds before resending"
   },
   "userMenu": {
     "profile": "Profile",

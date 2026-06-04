@@ -81,17 +81,15 @@ export function useLogin(callbackUrl?: string | null) {
 
 export function useRegister(callbackUrl?: string | null) {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
   return useMutation({
     mutationFn: (registerData: RegisterData) => authService.register(registerData),
-    onSuccess: (data) => {
-      setCurrentUser(data.user);
-      queryClient.setQueryData(["session"], data);
-      toast.success("Compte créé avec succès");
-      const redirectUrl = getRedirectUrl(data.user, callbackUrl);
-      router.push(redirectUrl);
+    onSuccess: (_, variables) => {
+      // With email verification required, no session is returned immediately
+      // Store password temporarily for auto-login after OTP verification
+      sessionStorage.setItem("_bridge_pending_pw", variables.password);
+      toast.success("Un code de vérification a été envoyé à votre email");
+      router.push(`/auth/verify-email?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error) => {
       toast.error(extractErrorMessage(error));

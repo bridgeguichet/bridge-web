@@ -1,8 +1,10 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { emailOTP } from "better-auth/plugins";
 
 import { db } from "@/lib/db";
 import { accounts, sessions, users, verifications } from "@/lib/db/schema/users";
+import { sendOTPEmail } from "@/lib/email/resend";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -16,8 +18,23 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // À activer plus tard avec email service
+    requireEmailVerification: true,
   },
+  plugins: [
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        // type can be "email-verification" | "forget-password" | "password-reset" | "change-email"
+        if (type === "email-verification" || type === "change-email") {
+          await sendOTPEmail(email, otp);
+        }
+      },
+      otpLength: 6,
+      expiresIn: 600, // 10 minutes in seconds
+      changeEmail: {
+        enabled: true,
+      },
+    }),
+  ],
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID || "",

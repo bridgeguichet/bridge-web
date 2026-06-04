@@ -38,7 +38,19 @@
     "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
     "loginSuccess": "Connexion réussie",
     "loginError": "Erreur de connexion",
-    "unauthorized": "Non autorisé"
+    "unauthorized": "Non autorisé",
+    "verifyEmail": "Vérifier votre email",
+    "enterOtp": "Entrez le code à 6 chiffres",
+    "otpSent": "Un code de vérification a été envoyé à votre email",
+    "resendCode": "Renvoyer le code",
+    "verifying": "Vérification en cours...",
+    "invalidOtp": "Code invalide, veuillez réessayer",
+    "verifyButton": "Vérifier mon email",
+    "backToRegister": "Retour à l'inscription",
+    "otpResent": "Un nouveau code a été envoyé",
+    "noEmailProvided": "Aucune adresse email fournie",
+    "otpExpired": "Le code a expiré, veuillez demander un nouveau",
+    "otpCooldown": "Veuillez attendre {{seconds}} secondes avant de renvoyer"
   },
   "userMenu": {
     "profile": "Profil",

@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import {
   CreditCardIcon,
@@ -16,15 +17,25 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "framer-motion";
+import { Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuthStore, useChangePassword } from "@/features/auth";
+import { authClient, signOut } from "@/lib/auth/auth-client";
 
 type MobileMoneyProvider = "mpesa" | "orange" | "airtel";
 
@@ -68,11 +79,22 @@ const itemVariants = {
   },
 };
 
+const RESEND_COOLDOWN = 60;
+
 export default function ParametrePage() {
+  const router = useRouter();
   const currentUser = useAuthStore((state) => state.currentUser);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
   const changePassword = useChangePassword();
 
-  const [email, setEmail] = useState(currentUser?.email || "");
+  const [newEmail, setNewEmail] = useState("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [otpDialogOpen, setOtpDialogOpen] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [isChangingEmail, setIsChangingEmail] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -92,13 +114,73 @@ export default function ParametrePage() {
 
   const isEmailVerified = currentUser?.emailVerified ?? false;
 
-  const handleEmailUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.info("Fonctionnalité à venir : modification de l'email");
+  const startCooldown = () => {
+    setCooldown(RESEND_COOLDOWN);
+    const interval = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
-  const handleSendVerification = () => {
-    toast.info("Fonctionnalité à venir : envoi du lien de vérification");
+  const handleSendOtp = async () => {
+    if (!newEmail || newEmail === currentUser?.email) {
+      toast.error("Veuillez saisir une nouvelle adresse email différente de l'actuelle");
+      return;
+    }
+    setIsSendingOtp(true);
+    try {
+      const result = await authClient.emailOtp.requestEmailChange({ newEmail });
+      if (result.error) throw new Error(result.error.message || "Erreur lors de l'envoi");
+      toast.success(`Code envoyé à ${newEmail}`);
+      setOtpDialogOpen(true);
+      setOtp("");
+      startCooldown();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de l'envoi du code");
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (cooldown > 0) return;
+    setIsResending(true);
+    try {
+      const result = await authClient.emailOtp.requestEmailChange({ newEmail });
+      if (result.error) throw new Error(result.error.message || "Erreur lors de l'envoi");
+      toast.success("Nouveau code envoyé");
+      startCooldown();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors du renvoi");
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  const handleConfirmEmailChange = async () => {
+    if (otp.length !== 6) {
+      toast.error("Veuillez entrer les 6 chiffres du code");
+      return;
+    }
+    setIsChangingEmail(true);
+    try {
+      const result = await authClient.emailOtp.changeEmail({ newEmail, otp });
+      if (result.error) throw new Error(result.error.message || "Code invalide");
+      toast.success("Email modifié avec succès. Veuillez vous reconnecter.");
+      setOtpDialogOpen(false);
+      clearAuth();
+      await signOut();
+      router.push("/auth/login");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur lors de la modification");
+    } finally {
+      setIsChangingEmail(false);
+    }
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
@@ -169,6 +251,69 @@ export default function ParametrePage() {
   };
 
   return (
+    <>
+      <Dialog open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Vérifier votre nouvel email</DialogTitle>
+            <DialogDescription>
+              Un code à 6 chiffres a été envoyé à{" "}
+              <span className="font-medium text-foreground">{newEmail}</span>. Entrez-le ci-dessous pour confirmer le
+              changement.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-6 py-2">
+            <InputOTP maxLength={6} value={otp} onChange={setOtp} disabled={isChangingEmail}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+            <Button
+              onClick={handleConfirmEmailChange}
+              disabled={otp.length !== 6 || isChangingEmail}
+              className="w-full"
+            >
+              {isChangingEmail ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  Modification...
+                </>
+              ) : (
+                "Confirmer le changement"
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleResendOtp}
+              disabled={isResending || cooldown > 0}
+              className="text-muted-foreground text-sm"
+            >
+              {isResending ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  Envoi...
+                </>
+              ) : cooldown > 0 ? (
+                <>
+                  <RefreshCw className="mr-2 size-4" />
+                  Renvoyer ({cooldown}s)
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 size-4" />
+                  Renvoyer le code
+                </>
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <motion.div
         variants={itemVariants}
@@ -220,29 +365,33 @@ export default function ParametrePage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleEmailUpdate} className="space-y-4">
+                <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email actuel</Label>
+                    <Label>Email actuel</Label>
+                    <Input value={currentUser?.email || ""} disabled className="max-w-md bg-muted" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-email">Nouvel email</Label>
                     <Input
-                      id="email"
+                      id="new-email"
                       type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="votre@email.com"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      placeholder="nouveau@email.com"
                       className="max-w-md"
                     />
                   </div>
-                  <div className="flex flex-wrap gap-3">
-                    <Button type="submit" variant="outline">
-                      Modifier l&apos;email
-                    </Button>
-                    {!isEmailVerified && (
-                      <Button type="button" onClick={handleSendVerification}>
-                        Envoyer le lien de vérification
-                      </Button>
+                  <Button onClick={handleSendOtp} disabled={isSendingOtp || !newEmail}>
+                    {isSendingOtp ? (
+                      <>
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                        Envoi en cours...
+                      </>
+                    ) : (
+                      "Envoyer le code de vérification"
                     )}
-                  </div>
-                </form>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
@@ -590,5 +739,6 @@ export default function ParametrePage() {
         </Tabs>
       </motion.div>
     </motion.div>
+    </>
   );
 }

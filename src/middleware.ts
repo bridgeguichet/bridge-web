@@ -6,6 +6,12 @@ export async function middleware(request: NextRequest) {
 
   const isUserDashboardRoute = pathname.startsWith("/user-dashboard");
   const isDashboardRoute = pathname.startsWith("/dashboard");
+  const isAuthRoute = pathname.startsWith("/auth/");
+
+  // Allow auth routes (including verify-email) without session check
+  if (isAuthRoute) {
+    return NextResponse.next();
+  }
 
   if (!isUserDashboardRoute && !isDashboardRoute) {
     return NextResponse.next();
