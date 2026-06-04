@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Eye, EyeOff, KeyRound, Loader2, Mail, RefreshCw } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -138,6 +139,8 @@ export default function SettingsPage() {
     );
   };
 
+  const isEmailVerified = currentUser?.emailVerified ?? false;
+
   if (!currentUser) return null;
 
   return (
@@ -210,9 +213,17 @@ export default function SettingsPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
-              <Mail className="size-5 text-muted-foreground" />
-              <CardTitle>Adresse email</CardTitle>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Mail className="size-5 text-muted-foreground" />
+                <CardTitle>Adresse email</CardTitle>
+              </div>
+              <Badge
+                variant={isEmailVerified ? "default" : "secondary"}
+                className={isEmailVerified ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}
+              >
+                {isEmailVerified ? "Vérifié" : "Non vérifié"}
+              </Badge>
             </div>
             <CardDescription>Modifiez votre adresse email de connexion</CardDescription>
           </CardHeader>

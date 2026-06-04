@@ -24,9 +24,10 @@ interface MembersTableProps {
   onEdit: (memberId: string) => void;
   onDelete: (memberId: string, vendorId: string) => void;
   currentUserId: string;
+  currentUserRole?: "admin" | "manager" | "operator" | null;
 }
 
-export function MembersTable({ members, roleLabels, onEdit, onDelete, currentUserId }: MembersTableProps) {
+export function MembersTable({ members, roleLabels, onEdit, onDelete, currentUserId, currentUserRole }: MembersTableProps) {
   const getRoleBadge = (role: string) => {
     const config = roleLabels[role] || { label: role, color: "bg-gray-100 text-gray-600" };
     return (
@@ -42,7 +43,22 @@ export function MembersTable({ members, roleLabels, onEdit, onDelete, currentUse
   const canDelete = (member: MemberWithUser) => {
     // Can't delete yourself
     if (member.user.id === currentUserId) return false;
-    // Can't delete admin (except by another admin - handled by backend)
+    
+    // Only admins can delete admins (UI protection)
+    if (member.member.role === "admin" && currentUserRole !== "admin") {
+      return false;
+    }
+    
+    // Managers can only delete operators
+    if (currentUserRole === "manager" && member.member.role !== "operator") {
+      return false;
+    }
+    
+    // Operators cannot delete anyone
+    if (currentUserRole === "operator") {
+      return false;
+    }
+    
     return true;
   };
 

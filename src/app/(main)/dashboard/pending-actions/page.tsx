@@ -1,14 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
-import { CheckCircle2, Clock, Loader2, XCircle } from "lucide-react";
+import { CheckCircle2, Clock, Loader2, RefreshCw, XCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { usePendingActions, useReviewPendingAction } from "@/features/admin";
+import { usePendingActions, usePendingActionsStats, useReviewPendingAction, useUserVendorContext } from "@/features/admin";
 import { useAuthStore } from "@/features/auth/store";
 
 import { PendingActionsTable } from "./_components/pending-actions-table";
@@ -25,20 +26,28 @@ const ACTION_TYPE_LABELS: Record<string, string> = {
   delete_category: "Suppression de catégorie",
   delete_variant: "Suppression de variante",
   delete_resource: "Suppression de ressource",
+  delete_member: "Suppression de membre",
 };
 
 export default function PendingActionsPage() {
   const { currentUser: user } = useAuthStore();
-  // TODO: Get vendorId from user's vendor context
-  const vendorId = ""; // This should come from user context
+  const { data: vendorContext } = useUserVendorContext();
+  const vendorId = vendorContext?.vendorId || "";
   const isAdmin = user?.role === "admin";
 
   const [statusFilter, setStatusFilter] = useState<string>("pending");
   const [searchQuery, setSearchQuery] = useState("");
   const [reviewingAction, setReviewingAction] = useState<{ id: string; status: "approved" | "rejected" } | null>(null);
 
-  const { data: actions, isLoading } = usePendingActions(vendorId, statusFilter);
+  const { data: actions, isLoading, refetch } = usePendingActions(vendorId, statusFilter);
+  const { data: stats } = usePendingActionsStats(vendorId);
   const reviewAction = useReviewPendingAction();
+  const isReviewing = reviewAction.isPending;
+
+  // Logs pour déboguer
+  console.log(`🔄 Pending Actions Page - vendorId: ${vendorId}, statusFilter: ${statusFilter}, actions count: ${actions?.length || 0}`);
+  console.log(`📊 Stats:`, stats);
+  console.log(`📋 Actions:`, actions?.map(a => ({ id: a.action.id, status: a.action.status, targetType: a.action.targetType })));
 
   const filteredActions = useMemo(() => {
     if (!actions) return [];
@@ -53,8 +62,34 @@ export default function PendingActionsPage() {
   }, [actions, searchQuery]);
 
   const handleReview = async (id: string, status: "approved" | "rejected", reason?: string) => {
-    await reviewAction.mutateAsync({ id, vendorId, status, reason });
-    setReviewingAction(null);
+    try {
+      await reviewAction.mutateAsync({ id, vendorId, status, reason });
+      setReviewingAction(null);
+      
+      // Afficher une notification de succès
+      toast.success(
+        status === "approved" 
+          ? "Action approuvée avec succès" 
+          : "Action rejetée avec succès"
+      );
+      
+      // Basculer automatiquement vers l'onglet correspondant après validation
+      setTimeout(() => {
+        setStatusFilter(status);
+        // Forcer un rafraîchissement après le changement de filtre
+        setTimeout(() => {
+          refetch();
+        }, 50);
+      }, 100);
+    } catch (error) {
+      console.error("Erreur lors de la validation:", error);
+      toast.error("Erreur lors de la validation");
+    }
+  };
+
+  const handleRefresh = () => {
+    refetch();
+    toast.success("Données actualisées");
   };
 
   const handleCloseReview = () => {
@@ -78,6 +113,15 @@ export default function PendingActionsPage() {
             {isAdmin ? "Validez ou refusez les demandes de votre équipe" : "Suivez vos demandes de validation"}
           </p>
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefresh}
+          disabled={isLoading}
+        >
+          <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          Actualiser
+        </Button>
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -103,7 +147,7 @@ export default function PendingActionsPage() {
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {Object.entries(STATUS_LABELS).map(([status, { label, icon, color }]) => {
-          const count = actions?.filter((a) => a.action.status === status).length ?? 0;
+          const count = stats?.[status as keyof typeof stats] ?? 0;
           const isSelected = statusFilter === status;
           return (
             <Button
@@ -124,18 +168,22 @@ export default function PendingActionsPage() {
         })}
       </div>
 
-      {filteredActions.length === 0 ? (
+      {filteredActions.length === 0 && !isReviewing ? (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed bg-card p-12 text-center">
           <div className="rounded-full bg-primary/10 p-3">
             <Clock className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="mt-4 font-semibold text-lg">Aucune action en attente</h3>
+          <h3 className="mt-4 font-semibold text-lg">
+            {isReviewing ? "Traitement en cours..." : "Aucune action en attente"}
+          </h3>
           <p className="mt-1 text-muted-foreground text-sm">
-            {searchQuery
-              ? "Essayez une autre recherche."
-              : statusFilter === "pending"
-                ? "Votre équipe n'a soumis aucune demande récemment."
-                : "Aucune action dans cette catégorie."}
+            {isReviewing
+              ? "Veuillez patienter pendant le traitement de votre demande."
+              : searchQuery
+                ? "Essayez une autre recherche."
+                : statusFilter === "pending"
+                  ? "Votre équipe n'a soumis aucune demande récemment."
+                  : "Aucune action dans cette catégorie."}
           </p>
         </div>
       ) : (
@@ -144,6 +192,7 @@ export default function PendingActionsPage() {
           statusLabels={STATUS_LABELS}
           actionTypeLabels={ACTION_TYPE_LABELS}
           isAdmin={isAdmin}
+          disabled={isReviewing}
           onReview={(id: string, status: "approved" | "rejected") => setReviewingAction({ id, status })}
         />
       )}

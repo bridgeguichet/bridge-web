@@ -13,7 +13,9 @@ export type NotificationType =
   | "APPOINTMENT_CANCELLED"
   | "MESSAGE_RECEIVED"
   | "ADMIN_ALERT"
-  | "SYSTEM";
+  | "SYSTEM"
+  | "pending_validation"
+  | "validation_result";
 
 export interface NotificationData {
   orderId?: string;
@@ -24,6 +26,8 @@ export interface NotificationData {
   amount?: number;
   currency?: string;
   url?: string;
+  pendingActionId?: string;
+  approved?: boolean;
   [key: string]: unknown;
 }
 

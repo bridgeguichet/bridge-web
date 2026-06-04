@@ -5,7 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { canPerform, getUserVendorRole } from "@/lib/auth/permissions";
 import { db } from "@/lib/db";
-import { pendingActions, services, categories, resources, vendorMembers } from "@/lib/db/schema";
+import { pendingActions, services, categories, resources, vendorMembers, serviceVariants } from "@/lib/db/schema";
+import { executeDeletionAfterApproval, notifyRequesterOfApproval } from "@/lib/notifications/validation";
 
 // Helper to get current user from session
 async function getCurrentUser() {
@@ -13,25 +14,6 @@ async function getCurrentUser() {
   return session?.user ?? null;
 }
 
-// Helper to execute the actual deletion based on target type
-async function executeDeletion(targetType: string, targetId: string) {
-  switch (targetType) {
-    case "service":
-      await db.delete(services).where(eq(services.id, targetId));
-      break;
-    case "category":
-      await db.delete(categories).where(eq(categories.id, targetId));
-      break;
-    case "resource":
-      await db.delete(resources).where(eq(resources.id, targetId));
-      break;
-    case "member":
-      await db.delete(vendorMembers).where(eq(vendorMembers.id, targetId));
-      break;
-    default:
-      throw new Error(`Type de cible non supporté: ${targetType}`);
-  }
-}
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -67,10 +49,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "Cette action a déjà été traitée" }, { status: 409 });
     }
 
-    // If approved, execute the actual action
+    // If approved, execute the actual action with cascade support
+    let deletionResult: { success: boolean; error?: string } = { success: true };
     if (newStatus === "approved") {
       try {
-        await executeDeletion(action.targetType, action.targetId);
+        deletionResult = await executeDeletionAfterApproval(action);
+        if (!deletionResult.success) {
+          return NextResponse.json({ error: `Erreur lors de la suppression: ${deletionResult.error || "Erreur inconnue"}` }, { status: 500 });
+        }
       } catch (error) {
         console.error("Error executing deletion:", error);
         return NextResponse.json({ error: "Erreur lors de l'exécution de la suppression" }, { status: 500 });
@@ -88,6 +74,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       })
       .where(eq(pendingActions.id, id))
       .returning();
+
+    // Notify the requester of the approval/rejection result
+    await notifyRequesterOfApproval(action, newStatus === "approved", reason);
 
     return NextResponse.json({
       message: newStatus === "approved" ? "Action approuvée et exécutée" : "Action rejetée",

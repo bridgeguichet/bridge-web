@@ -181,6 +181,11 @@ export const adminService = {
     return data;
   },
 
+  getPendingActionsStats: async (vendorId: string): Promise<{ pending: number; approved: number; rejected: number }> => {
+    const { data } = await axiosInstance.get("/api/pending-actions/stats", { params: { vendorId } });
+    return data;
+  },
+
   createPendingAction: async (action: Omit<NewPendingAction, "id">): Promise<PendingAction> => {
     const { data } = await axiosInstance.post("/api/pending-actions", action);
     return data;

@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
     // Build query conditions
     const conditions = [eq(pendingActions.vendorId, vendorId), eq(pendingActions.status, status)];
 
-    // Managers can only see their own pending actions
-    if (role === "manager") {
+    // Managers can only see their own pending actions, but can see all approved/rejected actions for their vendor
+    if (role === "manager" && status === "pending") {
       conditions.push(eq(pendingActions.requestedBy, user.id));
     }
 
@@ -61,6 +61,9 @@ export async function GET(request: NextRequest) {
       .innerJoin(users, eq(pendingActions.requestedBy, users.id))
       .where(and(...conditions))
       .orderBy(pendingActions.createdAt);
+
+    console.log(`📊 Pending Actions API - vendorId: ${vendorId}, status: ${status}, role: ${role}, count: ${actions.length}`);
+    console.log(`📋 Actions trouvées:`, actions.map(a => ({ id: a.action.id, status: a.action.status, targetType: a.action.targetType })));
 
     return NextResponse.json(actions);
   } catch (error) {
@@ -109,3 +112,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
+

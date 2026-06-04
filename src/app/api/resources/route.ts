@@ -1,8 +1,11 @@
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
+import { auth } from "@/lib/auth/auth";
+import { canDelete, canPerform, getUserVendorRole, requiresPendingApproval } from "@/lib/auth/permissions";
 import { db } from "@/lib/db";
-import { resources } from "@/lib/db/schema";
+import { resources, pendingActions } from "@/lib/db/schema";
+import { notifyValidatorsForValidation } from "@/lib/notifications/validation";
 
 export async function GET(request: NextRequest) {
   try {
@@ -94,6 +97,11 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session || !session.user) {
+      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+    }
+
     const { searchParams } = request.nextUrl;
     const id = searchParams.get("id");
 
@@ -101,13 +109,56 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "id requis" }, { status: 400 });
     }
 
+    // Get existing resource
+    const existingResource = await db.select().from(resources).where(eq(resources.id, id)).limit(1);
+    if (existingResource.length === 0) {
+      return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
+    }
+
+    const resource = existingResource[0];
+
+    // Check permission
+    const role = await getUserVendorRole(session.user.id, resource.vendorId);
+    if (!canDelete(role, "resource")) {
+      return NextResponse.json({ error: "Permission refusée" }, { status: 403 });
+    }
+
+    // Check if deletion requires pending approval (manager or operator role)
+    if (requiresPendingApproval(role, "delete", "resource")) {
+      // Create pending action instead of deleting
+      const [pendingAction] = await db
+        .insert(pendingActions)
+        .values({
+          vendorId: resource.vendorId,
+          requestedBy: session.user.id,
+          actionType: "delete",
+          targetType: "resource",
+          targetId: id,
+          targetName: resource.name,
+          status: "pending",
+        })
+        .returning();
+
+      // Notifier les admins et managers pour validation
+      await notifyValidatorsForValidation(resource.vendorId, pendingAction);
+
+      return NextResponse.json(
+        {
+          message: "Demande de suppression soumise pour validation",
+          pendingAction,
+        },
+        { status: 202 },
+      );
+    }
+
+    // Admin can delete directly
     const [deleted] = await db.delete(resources).where(eq(resources.id, id)).returning();
 
     if (!deleted) {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ message: "Ressource supprimée" });
   } catch (error) {
     console.error("DELETE /api/resources error:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

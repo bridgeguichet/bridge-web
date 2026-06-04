@@ -37,9 +37,28 @@ export async function middleware(request: NextRequest) {
 
   console.log("[Middleware] User:", user.email, "Role:", user.role, "isSuperUser:", isSuperUser);
 
-  // user-dashboard is only for customers (but super-users can access anything)
+  // user-dashboard is for customers and users without vendor context (but super-users can access anything)
   if (isUserDashboardRoute && user.role !== "customer" && !isSuperUser) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Check if user has vendor context by making an internal API call
+    try {
+      const vendorContextResponse = await fetch(new URL("/api/auth/vendor-context", request.url), {
+        headers: {
+          cookie: request.headers.get("cookie") || "",
+        },
+      });
+      
+      if (vendorContextResponse.ok) {
+        const vendorContext = await vendorContextResponse.json();
+        // If user has vendor context, redirect to main dashboard
+        if (vendorContext.vendorId) {
+          return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+      }
+      // If no vendor context or API call fails, allow access to user-dashboard
+    } catch (error) {
+      // If vendor context check fails, allow access to user-dashboard as fallback
+      console.log("[Middleware] Vendor context check failed, allowing user-dashboard access");
+    }
   }
 
   // dashboard is for admins/vendors only (super-users bypass)

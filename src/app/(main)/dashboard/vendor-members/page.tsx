@@ -170,6 +170,7 @@ export default function VendorMembersPage() {
           onEdit={handleEdit}
           onDelete={handleDelete}
           currentUserId={user?.id ?? ""}
+          currentUserRole={vendorContext?.role ?? null}
         />
       )}
 

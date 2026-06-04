@@ -108,10 +108,14 @@ export function canDelete(role: VendorRole | null, targetType: TargetType): bool
 
 export function requiresPendingApproval(role: VendorRole | null, action: Action, targetType: TargetType): boolean {
   if (!role || role === "admin") return false;
-  if (role === "operator") return true; // operators always need approval for deletes
-
-  // manager: delete requires approval (except for self-owned resources)
+  
+  // manager: delete requires approval for all types
   if (role === "manager" && action === "delete") {
+    return true;
+  }
+  
+  // operator: delete requires approval for all types
+  if (role === "operator" && action === "delete") {
     return true;
   }
 
@@ -133,8 +137,13 @@ export function canDeleteMember(
   if (isSuperUser) return true;
   if (!currentUserRole) return false;
 
-  // admin can delete anyone
-  if (currentUserRole === "admin") return true;
+  // Protection: seul un admin peut supprimer un admin
+  if (targetMemberRole === "admin" && currentUserRole !== "admin") {
+    return false;
+  }
+
+  // admin can delete anyone except other admins (handled above)
+  if (currentUserRole === "admin") return targetMemberRole !== "admin";
 
   // manager cannot delete another manager
   if (currentUserRole === "manager" && targetMemberRole === "manager") {
@@ -144,6 +153,11 @@ export function canDeleteMember(
   // manager can delete operators
   if (currentUserRole === "manager" && targetMemberRole === "operator") {
     return true;
+  }
+
+  // operators cannot delete anyone
+  if (currentUserRole === "operator") {
+    return false;
   }
 
   return false;
@@ -166,6 +180,17 @@ export function canCreateOperator(
   }
 
   return false;
+}
+
+export function getValidatorsForRole(requesterRole: VendorRole): VendorRole[] {
+  switch (requesterRole) {
+    case "manager":
+      return ["admin"]; // Seuls les admins peuvent valider les managers
+    case "operator":
+      return ["admin", "manager"]; // Admins et managers peuvent valider les operators
+    default:
+      return [];
+  }
 }
 
 // Error throwing helper for API routes

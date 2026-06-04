@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Eye, XCircle } from "lucide-react";
+import { CheckCircle2, Eye, Loader2, XCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ interface PendingActionsTableProps {
   statusLabels: Record<string, { label: string; icon: React.ReactNode; color: string }>;
   actionTypeLabels: Record<string, string>;
   isAdmin: boolean;
+  disabled?: boolean;
   onReview: (id: string, status: "approved" | "rejected") => void;
 }
 
@@ -29,6 +30,7 @@ export function PendingActionsTable({
   statusLabels,
   actionTypeLabels,
   isAdmin,
+  disabled = false,
   onReview,
 }: PendingActionsTableProps) {
   const getStatusBadge = (status: string) => {
@@ -90,19 +92,39 @@ export function PendingActionsTable({
                       variant="ghost"
                       size="sm"
                       className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                      disabled={disabled}
                       onClick={() => onReview(item.action.id, "approved")}
                     >
-                      <CheckCircle2 className="mr-1 h-4 w-4" />
-                      Approuver
+                      {disabled ? (
+                        <>
+                          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                          Traitement...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="mr-1 h-4 w-4" />
+                          Approuver
+                        </>
+                      )}
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      disabled={disabled}
                       onClick={() => onReview(item.action.id, "rejected")}
                     >
-                      <XCircle className="mr-1 h-4 w-4" />
-                      Rejeter
+                      {disabled ? (
+                        <>
+                          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                          Traitement...
+                        </>
+                      ) : (
+                        <>
+                          <XCircle className="mr-1 h-4 w-4" />
+                          Rejeter
+                        </>
+                      )}
                     </Button>
                   </div>
                 </TableCell>

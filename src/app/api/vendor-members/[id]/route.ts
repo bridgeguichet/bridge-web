@@ -4,9 +4,10 @@ import { type NextRequest, NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth/auth";
-import { canDeleteMember, canPerform, checkIsSuperUser, getUserVendorRole } from "@/lib/auth/permissions";
+import { canDeleteMember, canPerform, checkIsSuperUser, getUserVendorRole, requiresPendingApproval } from "@/lib/auth/permissions";
 import { db } from "@/lib/db";
 import { pendingActions, users, vendorMembers } from "@/lib/db/schema";
+import { notifyValidatorsForValidation } from "@/lib/notifications/validation";
 
 // Helper to get current user from session
 async function getCurrentUser() {
@@ -82,11 +83,52 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     const isSuperUser = await checkIsSuperUser(user.id);
     const currentRole = await getUserVendorRole(user.id, member.vendorId);
 
-    // Special member deletion rules
+    // Règles strictes pour la suppression de membres
     if (!canDeleteMember(currentRole, member.role as "admin" | "manager" | "operator", isSuperUser)) {
+      const errorMessage = member.role === "admin" 
+        ? "Permission refusée - Impossible de supprimer un administrateur"
+        : "Permission refusée - Vous ne pouvez pas supprimer ce membre";
+      
+      // Log de sécurité pour les tentatives de suppression d'admin
+      if (member.role === "admin") {
+        console.warn(`🚨 TENTATIVE DE SUPPRESSION D'ADMIN - User: ${user.id} (${user.email}), Role: ${currentRole}, Target: ${member.userId} (${member.role})`);
+      }
+      
       return NextResponse.json(
-        { error: "Permission refusée - Vous ne pouvez pas supprimer ce membre" },
+        { error: errorMessage },
         { status: 403 },
+      );
+    }
+
+    // Check if deletion requires pending approval (manager or operator role)
+    if (requiresPendingApproval(currentRole, "delete", "member")) {
+      // Get user info for display
+      const userInfo = await db.select().from(users).where(eq(users.id, member.userId)).limit(1);
+      const userName = userInfo[0] ? userInfo[0].name : `Membre ${member.userId}`;
+      
+      // Create pending action instead of deleting
+      const [pendingAction] = await db
+        .insert(pendingActions)
+        .values({
+          vendorId: member.vendorId,
+          requestedBy: user.id,
+          actionType: "delete",
+          targetType: "member",
+          targetId: id,
+          targetName: `${userName} (${member.role})`,
+          status: "pending",
+        })
+        .returning();
+
+      // Notifier les admins et managers pour validation
+      await notifyValidatorsForValidation(member.vendorId, pendingAction);
+
+      return NextResponse.json(
+        {
+          message: "Demande de suppression soumise pour validation",
+          pendingAction,
+        },
+        { status: 202 },
       );
     }
 

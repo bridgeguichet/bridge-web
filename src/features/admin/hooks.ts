@@ -289,6 +289,21 @@ export function usePendingActions(vendorId: string, status?: string) {
     queryKey: ["pending-actions", vendorId, status],
     queryFn: () => adminService.getPendingActions(vendorId, status),
     enabled: !!vendorId,
+    staleTime: 0, // Les données sont toujours considérées comme périmées
+    refetchOnWindowFocus: true, // Rafraîchir quand la fenêtre reprend le focus
+    refetchOnMount: true, // Rafraîchir à chaque montage
+  });
+}
+
+// Pending Actions Statistics (pour les compteurs)
+export function usePendingActionsStats(vendorId: string) {
+  return useQuery({
+    queryKey: ["pending-actions-stats", vendorId],
+    queryFn: () => adminService.getPendingActionsStats(vendorId),
+    enabled: !!vendorId,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
 }
 
@@ -318,7 +333,17 @@ export function useReviewPendingAction() {
       reason?: string;
     }) => adminService.reviewPendingAction(id, status, reason),
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["pending-actions", variables.vendorId] });
+      // Invalider TOUTES les queries pending-actions y compris les stats
+      queryClient.invalidateQueries({ 
+        queryKey: ["pending-actions"],
+        exact: false 
+      });
+      
+      // Forcer un rafraîchissement immédiat de toutes les queries
+      queryClient.refetchQueries({ 
+        queryKey: ["pending-actions"],
+        exact: false 
+      });
     },
   });
 }
