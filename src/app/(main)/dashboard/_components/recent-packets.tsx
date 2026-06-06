@@ -7,10 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { Transaction } from "@/features/transactions/types";
+import type { Order } from "@/features/orders/types";
 
 interface RecentPacketsProps {
-  transactions: Transaction[];
+  orders: Order[];
   isLoading?: boolean;
 }
 
@@ -21,9 +21,7 @@ const STATUS_MAP: Record<string, { label: string; variant: "default" | "secondar
   refunded: { label: "Remboursé", variant: "outline" },
 };
 
-export function RecentPackets({ transactions, isLoading }: RecentPacketsProps) {
-  const recent = transactions.filter((t) => t.type === "pack").slice(0, 5);
-
+export function RecentPackets({ orders, isLoading }: RecentPacketsProps) {
   return (
     <Card className="border bg-card">
       <CardHeader className="pb-3">
@@ -50,28 +48,28 @@ export function RecentPackets({ transactions, isLoading }: RecentPacketsProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recent.length === 0 ? (
+                {orders.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="h-24 text-center text-muted-foreground text-sm">
                       Aucun packet pour le moment
                     </TableCell>
                   </TableRow>
                 ) : (
-                  recent.map((txn) => {
-                    const status = STATUS_MAP[txn.status] || { label: txn.status, variant: "outline" };
-                    const itemCount = txn.items.reduce((sum, item) => sum + item.quantity, 0);
+                  orders.map((order) => {
+                    const status = STATUS_MAP[order.status] || { label: order.status, variant: "outline" };
+                    const itemCount = order.items.reduce((sum, item) => sum + item.quantity, 0);
                     const clientName =
-                      txn.metadata?.customerName ||
-                      (txn.items[0]?.name ? `Client ${txn.items[0].name.slice(0, 8)}` : "—");
-                    const packetId = txn.packId || txn.id.slice(4, 12).toUpperCase();
+                      (order.metadata?.customerName as string) ||
+                      (order.items[0]?.name ? `Client ${order.items[0].name.slice(0, 8)}` : "—");
+                    const packetNumber = order.orderNumber || order.id.slice(4, 12).toUpperCase();
 
                     return (
-                      <TableRow key={txn.id}>
-                        <TableCell className="font-mono text-xs font-medium">PKT-{packetId}</TableCell>
+                      <TableRow key={order.id}>
+                        <TableCell className="font-mono text-xs font-medium">PKT-{packetNumber}</TableCell>
                         <TableCell className="text-sm">{clientName}</TableCell>
                         <TableCell className="text-sm">{itemCount}</TableCell>
                         <TableCell className="text-sm font-medium">
-                          {txn.amount.toLocaleString("fr-FR")} {txn.currency}
+                          {Number(order.amount).toLocaleString("fr-FR")} {order.currency}
                         </TableCell>
                         <TableCell>
                           <Badge variant={status.variant} className="rounded-full px-2.5 py-0.5 text-xs font-medium">
@@ -79,7 +77,7 @@ export function RecentPackets({ transactions, isLoading }: RecentPacketsProps) {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-muted-foreground text-xs">
-                          {format(new Date(txn.createdAt), "dd/MM/yyyy", { locale: fr })}
+                          {format(new Date(order.createdAt), "dd/MM/yyyy", { locale: fr })}
                         </TableCell>
                       </TableRow>
                     );

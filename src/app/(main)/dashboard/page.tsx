@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-
 import { useCustomerUsers, useServices } from "@/features/admin";
-import { useTransactionsStore } from "@/features/transactions/store";
+import { useActivityData } from "@/features/analytics";
+import { useOrders, useOrderStats } from "@/features/orders";
 import { useTranslation } from "@/lib/i18n/use-translation";
 
 import { ActivityChart } from "./_components/activity-chart";
@@ -13,45 +12,22 @@ import { RecentOrders } from "./_components/recent-orders";
 import { RecentPackets } from "./_components/recent-packets";
 import { StatsSummary } from "./_components/stats-summary";
 
-function generateActivityData(): Array<{ date: string; value: number }> {
-  const data: Array<{ date: string; value: number }> = [];
-  const today = new Date();
-  for (let i = 89; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(date.getDate() - i);
-    const base = 20 + Math.sin(i * 0.3) * 15;
-    const random = Math.random() * 30;
-    data.push({
-      date: date.toISOString().split("T")[0],
-      value: Math.max(0, Math.round(base + random)),
-    });
-  }
-  return data;
-}
-
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { data: customerUsers, isLoading: usersLoading } = useCustomerUsers();
   const { data: servicesData, isLoading: servicesLoading } = useServices();
-  const transactions = useTransactionsStore((state) => state.transactions);
 
-  const [activityData, setActivityData] = useState<Array<{ date: string; value: number }>>([]);
+  // Fetch real data from database
+  const { data: orders, isLoading: ordersLoading } = useOrders();
+  const { data: orderStats, isLoading: statsLoading } = useOrderStats();
+  const { data: activityData, isLoading: activityLoading } = useActivityData("90");
 
-  useEffect(() => {
-    setActivityData(generateActivityData());
-  }, []);
+  // Calculate derived values from real data
+  const revenue = orderStats?.totalRevenue ?? 0;
+  const ordersCount = orderStats?.orderCount ?? 0;
+  const packetsCount = orderStats?.packCount ?? 0;
 
-  const revenue = useMemo(() => {
-    return transactions
-      .filter((t) => t.status === "completed" && t.type === "order")
-      .reduce((sum, t) => sum + t.amount, 0);
-  }, [transactions]);
-
-  const ordersCount = useMemo(() => transactions.filter((t) => t.type === "order").length, [transactions]);
-
-  const packetsCount = useMemo(() => transactions.filter((t) => t.type === "pack").length, [transactions]);
-
-  const isLoading = usersLoading || servicesLoading;
+  const isLoading = usersLoading || servicesLoading || ordersLoading || statsLoading;
 
   const getCardData = (countKey?: "organizations" | "users") => {
     switch (countKey) {
@@ -81,15 +57,24 @@ export default function DashboardPage() {
         isLoading={isLoading}
       />
 
-      <ActivityChart data={activityData} isLoading={false} />
+      <ActivityChart
+        data={activityData?.map((d) => ({ date: d.date, value: d.visitors })) ?? []}
+        isLoading={activityLoading}
+      />
 
-      <RecentOrders transactions={transactions.filter((t) => t.type === "order")} isLoading={false} />
+      <RecentOrders
+        orders={orders?.filter((o) => o.type === "order").slice(0, 5) ?? []}
+        isLoading={ordersLoading}
+      />
 
-      <RecentPackets transactions={transactions} isLoading={false} />
+      <RecentPackets
+        orders={orders?.filter((o) => o.type === "pack").slice(0, 5) ?? []}
+        isLoading={ordersLoading}
+      />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {DASHBOARD_CARDS.map((card) => {
-          const { count, isLoading } = getCardData(card.countKey);
+          const { count, isLoading: cardLoading } = getCardData(card.countKey);
           return (
             <DashboardCard
               key={card.href}
@@ -98,7 +83,7 @@ export default function DashboardPage() {
               href={card.href}
               icon={card.icon}
               count={count}
-              isLoading={isLoading}
+              isLoading={cardLoading}
             />
           );
         })}
