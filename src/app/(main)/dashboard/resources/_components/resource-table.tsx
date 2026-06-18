@@ -23,12 +23,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { Resource } from "@/features/admin";
+import type { Resource, VendorRole } from "@/features/admin";
 import { useDeleteResource } from "@/features/admin";
 
 interface ResourceTableProps {
   resources: Resource[];
   onEdit: (resourceId: string) => void;
+  vendorRole?: VendorRole | null;
+  onRequestDelete?: (resourceId: string, resourceName: string) => void;
 }
 
 const typeLabels: Record<string, string> = {
@@ -43,8 +45,9 @@ const typeIcons: Record<string, React.ElementType> = {
   staff: UserCog,
 };
 
-export function ResourceTable({ resources, onEdit }: ResourceTableProps) {
+export function ResourceTable({ resources, onEdit, vendorRole, onRequestDelete }: ResourceTableProps) {
   const deleteResourceMutation = useDeleteResource();
+  const needsApproval = vendorRole === "manager" || vendorRole === "operator";
 
   const handleDelete = (resourceId: string) => {
     deleteResourceMutation.mutate(resourceId);
@@ -119,34 +122,44 @@ export function ResourceTable({ resources, onEdit }: ResourceTableProps) {
                         Modifier
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <DropdownMenuItem
-                            onSelect={(e) => e.preventDefault()}
-                            className="text-destructive focus:text-destructive"
-                          >
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Supprimer
-                          </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Supprimer la ressource</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Êtes-vous sûr de vouloir supprimer la ressource "{resource.name}" ?
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(resource.id)}
-                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      {needsApproval ? (
+                        <DropdownMenuItem
+                          onSelect={() => onRequestDelete?.(resource.id, resource.name)}
+                          className="text-destructive focus:text-destructive"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Demander la suppression
+                        </DropdownMenuItem>
+                      ) : (
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <DropdownMenuItem
+                              onSelect={(e) => e.preventDefault()}
+                              className="text-destructive focus:text-destructive"
                             >
+                              <Trash2 className="mr-2 h-4 w-4" />
                               Supprimer
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                            </DropdownMenuItem>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Supprimer la ressource</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Êtes-vous sûr de vouloir supprimer la ressource &ldquo;{resource.name}&rdquo; ?
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Annuler</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDelete(resource.id)}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                              >
+                                Supprimer
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      )}
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </TableCell>

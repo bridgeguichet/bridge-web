@@ -6,7 +6,9 @@ import { Box, Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useResources } from "@/features/admin";
+import { toast } from "sonner";
+
+import { useCreatePendingAction, useResources, useUserVendorContext } from "@/features/admin";
 
 import { ResourceFormDialog } from "./_components/resource-form-dialog";
 import { ResourceTable } from "./_components/resource-table";
@@ -17,6 +19,8 @@ export default function ResourcesPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingResourceId, setEditingResourceId] = useState<string | null>(null);
 
+  const { data: vendorContext } = useUserVendorContext();
+  const createPendingAction = useCreatePendingAction();
   const { data: resources, isLoading } = useResources({
     type: typeFilter !== "all" ? typeFilter : undefined,
     status: statusFilter !== "all" ? statusFilter : undefined,
@@ -30,6 +34,27 @@ export default function ResourcesPage() {
   const handleCloseForm = () => {
     setIsFormOpen(false);
     setEditingResourceId(null);
+  };
+
+  const handleRequestDelete = (resourceId: string, resourceName: string) => {
+    if (!vendorContext?.vendorId) return;
+    createPendingAction.mutate(
+      {
+        vendorId: vendorContext.vendorId,
+        requestedBy: "",
+        actionType: "delete",
+        targetType: "resource",
+        targetId: resourceId,
+        targetName: resourceName,
+        status: "pending",
+        reason: null,
+        reviewedBy: null,
+      },
+      {
+        onSuccess: () => toast.success("Demande de suppression envoyée à l'administrateur"),
+        onError: () => toast.error("Erreur lors de l'envoi de la demande"),
+      },
+    );
   };
 
   return (
@@ -86,7 +111,12 @@ export default function ResourcesPage() {
           </p>
         </div>
       ) : (
-        <ResourceTable resources={resources} onEdit={handleEdit} />
+        <ResourceTable
+          resources={resources}
+          onEdit={handleEdit}
+          vendorRole={vendorContext?.role}
+          onRequestDelete={handleRequestDelete}
+        />
       )}
 
       <ResourceFormDialog open={isFormOpen} onOpenChange={handleCloseForm} resourceId={editingResourceId} />

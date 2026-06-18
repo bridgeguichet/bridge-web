@@ -19,8 +19,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import type { Service, ServiceWithRelations, Category } from "@/features/admin";
-import { useCategories, useCreateService, useServices, useUpdateService } from "@/features/admin";
+import type { Service, ServiceWithRelations } from "@/features/admin";
+import { useCategories, useCreateService, useServices, useUpdateService, useUserVendorContext } from "@/features/admin";
 
 interface ServiceFormDialogProps {
   open: boolean;
@@ -59,6 +59,7 @@ const initialFormData: FormData = {
 export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceFormDialogProps) {
   const { data: services } = useServices();
   const { data: categories } = useCategories();
+  const { data: vendorContext } = useUserVendorContext();
   const createService = useCreateService();
   const updateService = useUpdateService();
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -88,8 +89,10 @@ export function ServiceFormDialog({ open, onOpenChange, serviceId }: ServiceForm
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const vendorId = vendorContext?.vendorId;
     const submitData = {
       ...formData,
+      vendorId,
       basePrice: String(formData.basePrice),
       expiresAt: formData.isTemporary && formData.expiresAt ? new Date(formData.expiresAt) : null,
     };

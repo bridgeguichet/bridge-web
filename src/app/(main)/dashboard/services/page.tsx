@@ -7,7 +7,9 @@ import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCategories, useServices } from "@/features/admin";
+import { toast } from "sonner";
+
+import { useCategories, useCreatePendingAction, useServices, useUserVendorContext } from "@/features/admin";
 
 import { ServiceFormDialog } from "./_components/service-form-dialog";
 import { ServiceTable } from "./_components/service-table";
@@ -21,6 +23,8 @@ export default function ServicesPage() {
   const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
   const [variantServiceId, setVariantServiceId] = useState<string | null>(null);
 
+  const { data: vendorContext } = useUserVendorContext();
+  const createPendingAction = useCreatePendingAction();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: services, isLoading: servicesLoading } = useServices({
     categoryId: categoryFilter !== "all" ? categoryFilter : undefined,
@@ -40,6 +44,27 @@ export default function ServicesPage() {
 
   const handleManageVariants = (serviceId: string) => {
     setVariantServiceId(serviceId);
+  };
+
+  const handleRequestDelete = (serviceId: string, serviceName: string) => {
+    if (!vendorContext?.vendorId) return;
+    createPendingAction.mutate(
+      {
+        vendorId: vendorContext.vendorId,
+        requestedBy: "",
+        actionType: "delete",
+        targetType: "service",
+        targetId: serviceId,
+        targetName: serviceName,
+        status: "pending",
+        reason: null,
+        reviewedBy: null,
+      },
+      {
+        onSuccess: () => toast.success("Demande de suppression envoyée à l'administrateur"),
+        onError: () => toast.error("Erreur lors de l'envoi de la demande"),
+      },
+    );
   };
 
   if (categoriesLoading || servicesLoading) {
@@ -96,7 +121,13 @@ export default function ServicesPage() {
         </Select>
       </div>
 
-      <ServiceTable services={services || []} onEdit={handleEdit} onManageVariants={handleManageVariants} />
+      <ServiceTable
+        services={services || []}
+        onEdit={handleEdit}
+        onManageVariants={handleManageVariants}
+        vendorRole={vendorContext?.role}
+        onRequestDelete={handleRequestDelete}
+      />
 
       <ServiceFormDialog open={isFormOpen} onOpenChange={handleCloseForm} serviceId={editingServiceId} />
 

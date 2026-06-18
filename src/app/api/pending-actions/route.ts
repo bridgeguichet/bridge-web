@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth/auth";
 import { canPerform, getUserVendorRole } from "@/lib/auth/permissions";
 import { db } from "@/lib/db";
 import { pendingActions, users } from "@/lib/db/schema";
+import { notifyValidatorsForValidation } from "@/lib/notifications/validation";
 
 // Helper to get current user from session
 async function getCurrentUser() {
@@ -105,6 +106,11 @@ export async function POST(request: NextRequest) {
         status: "pending",
       })
       .returning();
+
+    // Notify admins (and managers if operator) in real time
+    await notifyValidatorsForValidation(vendorId, newAction).catch((err) =>
+      console.error("notifyValidatorsForValidation error:", err),
+    );
 
     return NextResponse.json(newAction, { status: 201 });
   } catch (error) {

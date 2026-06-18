@@ -23,13 +23,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { ServiceWithRelations } from "@/features/admin";
+import type { ServiceWithRelations, VendorRole } from "@/features/admin";
 import { useDeleteService } from "@/features/admin";
 
 interface ServiceTableProps {
   services: ServiceWithRelations[];
   onEdit: (serviceId: string) => void;
   onManageVariants: (serviceId: string) => void;
+  vendorRole?: VendorRole | null;
+  onRequestDelete?: (serviceId: string, serviceName: string) => void;
 }
 
 const priceUnitLabels: Record<string, string> = {
@@ -45,8 +47,9 @@ const statusLabels: Record<string, string> = {
   archived: "Archivé",
 };
 
-export function ServiceTable({ services, onEdit, onManageVariants }: ServiceTableProps) {
+export function ServiceTable({ services, onEdit, onManageVariants, vendorRole, onRequestDelete }: ServiceTableProps) {
   const deleteServiceMutation = useDeleteService();
+  const needsApproval = vendorRole === "manager" || vendorRole === "operator";
 
   const handleDelete = (serviceId: string) => {
     deleteServiceMutation.mutate(serviceId);
@@ -139,35 +142,45 @@ export function ServiceTable({ services, onEdit, onManageVariants }: ServiceTabl
                       Gérer les variantes
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <DropdownMenuItem
-                          onSelect={(e) => e.preventDefault()}
-                          className="text-destructive focus:text-destructive"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          Supprimer
-                        </DropdownMenuItem>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Supprimer le service</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Êtes-vous sûr de vouloir supprimer le service "{service.nameFr}" ? Cette action supprimera
-                            également toutes les variantes associées.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Annuler</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(service.id)}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    {needsApproval ? (
+                      <DropdownMenuItem
+                        onSelect={() => onRequestDelete?.(service.id, service.nameFr)}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Demander la suppression
+                      </DropdownMenuItem>
+                    ) : (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                            className="text-destructive focus:text-destructive"
                           >
+                            <Trash2 className="mr-2 h-4 w-4" />
                             Supprimer
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Supprimer le service</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Êtes-vous sûr de vouloir supprimer le service &ldquo;{service.nameFr}&rdquo; ? Cette action
+                              supprimera également toutes les variantes associées.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Annuler</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(service.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Supprimer
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

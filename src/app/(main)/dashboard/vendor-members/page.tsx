@@ -6,7 +6,9 @@ import { Loader2, Plus, Shield, UserCog, UserX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useVendorMembers, useDeleteVendorMember, useUserVendorContext, type VendorRole } from "@/features/admin";
+import { toast } from "sonner";
+
+import { useCreatePendingAction, useDeleteVendorMember, useUserVendorContext, useVendorMembers, type VendorRole } from "@/features/admin";
 import { useAuthStore } from "@/features/auth/store";
 
 import { MemberFormDialog } from "./_components/member-form-dialog";
@@ -37,6 +39,7 @@ export default function VendorMembersPage() {
   console.log("[VendorMembersPage] isLoadingMembers:", isLoadingMembers);
   console.log("[VendorMembersPage] membersError:", membersError);
   const deleteMember = useDeleteVendorMember();
+  const createPendingAction = useCreatePendingAction();
   const [searchQuery, setSearchQuery] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
@@ -59,8 +62,33 @@ export default function VendorMembersPage() {
   };
 
   const handleDelete = async (memberId: string, memberVendorId: string) => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce membre ?")) {
-      await deleteMember.mutateAsync({ id: memberId, vendorId: memberVendorId });
+    const currentRole = vendorContext?.role;
+    const needsApproval = currentRole === "manager" || currentRole === "operator";
+
+    if (needsApproval) {
+      const targetMember = members?.find((m) => m.member.id === memberId);
+      const targetName = targetMember?.user?.name ?? memberId;
+      createPendingAction.mutate(
+        {
+          vendorId: memberVendorId,
+          requestedBy: "",
+          actionType: "delete",
+          targetType: "member",
+          targetId: memberId,
+          targetName,
+          status: "pending",
+          reason: null,
+          reviewedBy: null,
+        },
+        {
+          onSuccess: () => toast.success("Demande de suppression envoyée à l'administrateur"),
+          onError: () => toast.error("Erreur lors de l'envoi de la demande"),
+        },
+      );
+    } else {
+      if (confirm("Êtes-vous sûr de vouloir supprimer ce membre ?")) {
+        await deleteMember.mutateAsync({ id: memberId, vendorId: memberVendorId });
+      }
     }
   };
 
