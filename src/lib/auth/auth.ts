@@ -7,6 +7,7 @@ import { accounts, sessions, users, verifications } from "@/lib/db/schema/users"
 import { sendOTPEmail } from "@/lib/email/resend";
 
 export const auth = betterAuth({
+  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"],
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
