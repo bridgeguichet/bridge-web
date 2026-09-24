@@ -334,7 +334,7 @@ export default function ParametrePage() {
 
       <motion.div variants={itemVariants}>
         <Tabs defaultValue="compte" className="w-full">
-          <TabsList className="mb-6 grid w-full grid-cols-2 lg:w-[400px]">
+          <TabsList className="mb-6 grid w-full grid-cols-2 lg:w-100">
             <TabsTrigger value="compte" className="gap-2">
               <HugeiconsIcon icon={LockPasswordIcon} size={16} color="currentColor" />
               Compte

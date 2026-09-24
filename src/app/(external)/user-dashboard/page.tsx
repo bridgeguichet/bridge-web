@@ -191,6 +191,7 @@ export default function UserDashboard() {
             return (
               <motion.div
                 key={action.label}
+                className="h-full"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -201,13 +202,13 @@ export default function UserDashboard() {
                 whileHover={{ y: -6, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Link href={action.href} className="group block">
-                  <Card className="relative overflow-hidden border-0 bg-card shadow-md transition-all duration-300 hover:shadow-xl">
+                <Link href={action.href} className="group block h-full">
+                  <Card className="relative h-full overflow-hidden border-0 bg-card shadow-md transition-all duration-300 hover:shadow-xl">
                     {/* Background subtil au hover */}
                     <div className="absolute inset-0 bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-                    <CardContent className="relative p-6">
-                      <div className="flex items-start gap-4">
+                    <CardContent className="relative flex h-full p-6">
+                      <div className="flex h-full w-full items-start gap-4">
                         <motion.div
                           whileHover={{ rotate: 3 }}
                           className="shrink-0 rounded-xl bg-primary p-3 text-primary-foreground"
@@ -224,7 +225,7 @@ export default function UserDashboard() {
                           icon={ArrowRight01Icon}
                           size={20}
                           color="currentColor"
-                          className="shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary"
+                          className="shrink-0 self-start text-muted-foreground transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary"
                         />
                       </div>
                     </CardContent>

@@ -41,7 +41,7 @@ export function CategoryProgress({ categories, currentIndex }: CategoryProgressP
                 {/* Label below circle */}
                 <span
                   className={cn(
-                    "mt-1 text-center text-xs font-medium leading-tight max-w-[100px]",
+                    "mt-1 text-center text-xs font-medium leading-tight max-w-25",
                     isCurrent && "text-gray-900",
                     isCompleted && "text-gray-700",
                     isUpcoming && "text-gray-400",
@@ -53,7 +53,7 @@ export function CategoryProgress({ categories, currentIndex }: CategoryProgressP
 
               {/* Vertical Connector */}
               {index < categories.length - 1 && (
-                <div className="my-2 w-0.5 bg-gray-200 min-h-[24px]">
+                <div className="my-2 w-0.5 bg-gray-200 min-h-6">
                   <div
                     className={cn("w-full bg-primary transition-all duration-500", isCompleted ? "h-full" : "h-0")}
                   />

@@ -194,7 +194,7 @@ export default function TransactionsPage() {
           <span className="text-sm text-muted-foreground">Filtrer:</span>
         </div>
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as TransactionStatus | "all")}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Statut" />
           </SelectTrigger>
           <SelectContent>
@@ -205,7 +205,7 @@ export default function TransactionsPage() {
           </SelectContent>
         </Select>
         <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v as TransactionType | "all")}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-40">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>

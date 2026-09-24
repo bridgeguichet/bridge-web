@@ -249,7 +249,7 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
   const { data: services, isLoading } = useServices({ categoryId: category.id });
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
+      <div className="flex min-h-100 items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -257,7 +257,7 @@ export function CategoryServicesGrid({ category, packId }: CategoryServicesGridP
 
   if (!services || services.length === 0) {
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-12 text-center">
+      <div className="flex min-h-75 flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white p-12 text-center">
         <Package className="mb-3 h-10 w-10 text-gray-300" />
         <p className="font-medium text-gray-500">Aucun service disponible dans cette catégorie</p>
       </div>

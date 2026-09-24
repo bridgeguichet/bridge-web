@@ -41,8 +41,8 @@ function LoginContent() {
   }
 
   return (
-    <div className="flex min-h-[500px] w-full flex-col">
-      <div className="mx-auto flex w-full max-w-[350px] flex-1 flex-col justify-center px-8 py-12">
+    <div className="flex min-h-125 w-full flex-col">
+      <div className="mx-auto flex w-full max-w-87.5 flex-1 flex-col justify-center px-8 py-12">
         <div className="space-y-2 text-center">
           <h1 className="font-semibold text-2xl tracking-tight">Connectez-vous à votre compte</h1>
           <p className="text-muted-foreground text-sm">
@@ -99,7 +99,7 @@ function LoginContent() {
 
 export default function Login() {
   return (
-    <Suspense fallback={<div className="flex min-h-[500px] w-full items-center justify-center">Chargement...</div>}>
+    <Suspense fallback={<div className="flex min-h-125 w-full items-center justify-center">Chargement...</div>}>
       <LoginContent />
     </Suspense>
   );

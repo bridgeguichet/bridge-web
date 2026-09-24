@@ -134,8 +134,8 @@ function VerifyEmailContent() {
   }
 
   return (
-    <div className="flex min-h-[500px] w-full flex-col">
-      <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col justify-center px-8 py-12">
+    <div className="flex min-h-125 w-full flex-col">
+      <div className="mx-auto flex w-full max-w-100 flex-1 flex-col justify-center px-8 py-12">
         <div className="space-y-2 text-center">
           <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-primary/10">
             <Mail className="size-6 text-primary" />
@@ -235,7 +235,7 @@ function VerifyEmailContent() {
 
 export default function VerifyEmail() {
   return (
-    <Suspense fallback={<div className="flex min-h-[500px] w-full items-center justify-center">Chargement...</div>}>
+    <Suspense fallback={<div className="flex min-h-125 w-full items-center justify-center">Chargement...</div>}>
       <VerifyEmailContent />
     </Suspense>
   );
