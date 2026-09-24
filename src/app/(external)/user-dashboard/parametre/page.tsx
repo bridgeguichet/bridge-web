@@ -475,7 +475,7 @@ export default function ParametrePage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="facturation" className="space-y-6">
+          {/* <TabsContent value="facturation" className="space-y-6">
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -735,7 +735,7 @@ export default function ParametrePage() {
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </motion.div>
     </motion.div>
