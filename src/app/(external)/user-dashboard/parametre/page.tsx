@@ -339,10 +339,10 @@ export default function ParametrePage() {
               <HugeiconsIcon icon={LockPasswordIcon} size={16} color="currentColor" />
               Compte
             </TabsTrigger>
-            <TabsTrigger value="facturation" className="gap-2">
+            {/* <TabsTrigger value="facturation" className="gap-2">
               <HugeiconsIcon icon={CreditCardIcon} size={16} color="currentColor" />
               Facturation
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="compte" className="space-y-6">
